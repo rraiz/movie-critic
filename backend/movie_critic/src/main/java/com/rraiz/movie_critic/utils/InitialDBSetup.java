@@ -5,8 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ApplicationContext;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Component;
 
 import com.rraiz.movie_critic.model.Cast;
 import com.rraiz.movie_critic.model.Media;
@@ -15,8 +16,9 @@ import com.rraiz.movie_critic.service.CastService;
 import com.rraiz.movie_critic.service.MediaService;
 import com.rraiz.movie_critic.service.PersonService;
 
-
-public class InitialDBSetup {
+@SpringBootApplication
+@Component
+public class InitialDBSetup implements CommandLineRunner{
 
     private final MediaService mediaService;
     private final CastService castService;
@@ -111,19 +113,12 @@ public class InitialDBSetup {
         return person;
     }
 
- public static void main(String[] args) {
-        // Initialize the Spring application context
-        ApplicationContext context = SpringApplication.run(InitialDBSetup.class);
+    @Override
+    public void run(String... args) throws Exception {
+        setupDatabase();
+    } 
 
-        // Retrieve the necessary services from the context
-        MediaService mediaService = context.getBean(MediaService.class);
-        CastService castService = context.getBean(CastService.class);
-        PersonService personService = context.getBean(PersonService.class);
-
-        // Create an instance of InitialDBSetup with the retrieved services
-        InitialDBSetup dbSetup = new InitialDBSetup(mediaService, castService, personService);
-
-        // Call the setupDatabase method to populate the database
-        dbSetup.setupDatabase();
+    public static void main(String[] args) {
+        org.springframework.boot.SpringApplication.run(InitialDBSetup.class, args);
     }
 }
