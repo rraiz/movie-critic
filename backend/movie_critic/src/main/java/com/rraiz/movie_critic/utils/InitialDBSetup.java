@@ -1,4 +1,4 @@
-package com.utils;
+package com.rraiz.movie_critic.utils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
