@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import com.rraiz.movie_critic.model.Cast;
@@ -16,6 +17,8 @@ import com.rraiz.movie_critic.service.CastService;
 import com.rraiz.movie_critic.service.MediaService;
 import com.rraiz.movie_critic.service.PersonService;
 
+
+@ComponentScan(basePackages = "com.rraiz.movie_critic")
 @SpringBootApplication
 @Component
 public class InitialDBSetup implements CommandLineRunner{
