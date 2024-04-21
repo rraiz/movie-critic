@@ -25,6 +25,9 @@ public class Person {
     @ElementCollection
     private List<String> knownForTitles;
 
+    public Person() {
+    }
+
     public Person(String nconst, String name, int birthYear, int deathYear, List<String> primaryProfession, List<String> knownForTitles) 
     {
         this.nconst = nconst;

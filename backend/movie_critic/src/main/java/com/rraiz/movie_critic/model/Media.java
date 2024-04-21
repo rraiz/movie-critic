@@ -26,6 +26,9 @@ public class Media {
     private int numVotes;
     private String coverURL;
 
+    public Media() {
+        }
+
     public Media(String tconst, String titleType, String title, int startYear, int endYear, int runtimeMinutes, List<String> genres, int averageRating, int numVotes, String coverURL) 
     {
         this.tconst = tconst;

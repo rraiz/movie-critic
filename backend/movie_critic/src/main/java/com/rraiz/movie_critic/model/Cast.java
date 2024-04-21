@@ -22,6 +22,9 @@ public class Cast {
     @ElementCollection
     private List<String> characters;
 
+    public Cast() {
+    }
+
     public Cast(String tconst, String nconst, String category, String job, List<String> characters) 
     {
         this.tconst = tconst;
