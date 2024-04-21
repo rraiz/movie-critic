@@ -1,0 +1,1 @@
+Directory containing scrapped ideas in the beginning
