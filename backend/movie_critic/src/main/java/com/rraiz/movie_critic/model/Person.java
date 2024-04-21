@@ -16,8 +16,8 @@ public class Person {
     private int id;
     private String nconst;
     private String name;
-    private int birthYear;
-    private int deathYear;
+    private Integer birthYear;
+    private Integer deathYear;
 
     @ElementCollection
     private List<String> primaryProfession;
@@ -28,7 +28,7 @@ public class Person {
     public Person() {
     }
 
-    public Person(String nconst, String name, int birthYear, int deathYear, List<String> primaryProfession, List<String> knownForTitles) 
+    public Person(String nconst, String name, Integer birthYear, Integer deathYear, List<String> primaryProfession, List<String> knownForTitles) 
     {
         this.nconst = nconst;
         this.name = name;
@@ -62,19 +62,19 @@ public class Person {
         this.name = name;
     }
 
-    public int getBirthYear() {
+    public Integer getBirthYear() {
         return birthYear;
     }
 
-    public void setBirthYear(int birthYear) {
+    public void setBirthYear(Integer birthYear) {
         this.birthYear = birthYear;
     }
 
-    public int getDeathYear() {
+    public Integer getDeathYear() {
         return deathYear;
     }
 
-    public void setDeathYear(int deathYear) {
+    public void setDeathYear(Integer deathYear) {
         this.deathYear = deathYear;
     }
 
@@ -84,5 +84,13 @@ public class Person {
 
     public void setPrimaryProfession(List<String> primaryProfession) {
         this.primaryProfession = primaryProfession;
+    }
+
+    public List<String> getKnownForTitles() {
+        return knownForTitles;
+    }
+
+    public void setKnownForTitles(List<String> knownForTitles) {
+        this.knownForTitles = knownForTitles;
     }
 }

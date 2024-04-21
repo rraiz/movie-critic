@@ -17,19 +17,19 @@ public class Media {
     private String tconst;
     private String titleType;
     private String title;
-    private int startYear;
-    private int endYear;
-    private int runtimeMinutes;
+    private Integer startYear;
+    private Integer endYear;
+    private Integer runtimeMinutes;
     @ElementCollection
     private List<String> genres;
-    private int averageRating;
-    private int numVotes;
+    private Double averageRating;
+    private Integer numVotes;
     private String coverURL;
 
     public Media() {
         }
 
-    public Media(String tconst, String titleType, String title, int startYear, int endYear, int runtimeMinutes, List<String> genres, int averageRating, int numVotes, String coverURL) 
+    public Media(String tconst, String titleType, String title, Integer startYear, Integer endYear, Integer runtimeMinutes, List<String> genres, Double averageRating, Integer numVotes, String coverURL) 
     {
         this.tconst = tconst;
         this.titleType = titleType;
@@ -75,27 +75,27 @@ public class Media {
         this.title = title;
     }
     
-    public int getStartYear() {
+    public Integer getStartYear() {
         return startYear;
     }
     
-    public void setStartYear(int startYear) {
+    public void setStartYear(Integer startYear) {
         this.startYear = startYear;
     }
     
-    public int getEndYear() {
+    public Integer getEndYear() {
         return endYear;
     }
     
-    public void setEndYear(int endYear) {
+    public void setEndYear(Integer endYear) {
         this.endYear = endYear;
     }
     
-    public int getRuntimeMinutes() {
+    public Integer getRuntimeMinutes() {
         return runtimeMinutes;
     }
     
-    public void setRuntimeMinutes(int runtimeMinutes) {
+    public void setRuntimeMinutes(Integer runtimeMinutes) {
         this.runtimeMinutes = runtimeMinutes;
     }
     
@@ -107,19 +107,19 @@ public class Media {
         this.genres = genres;
     }
     
-    public int getAverageRating() {
+    public Double getAverageRating() {
         return averageRating;
     }
     
-    public void setAverageRating(int averageRating) {
+    public void setAverageRating(Double averageRating) {
         this.averageRating = averageRating;
     }
     
-    public int getNumVotes() {
+    public Integer getNumVotes() {
         return numVotes;
     }
     
-    public void setNumVotes(int numVotes) {
+    public void setNumVotes(Integer numVotes) {
         this.numVotes = numVotes;
     }
     
