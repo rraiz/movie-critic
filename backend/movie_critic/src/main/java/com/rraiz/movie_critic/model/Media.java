@@ -5,17 +5,13 @@ import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class Media {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    private String tconst;
+    private int tconst;
     private String titleType;
     private String title;
 
@@ -44,7 +40,7 @@ public class Media {
     public Media() {
         }
 
-    public Media(String tconst, String titleType, String title, Integer startYear, Integer endYear, Integer runtimeMinutes, List<String> genres, Double averageRating, Integer numVotes, String coverURL) 
+    public Media(int tconst, String titleType, String title, Integer startYear, Integer endYear, Integer runtimeMinutes, List<String> genres, Double averageRating, Integer numVotes, String coverURL) 
     {
         this.tconst = tconst;
         this.titleType = titleType;
@@ -57,20 +53,12 @@ public class Media {
         this.numVotes = numVotes;
         this.coverURL = coverURL;
     }
-
-    public int getId() {
-        return id;
-    }
     
-    public void setId(int id) {
-        this.id = id;
-    }
-    
-    public String getTconst() {
+    public int getTconst() {
         return tconst;
     }
     
-    public void setTconst(String tconst) {
+    public void setTconst(int tconst) {
         this.tconst = tconst;
     }
     

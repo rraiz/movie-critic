@@ -4,21 +4,30 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "movie_cast")
 public class Cast {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    private String tconst;
-    private String nconst;
+
+    @EmbeddedId
+    private CastId id;
+
+    @ManyToOne
+    @MapsId("tconst")
+    @JoinColumn(name = "tconst")
+    private Media media;
+
+    @ManyToOne
+    @MapsId("nconst")
+    @JoinColumn(name = "nconst")
+    private Person person;
     
     @Column(nullable = true, columnDefinition = "TEXT")
     private String category;
@@ -33,37 +42,38 @@ public class Cast {
     public Cast() {
     }
 
-    public Cast(String tconst, String nconst, String category, String job, List<String> characters) 
+    public Cast(CastId id, Media media, Person person, String category, String job, List<String> characters) 
     {
-        this.tconst = tconst;
-        this.nconst = nconst;
+        this.id = id;
+        this.media = media;
+        this.person = person;
         this.category = category;
         this.job = job;
         this.characters = characters;
     }
 
-    public int getId() {
+    public CastId getId() {
         return id;
     }
-    
-    public void setId(int id) {
+
+    public void setId(CastId id) {
         this.id = id;
     }
     
-    public String getTconst() {
-        return tconst;
+    public Media getMedia() {
+        return media;
     }
-    
-    public void setTconst(String tconst) {
-        this.tconst = tconst;
+
+    public void setMedia(Media media) {
+        this.media = media;
     }
-    
-    public String getNconst() {
-        return nconst;
+
+    public Person getPerson() {
+        return person;
     }
-    
-    public void setNconst(String nconst) {
-        this.nconst = nconst;
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
     
     public String getCategory() {

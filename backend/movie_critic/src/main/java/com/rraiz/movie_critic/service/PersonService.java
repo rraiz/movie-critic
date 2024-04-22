@@ -18,7 +18,40 @@ public class PersonService {
 
     @Transactional
     public void addPerson(Person person) {
+        if (getPersonById(person.getNconst()) != null) {
+            throw new IllegalStateException("Person with ID:" + person.getNconst() + " already exists");
+        }
         personRepository.save(person);
     }
+
+    @Transactional
+    public Person getPersonById(int id) {
+        return personRepository.findById(id).orElse(null);
+    }
+
+    @Transactional
+    public Person getOrAddPerson(int personId)
+    {
+        Person person = getPersonById(personId);
+        if (person == null) {
+            person = new Person();
+            person.setNconst(personId);
+            addPerson(person);
+        }
+        return person; 
+    }
+
+    @Transactional
+    public Person addForeignKey(int personId)
+    {
+        Person person = getPersonById(personId);
+        if (person == null) {
+            person = new Person();
+            person.setNconst(personId);
+            addPerson(person);
+        }
+        return person; 
+    }
+    
     
 }

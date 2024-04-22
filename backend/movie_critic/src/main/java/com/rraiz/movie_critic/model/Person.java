@@ -2,20 +2,18 @@ package com.rraiz.movie_critic.model;
 
 import java.util.List;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 
 @Entity
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    private String nconst;
+    private int nconst;
     private String name;
 
     @Column(nullable = true)
@@ -29,35 +27,28 @@ public class Person {
     private List<String> primaryProfession;
 
     @ElementCollection
-    @Column(nullable = true, columnDefinition = "TEXT")
-    private List<String> knownForTitles;
+    @CollectionTable(name = "known_for_titles", joinColumns =@JoinColumn(name = "tconst"))
+    @Column(nullable = true)
+    private List<Media> media;
 
     public Person() {
     }
 
-    public Person(String nconst, String name, Integer birthYear, Integer deathYear, List<String> primaryProfession, List<String> knownForTitles) 
+    public Person(int nconst, String name, Integer birthYear, Integer deathYear, List<String> primaryProfession, List<Media> media) 
     {
         this.nconst = nconst;
         this.name = name;
         this.birthYear = birthYear;
         this.deathYear = deathYear;
         this.primaryProfession = primaryProfession;
-        this.knownForTitles = knownForTitles;
+        this.media = media;
     }
 
-    public int  getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNconst() {
+    public int getNconst() {
         return nconst;
     }
 
-    public void setNconst(String nconst) {
+    public void setNconst(int nconst) {
         this.nconst = nconst;
     }
 
@@ -93,11 +84,11 @@ public class Person {
         this.primaryProfession = primaryProfession;
     }
 
-    public List<String> getKnownForTitles() {
-        return knownForTitles;
+    public List<Media> getMedia() {
+        return media;
     }
 
-    public void setKnownForTitles(List<String> knownForTitles) {
-        this.knownForTitles = knownForTitles;
+    public void setMedia(List<Media> media) {
+        this.media = media;
     }
 }
