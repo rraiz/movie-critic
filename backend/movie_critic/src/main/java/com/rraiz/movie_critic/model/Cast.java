@@ -2,13 +2,16 @@ package com.rraiz.movie_critic.model;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "movie_cast")
 public class Cast {
 
     @Id
@@ -16,10 +19,15 @@ public class Cast {
     private int id;
     private String tconst;
     private String nconst;
+    
+    @Column(nullable = true, columnDefinition = "TEXT")
     private String category;
+
+    @Column(nullable = true, columnDefinition = "TEXT")
     private String job;
 
     @ElementCollection
+    @Column(nullable = true, columnDefinition = "TEXT")
     private List<String> characters;
 
     public Cast() {

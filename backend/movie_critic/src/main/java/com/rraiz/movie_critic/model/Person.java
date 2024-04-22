@@ -2,6 +2,7 @@ package com.rraiz.movie_critic.model;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,13 +17,19 @@ public class Person {
     private int id;
     private String nconst;
     private String name;
+
+    @Column(nullable = true)
     private Integer birthYear;
+
+    @Column(nullable = true)
     private Integer deathYear;
 
     @ElementCollection
+    @Column(nullable = true, columnDefinition = "TEXT")
     private List<String> primaryProfession;
 
     @ElementCollection
+    @Column(nullable = true, columnDefinition = "TEXT")
     private List<String> knownForTitles;
 
     public Person() {

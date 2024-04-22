@@ -34,9 +34,9 @@ public class InitialDBSetup implements CommandLineRunner{
     }
 
     public void setupDatabase() {
-        String mediaFilePath = "/tsv_initialize/media.tsv";
-        String castFilePath = "/tsv_initialize/media-cast.tsv";
-        String personFilePath = "/tsv_initialize/names.tsv";
+        String mediaFilePath = "backend/movie_critic/src/main/java/com/rraiz/movie_critic/utils/tsv_initialize/media.tsv";
+        String castFilePath = "backend/movie_critic/src/main/java/com/rraiz/movie_critic/utils/tsv_initialize/media-cast.tsv";
+        String personFilePath = "backend/movie_critic/src/main/java/com/rraiz/movie_critic/utils/tsv_initialize/names.tsv";
 
         try {
             setupMedia(mediaFilePath);
@@ -50,7 +50,8 @@ public class InitialDBSetup implements CommandLineRunner{
 
     private void setupMedia(String filePath) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
+            br.readLine(); // skip the first line
+            String line = br.readLine();
             while ((line = br.readLine()) != null) {
                 Media media = parseMediaLine(line);
                 mediaService.addMedia(media);
@@ -74,9 +75,10 @@ public class InitialDBSetup implements CommandLineRunner{
     }
 
     private void setupCast(String filePath) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            br.readLine(); // skip the first line
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 Cast cast = parseCastLine(line);
                 castService.addCast(cast);
             }
@@ -95,9 +97,10 @@ public class InitialDBSetup implements CommandLineRunner{
     }
 
     private void setupPerson(String filePath) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            br.readLine(); // skip the first line
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 Person person = parsePersonLine(line);
                 personService.addPerson(person);
             }

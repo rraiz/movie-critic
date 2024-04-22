@@ -2,6 +2,7 @@ package com.rraiz.movie_critic.model;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,13 +18,27 @@ public class Media {
     private String tconst;
     private String titleType;
     private String title;
+
+    @Column(nullable = true)
     private Integer startYear;
+
+    @Column(nullable = true)
     private Integer endYear;
+
+    @Column(nullable = true)
     private Integer runtimeMinutes;
+
     @ElementCollection
+    @Column(nullable = true, columnDefinition = "TEXT")
     private List<String> genres;
+
+    @Column(nullable = true)
     private Double averageRating;
+
+    @Column(nullable = true)
     private Integer numVotes;
+    
+    @Column(nullable = true, columnDefinition = "TEXT")
     private String coverURL;
 
     public Media() {
