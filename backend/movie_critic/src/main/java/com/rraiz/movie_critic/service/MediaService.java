@@ -18,27 +18,12 @@ public class MediaService {
 
     @Transactional
     public void addMedia(Media media) {
-        if (getMediaById(media.getTconst()) != null) {
-            throw new IllegalStateException("Media with ID:" + media.getTconst() + " already exists");
-        }
         mediaRepository.save(media);
     }
 
     @Transactional
     public Media getMediaById(int id) {
         return mediaRepository.findById(id).orElse(null);
-    }
-
-    @Transactional
-    public Media getOrAddMedia(int mediaId)
-    {
-        Media media = getMediaById(mediaId);
-        if (media == null) {
-            media = new Media();
-            media.setTconst(mediaId);
-            addMedia(media);
-        }
-        return media; 
     }
 
     @Transactional

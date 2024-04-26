@@ -2,6 +2,7 @@ package com.rraiz.movie_critic.model;
 
 import java.util.List;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.EmbeddedId;
@@ -12,7 +13,7 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "movie_cast")
+@Table(name = "media_cast")
 public class Cast {
 
 
@@ -36,7 +37,8 @@ public class Cast {
     private String job;
 
     @ElementCollection
-    @Column(nullable = true, columnDefinition = "TEXT")
+    @CollectionTable(name = "media_cast_characters")
+    @Column(name = "character", nullable = true, columnDefinition = "TEXT")
     private List<String> characters;
 
     public Cast() {

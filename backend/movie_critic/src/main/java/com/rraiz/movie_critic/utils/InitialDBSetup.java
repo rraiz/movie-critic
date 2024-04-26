@@ -3,9 +3,7 @@ package com.rraiz.movie_critic.utils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -74,7 +72,12 @@ public class InitialDBSetup implements CommandLineRunner{
         String[] mediaData = mediaLine.split("\t");
 
         String t_const = '1' + mediaData[0].substring(2);
-        Media media = mediaService.getOrAddMedia(Integer.parseInt(t_const));
+        Media media = mediaService.getMediaById(Integer.parseInt(t_const));
+
+        if (media == null) {
+            media = new Media();
+            media.setTconst(Integer.parseInt(t_const));
+        }
 
         media.setTitleType(mediaData[1]);
         media.setTitle(mediaData[2]);
@@ -84,6 +87,8 @@ public class InitialDBSetup implements CommandLineRunner{
         media.setGenres( mediaData[6].equals("\\N") ? null : Arrays.asList(mediaData[6].split(",")));
         media.setAverageRating(mediaData[7].equals("\\N") ? null : Double.valueOf(mediaData[7]));
         media.setNumVotes(mediaData[8].equals("\\N") ? null : Integer.valueOf(mediaData[8]));
+
+        mediaService.addMedia(media);
     }
 
     private void parseCastLine(String castLine) {
@@ -96,7 +101,13 @@ public class InitialDBSetup implements CommandLineRunner{
         int n_const = Integer.parseInt(n_const_str);
         
         CastId id = new CastId(t_const, n_const);
-        Cast cast = castService.getOrAddCast(id);
+        Cast cast = castService.getCastById(id);
+
+        if (cast == null) {
+            cast = new Cast();
+            cast.setId(id);
+        }
+
         Media media = mediaService.addForeignKey(t_const);
         Person person = personService.addForeignKey(n_const);
 
@@ -104,28 +115,28 @@ public class InitialDBSetup implements CommandLineRunner{
         cast.setPerson(person);
         cast.setCategory(castData[2]);
         cast.setJob(castData[3].equals("\\N") ? null : castData[3]);
-        cast.setCharacters(castData[4].equals("\\N") ? null : Arrays.asList(castData[4].split(",")));        
+        cast.setCharacters(castData[4].equals("\\N") ? null : Arrays.asList(castData[4].split(","))); 
+        
+        castService.addCast(cast);
     }
 
     private void parsePersonLine(String personLine) {
         String[] personData = personLine.split("\t");
 
         String n_const = '2' + personData[0].substring(2);
-        Person person = personService.getOrAddPerson(Integer.parseInt(n_const));
+        Person person = personService.getPersonById(Integer.parseInt(n_const));
+
+        if (person == null) {
+            person = new Person();
+            person.setNconst(Integer.parseInt(n_const));
+        }
 
         person.setName(personData[1]);
         person.setBirthYear(personData[2].equals("\\N") ? null : Integer.valueOf(personData[2]));
         person.setDeathYear(personData[3].equals("\\N") ? null : Integer.valueOf(personData[3]));
         person.setPrimaryProfession(personData[4].equals("\\N") ? null : Arrays.asList(personData[4].split(",")));
 
-        String[] media_ids = personData[5].split(",");
-        List<Media> medias = new ArrayList<Media>();
-        for (String id : media_ids) {
-            String t_const = '1' + id.substring(2);        
-            Media m = mediaService.addForeignKey(Integer.parseInt(t_const));
-            medias.add(m);
-        }
-        person.setMedia(medias);
+        personService.addPerson(person);
     }
 
     @Override

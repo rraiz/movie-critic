@@ -2,12 +2,15 @@ package com.rraiz.movie_critic.model;
 
 import java.util.List;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "media")
 public class Media {
 
     @Id
@@ -25,7 +28,8 @@ public class Media {
     private Integer runtimeMinutes;
 
     @ElementCollection
-    @Column(nullable = true, columnDefinition = "TEXT")
+    @CollectionTable(name = "media_genres")
+    @Column(name = "genre", nullable = true, columnDefinition = "TEXT")
     private List<String> genres;
 
     @Column(nullable = true)

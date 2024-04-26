@@ -19,27 +19,12 @@ public class CastService {
 
     @Transactional
     public void addCast(Cast cast) {
-        if (getCastById(cast.getId()) != null) {
-            throw new IllegalStateException("Cast with ID:" + cast.getId() + " already exists");
-        }
         castRepository.save(cast);
     }
 
     @Transactional
     public Cast getCastById(CastId id) {
         return castRepository.findById(id).orElse(null);
-    }
-
-    @Transactional
-    public Cast getOrAddCast(CastId castId)
-    {
-        Cast cast = getCastById(castId);
-        if (cast == null) {
-            cast = new Cast();
-            cast.setId(castId);
-            addCast(cast);
-        }
-        return cast; 
     }
 
     @Transactional

@@ -7,9 +7,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "person")
 public class Person {
 
     @Id
@@ -23,25 +24,20 @@ public class Person {
     private Integer deathYear;
 
     @ElementCollection
-    @Column(nullable = true, columnDefinition = "TEXT")
+    @CollectionTable(name = "person_primary_profession")
+    @Column(name = "profession", nullable = true, columnDefinition = "TEXT")
     private List<String> primaryProfession;
-
-    @ElementCollection
-    @CollectionTable(name = "known_for_titles", joinColumns =@JoinColumn(name = "tconst"))
-    @Column(nullable = true)
-    private List<Media> media;
 
     public Person() {
     }
 
-    public Person(int nconst, String name, Integer birthYear, Integer deathYear, List<String> primaryProfession, List<Media> media) 
+    public Person(int nconst, String name, Integer birthYear, Integer deathYear, List<String> primaryProfession) 
     {
         this.nconst = nconst;
         this.name = name;
         this.birthYear = birthYear;
         this.deathYear = deathYear;
         this.primaryProfession = primaryProfession;
-        this.media = media;
     }
 
     public int getNconst() {
@@ -82,13 +78,5 @@ public class Person {
 
     public void setPrimaryProfession(List<String> primaryProfession) {
         this.primaryProfession = primaryProfession;
-    }
-
-    public List<Media> getMedia() {
-        return media;
-    }
-
-    public void setMedia(List<Media> media) {
-        this.media = media;
     }
 }
