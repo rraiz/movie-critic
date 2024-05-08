@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rraiz.movie_critic.dto.CastDTO;
 import com.rraiz.movie_critic.dto.MediaCastDTO;
-import com.rraiz.movie_critic.model.Cast;
 import com.rraiz.movie_critic.model.Media;
 import com.rraiz.movie_critic.service.CastService;
 import com.rraiz.movie_critic.service.MediaService;
