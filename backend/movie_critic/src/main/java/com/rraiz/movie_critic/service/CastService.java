@@ -1,5 +1,7 @@
 package com.rraiz.movie_critic.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.rraiz.movie_critic.model.Cast;
@@ -37,6 +39,10 @@ public class CastService {
             addCast(cast);
         }
         return cast; 
+    }
+
+    public List<Cast> getCastsByMediaId(int tconst) {
+        return castRepository.findByIdTconst(tconst);
     }
     
 }

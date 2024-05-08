@@ -2,8 +2,6 @@ package com.rraiz.movie_critic.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -25,7 +23,6 @@ public class Cast {
     @ManyToOne
     @MapsId("tconst")
     @JoinColumn(name = "tconst")
-    @JsonBackReference
     private Media media;
 
     @ManyToOne
