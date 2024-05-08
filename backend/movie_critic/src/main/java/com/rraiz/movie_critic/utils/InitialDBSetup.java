@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.springframework.boot.CommandLineRunner;
+//import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
@@ -18,11 +18,11 @@ import com.rraiz.movie_critic.service.CastService;
 import com.rraiz.movie_critic.service.MediaService;
 import com.rraiz.movie_critic.service.PersonService;
 
-
 @ComponentScan(basePackages = "com.rraiz.movie_critic")
 @SpringBootApplication
 @Component
-public class InitialDBSetup implements CommandLineRunner{
+public class InitialDBSetup // implements CommandLineRunner
+{
 
     @FunctionalInterface
     interface ParseEntityLineFunction {
@@ -84,7 +84,7 @@ public class InitialDBSetup implements CommandLineRunner{
         media.setStartYear(mediaData[3].equals("\\N") ? null : Integer.valueOf(mediaData[3]));
         media.setEndYear(mediaData[4].equals("\\N") ? null : Integer.valueOf(mediaData[4]));
         media.setRuntimeMinutes(mediaData[5].equals("\\N") ? null : Integer.valueOf(mediaData[5]));
-        media.setGenres( mediaData[6].equals("\\N") ? null : Arrays.asList(mediaData[6].split(",")));
+        media.setGenres(mediaData[6].equals("\\N") ? null : Arrays.asList(mediaData[6].split(",")));
         media.setAverageRating(mediaData[7].equals("\\N") ? null : Double.valueOf(mediaData[7]));
         media.setNumVotes(mediaData[8].equals("\\N") ? null : Integer.valueOf(mediaData[8]));
 
@@ -99,7 +99,7 @@ public class InitialDBSetup implements CommandLineRunner{
 
         int t_const = Integer.parseInt(t_const_str);
         int n_const = Integer.parseInt(n_const_str);
-        
+
         CastId id = new CastId(t_const, n_const);
         Cast cast = castService.getCastById(id);
 
@@ -115,8 +115,8 @@ public class InitialDBSetup implements CommandLineRunner{
         cast.setPerson(person);
         cast.setCategory(castData[2]);
         cast.setJob(castData[3].equals("\\N") ? null : castData[3]);
-        cast.setCharacters(castData[4].equals("\\N") ? null : Arrays.asList(castData[4].split(","))); 
-        
+        cast.setCharacters(castData[4].equals("\\N") ? null : Arrays.asList(castData[4].split(",")));
+
         castService.addCast(cast);
     }
 
@@ -139,12 +139,14 @@ public class InitialDBSetup implements CommandLineRunner{
         personService.addPerson(person);
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        setupDatabase();
-    } 
-
-    public static void main(String[] args) {
-        org.springframework.boot.SpringApplication.run(InitialDBSetup.class, args);
-    }
+    /*
+     * @Override
+     * public void run(String... args) throws Exception {
+     * setupDatabase();
+     * }
+     * 
+     * public static void main(String[] args) {
+     * org.springframework.boot.SpringApplication.run(InitialDBSetup.class, args);
+     * }
+     */
 }
