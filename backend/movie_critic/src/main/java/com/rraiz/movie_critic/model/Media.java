@@ -2,11 +2,14 @@ package com.rraiz.movie_critic.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -41,10 +44,14 @@ public class Media {
     @Column(nullable = true, columnDefinition = "TEXT")
     private String coverURL;
 
+    @OneToMany(mappedBy = "media")
+    @JsonManagedReference
+    private List<Cast> castList;
+
     public Media() {
         }
 
-    public Media(int tconst, String titleType, String title, Integer startYear, Integer endYear, Integer runtimeMinutes, List<String> genres, Double averageRating, Integer numVotes, String coverURL) 
+    public Media(int tconst, String titleType, String title, Integer startYear, Integer endYear, Integer runtimeMinutes, List<String> genres, Double averageRating, Integer numVotes, String coverURL, List<Cast> castList) 
     {
         this.tconst = tconst;
         this.titleType = titleType;
@@ -56,6 +63,7 @@ public class Media {
         this.averageRating = averageRating;
         this.numVotes = numVotes;
         this.coverURL = coverURL;
+        this.castList = castList;
     }
     
     public int getTconst() {
@@ -136,6 +144,14 @@ public class Media {
     
     public void setCoverURL(String coverURL) {
         this.coverURL = coverURL;
+    }
+
+    public List<Cast> getCastList() {
+        return castList;
+    }
+
+    public void setCastList(List<Cast> castList) {
+        this.castList = castList;
     }
 
 }

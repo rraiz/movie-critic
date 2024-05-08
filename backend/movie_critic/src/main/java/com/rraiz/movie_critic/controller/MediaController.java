@@ -23,7 +23,6 @@ public class MediaController {
     @GetMapping("/{id}") 
     public ResponseEntity<Media> getMediaById(@PathVariable("id") int id) {
         Media media = mediaService.getMediaById(id);
-        System.out.println(media);
 
         if (media != null) {
             return new ResponseEntity<>(media, HttpStatus.OK);
