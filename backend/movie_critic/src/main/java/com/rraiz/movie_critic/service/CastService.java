@@ -1,9 +1,11 @@
 package com.rraiz.movie_critic.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.rraiz.movie_critic.dto.CastDTO;
 import com.rraiz.movie_critic.model.Cast;
 import com.rraiz.movie_critic.model.CastId;
 import com.rraiz.movie_critic.repository.CastRepository;
@@ -41,8 +43,11 @@ public class CastService {
         return cast; 
     }
 
-    public List<Cast> getCastsByMediaId(int tconst) {
-        return castRepository.findByIdTconst(tconst);
+    public List<CastDTO> getCastsByMediaId(int tconst) {
+        List<Cast> castList = castRepository.findByIdTconst(tconst);
+        return castList.stream()
+                .map(cast -> new CastDTO(cast.getId(), cast.getPerson(), cast.getCategory(), cast.getJob(), cast.getCharacters()))
+                .collect(Collectors.toList());
     }
     
 }

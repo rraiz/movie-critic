@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rraiz.movie_critic.dto.CastDTO;
+import com.rraiz.movie_critic.dto.MediaCastDTO;
 import com.rraiz.movie_critic.model.Cast;
 import com.rraiz.movie_critic.model.Media;
 import com.rraiz.movie_critic.service.CastService;
@@ -38,11 +40,15 @@ public class MediaController {
     }
 
     @GetMapping("/{id}/cast")
-    public ResponseEntity<List<Cast>> getCastByMediaId(@PathVariable("id") int id) {
-        List<Cast> castList = castService.getCastsByMediaId(id);
+    public ResponseEntity<MediaCastDTO> getCastByMediaId(@PathVariable("id") int id) {
+        Media media = mediaService.getMediaById(id);
+        List<CastDTO> castList = castService.getCastsByMediaId(id);
+
+        MediaCastDTO mediaCastDTO = new MediaCastDTO(media, castList);
+
 
         if (castList != null && !castList.isEmpty()) {
-            return new ResponseEntity<>(castList, HttpStatus.OK);
+            return new ResponseEntity<>(mediaCastDTO, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
