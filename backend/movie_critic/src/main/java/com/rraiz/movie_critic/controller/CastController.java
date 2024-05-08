@@ -21,13 +21,11 @@ public class CastController {
         this.castService = castService;
     }
 
-    @GetMapping("/{id1}-{id2}") 
-    public ResponseEntity<Cast> getCastById(@PathVariable("id1") int castId1, @PathVariable("id2") int castId2) {
-        CastId id = new CastId(castId1, castId2);
+    @GetMapping("/{mediaId}-{personId}") 
+    public ResponseEntity<Cast> getCastById(@PathVariable("mediaID") int mediaId, @PathVariable("personID") int personId) {
+        CastId id = new CastId(mediaId, personId);
         Cast cast = castService.getCastById(id);
-
-        System.out.println(cast);
-        
+                
         if (cast != null) {
             return new ResponseEntity<>(cast, HttpStatus.OK);
         } else {

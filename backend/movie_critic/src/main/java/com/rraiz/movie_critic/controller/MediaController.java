@@ -42,9 +42,7 @@ public class MediaController {
     public ResponseEntity<MediaCastDTO> getCastByMediaId(@PathVariable("id") int id) {
         Media media = mediaService.getMediaById(id);
         List<CastDTO> castList = castService.getCastsByMediaId(id);
-
         MediaCastDTO mediaCastDTO = new MediaCastDTO(media, castList);
-
 
         if (castList != null && !castList.isEmpty()) {
             return new ResponseEntity<>(mediaCastDTO, HttpStatus.OK);
