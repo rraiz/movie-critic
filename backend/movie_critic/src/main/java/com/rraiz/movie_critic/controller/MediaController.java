@@ -38,6 +38,15 @@ public class MediaController {
         }
     }
 
+    /**
+     * Retrieves the cast for a specific media by its ID.
+     * This method combines the media details with its associated cast members into a MediaCastDTO.
+     * The purpose of this method is to return a singular media entity with a list of its associated casts to reduce redundancy for the frontend.
+     * 
+     * @param id the unique identifier of the media
+     * @return a ResponseEntity containing a MediaCastDTO with the media and its cast,
+     *         and an HTTP status of OK if the cast is found, or NOT_FOUND if no cast is associated with the media
+     */
     @GetMapping("/{id}/cast")
     public ResponseEntity<MediaCastDTO> getCastByMediaId(@PathVariable("id") int id) {
         Media media = mediaService.getMediaById(id);
