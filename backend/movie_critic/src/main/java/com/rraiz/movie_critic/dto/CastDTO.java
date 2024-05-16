@@ -5,6 +5,10 @@ import com.rraiz.movie_critic.model.Person;
 
 import java.util.List;
 
+/**
+ * Data Transfer Object for the Cast entity.
+ * Note: This DTO does not include a reference to the media entity to avoid redundancy and simplify the structure.
+ */
 public class CastDTO {
 
     private CastId id;

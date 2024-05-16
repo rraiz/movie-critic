@@ -43,6 +43,14 @@ public class CastService {
         return cast; 
     }
 
+    /**
+     * Retrieves all the casts of a media by its tconst.
+     * The purpose of this method is to return a singular media entity
+     * with a list of its associated casts to reduce redundancy.
+     *
+     * @param tconst the unique identifier of the media
+     * @return a list of CastDTO objects representing the cast members of the media
+     */
     public List<CastDTO> getCastsByMediaId(int tconst) {
         List<Cast> castList = castRepository.findByIdTconst(tconst);
         return castList.stream()
