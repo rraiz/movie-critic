@@ -1,5 +1,5 @@
 /* Navbar Styling */
-nav {
+.navbar {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -10,17 +10,16 @@ nav {
 }
 
 /* Header for the Navbar */
-nav h1 {
+.navbar h1 {
     margin: 0;
     padding: 0;
-    color : #dfe6eb;
-    font-family: sans-serif;
+    color: #dfe6eb;
     background-color: transparent;
     font-size: 2rem; /* Increased font size */
 }
 
 /* Navigation links list */
-nav ul {
+.top {
     list-style: none;
     display: flex;
     margin: 0;
@@ -31,37 +30,84 @@ nav ul {
 }
 
 /* Navigation links element */
-nav li { 
+.top li { 
+    display: flex;
+    align-items: center; 
     background-color: transparent;
 }
 
-/* Hyperlinks*/
-nav a {
+/* Search container */
+.searchContainer {
+    position: relative; /* Position relative to allow absolute positioning of the button */
+    display: flex;
+    align-items: center;
+    background-color: #14191d;
+    border-radius: 10px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+/* Input field */
+.searchContainer input {
+    border: none; 
+    border-radius: 10px;
+    width: 200px; 
+    height: 30px; 
+    font-size: 15px;
+    color: #a6baca;
+    padding-left: 10px;
+    padding-right: 25px;
+    outline: none;
+    transition: background-color 0.2s ease; 
+}
+
+/* Input field focus */
+.searchContainer input:focus {
+    background-color: #dfe6eb;
+    color: #0e0f10;
+}
+
+
+/* Search button */
+.searchButton {
+    position: absolute; 
+    right: 5px; 
+    border: none; 
+    border-radius: 50%; 
+    width: 25px; 
+    height: 25px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    background-color: transparent;
+}
+
+/* Search icon */
+.searchIcon {
+    color: red;
+    font-size: 18px;
+    background-color: transparent;
+}
+
+/* Hyperlinks */
+.top a {
     text-decoration: none;
-    color : #a6baca;
+    color: #a6baca;
     font-size: 0.95rem;
     background-color: transparent; 
     transition: color 0.25s ease; 
 }
 
 /* Hover effect for hyperlinks */
-nav a:hover {
+.navbar a:hover {
     color: #ffffff;
 }
 
 /* Paragraph element for footer */
-nav p {
-    text-decoration: none;
-    color : #a6baca;
-    font-size: 0.8rem;
+.bottom, .bottom a {
+    color: #a6baca;
+    font-size: 0.75rem;
     background-color: transparent; 
-    transition: color 0.25s ease; 
-}
-
-.poop {
-    text-decoration: none;
-    color : black;
-    font-size: 0.8rem;
-    background-color: transparent; 
-    transition: color 0.25s ease; 
 }
