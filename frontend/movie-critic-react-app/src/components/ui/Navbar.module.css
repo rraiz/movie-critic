@@ -1,0 +1,67 @@
+/* Navbar Styling */
+nav {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #14191d;
+    padding: 10px 500px;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+/* Header for the Navbar */
+nav h1 {
+    margin: 0;
+    padding: 0;
+    color : #dfe6eb;
+    font-family: sans-serif;
+    background-color: transparent;
+    font-size: 2rem; /* Increased font size */
+}
+
+/* Navigation links list */
+nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    gap: 2rem; 
+    margin-left: 50px; 
+    background-color: transparent;
+}
+
+/* Navigation links element */
+nav li { 
+    background-color: transparent;
+}
+
+/* Hyperlinks*/
+nav a {
+    text-decoration: none;
+    color : #a6baca;
+    font-size: 0.95rem;
+    background-color: transparent; 
+    transition: color 0.25s ease; 
+}
+
+/* Hover effect for hyperlinks */
+nav a:hover {
+    color: #ffffff;
+}
+
+/* Paragraph element for footer */
+nav p {
+    text-decoration: none;
+    color : #a6baca;
+    font-size: 0.8rem;
+    background-color: transparent; 
+    transition: color 0.25s ease; 
+}
+
+.poop {
+    text-decoration: none;
+    color : black;
+    font-size: 0.8rem;
+    background-color: transparent; 
+    transition: color 0.25s ease; 
+}
