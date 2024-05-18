@@ -44,10 +44,13 @@ public class Media {
     @Column(nullable = true, columnDefinition = "TEXT")
     private String description;
 
+    @Column(nullable = true, columnDefinition = "TEXT")
+    private String backdrop;
+
     public Media() {
         }
 
-    public Media(int tconst, String titleType, String title, Integer startYear, Integer endYear, Integer runtimeMinutes, List<String> genres, Double averageRating, Integer numVotes, String coverURL, String description) {
+    public Media(int tconst, String titleType, String title, Integer startYear, Integer endYear, Integer runtimeMinutes, List<String> genres, Double averageRating, Integer numVotes, String coverURL, String description, String backdrop) {
         this.tconst = tconst;
         this.titleType = titleType;
         this.title = title;
@@ -59,6 +62,7 @@ public class Media {
         this.numVotes = numVotes;
         this.coverURL = coverURL;
         this.description = description;
+        this.backdrop = backdrop;
     }
     
     public int getTconst() {
@@ -147,6 +151,14 @@ public class Media {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getBackdrop() {
+        return backdrop;
+    }
+
+    public void setBackdrop(String backdrop) {
+        this.backdrop = backdrop;
     }
 
 }
