@@ -8,10 +8,10 @@ function Header() {
             <nav className={styles.navbar}>
                 <h1>Movie Critic</h1>
                 <ul className={styles.top}>
-                    <li><a href="#">Home</a></li>
+                    <li><a href="/home">Home</a></li>
                     <li><a href="#">Films</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Sign In</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/sign-in">Sign In</a></li>
                     <li>
                         <div className={styles.searchContainer}>
                             <input type="text" placeholder="" />
