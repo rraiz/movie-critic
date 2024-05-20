@@ -1,5 +1,5 @@
 package com.rraiz.movie_critic.service;
 
-public class CastService {
+public class ProductionCompanyService {
     
 }
