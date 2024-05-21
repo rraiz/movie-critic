@@ -26,4 +26,7 @@ public class NetworkService {
         tvShowNetworkRepository.save(tvShowNetwork);
     }
 
+    public Network getNetworkById(int networkId) {
+        return networkRepository.findById(networkId).orElse(null);
+    }
 }
