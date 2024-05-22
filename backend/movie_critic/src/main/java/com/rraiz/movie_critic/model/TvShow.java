@@ -24,13 +24,13 @@ public class TvShow extends Film {
     @Column(nullable = true, name = "number_of_seasons")
     private Integer numberOfSeasons;
 
-    @OneToMany(mappedBy = "tvShow")
+    @OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Created> created;
 
-    @OneToMany(mappedBy = "tvShow")
+    @OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Season> seasons;
 
-    @OneToMany(mappedBy = "tvShow")
+    @OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<TvShowNetwork> tvShowNetworks;
 
     // Default Constructor
