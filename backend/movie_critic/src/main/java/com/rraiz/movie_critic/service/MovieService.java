@@ -13,6 +13,8 @@ public class MovieService {
 
     private final MovieRepository movieRepository;
 
+    private TMDBApiService tmdbApiService;
+
     public MovieService(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
     }
@@ -26,6 +28,12 @@ public class MovieService {
     public Movie getMovieById(int movieId) {
         FilmId id = new FilmId(movieId, 0);
         return movieRepository.findById(id).orElse(null);
+    }
+
+    public Movie getMovieDetails(int movieId) {
+        Movie m = tmdbApiService.fetchMovieDetails(movieId);
+        addMovie(m);
+        return m;
     }
     
 }

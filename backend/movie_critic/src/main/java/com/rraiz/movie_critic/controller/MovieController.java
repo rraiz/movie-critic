@@ -22,7 +22,7 @@ public class MovieController {
 
     @GetMapping("/{movieId}")
     public ResponseEntity<Movie> getMovieById(@PathVariable("movieId") int movieId) {
-        Movie movie = movieService.getMovieById(movieId);
+        Movie movie = movieService.getMovieDetails(movieId);
         return ResponseUtil.createResponseEntity(movie);
     }
 

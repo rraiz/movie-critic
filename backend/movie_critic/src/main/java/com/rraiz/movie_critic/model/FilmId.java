@@ -1,12 +1,13 @@
 package com.rraiz.movie_critic.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class FilmId {
+public class FilmId implements Serializable  {
 
     @Column(name = "film_id")
     private Integer filmId;

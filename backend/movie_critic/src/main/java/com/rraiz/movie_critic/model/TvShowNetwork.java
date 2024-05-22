@@ -3,6 +3,7 @@ package com.rraiz.movie_critic.model;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
@@ -16,7 +17,10 @@ public class TvShowNetwork {
 
     @ManyToOne
     @MapsId("tvShowId")
-    @JoinColumn(name = "tv_show_id")
+    @JoinColumns({
+        @JoinColumn(name = "film_id"),
+        @JoinColumn(name = "film_type")
+    })
     private TvShow tvShow;
 
     @ManyToOne

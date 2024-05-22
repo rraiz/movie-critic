@@ -5,7 +5,6 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.rraiz.movie_critic.model.Film;
 import com.rraiz.movie_critic.model.Movie;
 import com.rraiz.movie_critic.model.TvShow;
 
@@ -21,11 +20,6 @@ public class TMDBApiService {
     public TMDBApiService(RestTemplateBuilder restTemplateBuilder, @Value("${TMDB_API_KEY}") String apiKey) {
         this.restTemplate = restTemplateBuilder.build();
         this.apiKey = apiKey;
-    }
-
-    public Film fetchFilmDetails(int filmId) {
-        String url = String.format("%s/movie/%d?api_key=%s", TMDB_API_BASE_URL, filmId, apiKey);
-        return restTemplate.getForObject(url, Film.class);
     }
 
     public TvShow fetchTvShowDetails(int tvShowId) {

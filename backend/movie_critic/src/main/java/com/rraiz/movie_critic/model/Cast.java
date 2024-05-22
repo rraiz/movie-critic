@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
@@ -20,9 +21,13 @@ public class Cast {
     @JoinColumn(name = "person_id")
     private Person person;
 
+
     @ManyToOne
     @MapsId("filmId")
-    @JoinColumn(name = "film_id")
+    @JoinColumns({
+        @JoinColumn(name = "film_id"),
+        @JoinColumn(name = "film_type")
+    })
     private Film film;
 
     @Column(nullable = true, columnDefinition = "TEXT")

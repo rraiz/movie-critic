@@ -1,15 +1,16 @@
 package com.rraiz.movie_critic.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class TvShowNetworkId {
+public class TvShowNetworkId implements Serializable  {
 
     @Column(name = "tv_show_id")
-    private Integer tvShowId;
+    private FilmId tvShowId;
 
     @Column(name = "network_id")
     private Integer networkId;
@@ -18,17 +19,17 @@ public class TvShowNetworkId {
     public TvShowNetworkId() {
     }
 
-    public TvShowNetworkId(Integer tvShowId, Integer networkId) {
+    public TvShowNetworkId(FilmId tvShowId, Integer networkId) {
         this.tvShowId = tvShowId;
         this.networkId = networkId;
     }
 
     // Getters and setters
-    public Integer getTvShowId() {
+    public FilmId getTvShowId() {
         return tvShowId;
     }
 
-    public void setTvShowId(Integer tvShowId) {
+    public void setTvShowId(FilmId tvShowId) {
         this.tvShowId = tvShowId;
     }
 

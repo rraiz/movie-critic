@@ -3,6 +3,7 @@ package com.rraiz.movie_critic.model;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
@@ -20,17 +21,20 @@ public class Created {
     private Person person;
 
     @ManyToOne
-    @MapsId("filmId")
-    @JoinColumn(name = "film_id")
-    private Film film;
+    @MapsId("tvShowId")
+    @JoinColumns({
+        @JoinColumn(name = "film_id"),
+        @JoinColumn(name = "film_type")
+    })
+    private TvShow tvShow;
 
     public Created() {
     }
 
-    public Created(CreatedId id, Person person, Film film) {
+    public Created(CreatedId id, Person person, TvShow tvShow) {
         this.id = id;
         this.person = person;
-        this.film = film;
+        this.tvShow = tvShow;
     }
 
     public CreatedId getId() {
@@ -49,11 +53,11 @@ public class Created {
         this.person = person;
     }
 
-    public Film getFilm() {
-        return film;
+    public TvShow getTvShow() {
+        return tvShow;
     }
 
-    public void setFilm(Film film) {
-        this.film = film;
+    public void setTvShow(TvShow tvShow) {
+        this.tvShow = tvShow;
     }
 }

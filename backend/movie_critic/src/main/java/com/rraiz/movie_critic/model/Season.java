@@ -7,6 +7,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
@@ -38,7 +39,10 @@ public class Season {
     private Set<Episode> episodes;
 
     @ManyToOne
-    @JoinColumn(name = "tv_show_id", nullable = false)
+    @JoinColumns({
+        @JoinColumn(name = "tv_show_id", referencedColumnName = "film_id"),
+        @JoinColumn(name = "tv_show_type", referencedColumnName = "film_type")
+    })
     private TvShow tvShow;
 
     // Parameterized Constructor

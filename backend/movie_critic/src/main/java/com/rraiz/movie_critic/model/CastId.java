@@ -1,24 +1,25 @@
 package com.rraiz.movie_critic.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class CastId {
+public class CastId implements Serializable  {
 
     @Column(name = "person_id")
     private Integer personId;
 
     @Column(name = "film_id")
-    private Integer filmId;
+    private FilmId filmId;
 
     // Constructors
     public CastId() {
     }
 
-    public CastId(Integer personId, Integer filmId) {
+    public CastId(Integer personId, FilmId filmId) {
         this.personId = personId;
         this.filmId = filmId;
     }
@@ -32,11 +33,11 @@ public class CastId {
         this.personId = personId;
     }
 
-    public Integer getFilmId() {
+    public FilmId getFilmId() {
         return filmId;
     }
 
-    public void setFilmId(Integer filmId) {
+    public void setFilmId(FilmId filmId) {
         this.filmId = filmId;
     }
 

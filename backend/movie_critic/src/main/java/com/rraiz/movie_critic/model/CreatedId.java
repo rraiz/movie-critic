@@ -1,26 +1,27 @@
 package com.rraiz.movie_critic.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class CreatedId {
+public class CreatedId implements Serializable  {
 
     @Column(name = "person_id")
     private Integer personId;
 
-    @Column(name = "film_id")
-    private Integer filmId;
+    @Column(name = "tv_show_id")
+    private FilmId tvShowId;
 
     // Constructors
     public CreatedId() {
     }
 
-    public CreatedId(Integer personId, Integer filmId) {
+    public CreatedId(Integer personId, FilmId tvShowId) {
         this.personId = personId;
-        this.filmId = filmId;
+        this.tvShowId = tvShowId;
     }
 
     // Getters and setters
@@ -32,12 +33,12 @@ public class CreatedId {
         this.personId = personId;
     }
 
-    public Integer getFilmId() {
-        return filmId;
+    public FilmId getFilmId() {
+        return tvShowId;
     }
 
-    public void setFilmId(Integer filmId) {
-        this.filmId = filmId;
+    public void setFilmId(FilmId movieId) {
+        this.tvShowId = movieId;
     }
 
     // Equals and hashCode
@@ -47,11 +48,11 @@ public class CreatedId {
         if (o == null || getClass() != o.getClass()) return false;
         CreatedId that = (CreatedId) o;
         return Objects.equals(personId, that.personId) &&
-               Objects.equals(filmId, that.filmId);
+               Objects.equals(tvShowId, that.tvShowId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(personId, filmId);
+        return Objects.hash(personId, tvShowId);
     }
 }
