@@ -21,10 +21,9 @@ public class Created {
     private Person person;
 
     @ManyToOne
-    @MapsId("tvShowId")
     @JoinColumns({
-        @JoinColumn(name = "film_id"),
-        @JoinColumn(name = "film_type")
+        @JoinColumn(name = "film_id", insertable = false, updatable = false),
+        @JoinColumn(name = "film_type", insertable = false, updatable = false)
     })
     private TvShow tvShow;
 

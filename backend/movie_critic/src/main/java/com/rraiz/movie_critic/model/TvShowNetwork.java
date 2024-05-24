@@ -16,10 +16,9 @@ public class TvShowNetwork {
     private TvShowNetworkId id;
 
     @ManyToOne
-    @MapsId("tvShowId")
     @JoinColumns({
-        @JoinColumn(name = "film_id"),
-        @JoinColumn(name = "film_type")
+        @JoinColumn(name = "film_id", insertable = false, updatable = false),
+        @JoinColumn(name = "film_type", insertable = false, updatable = false)
     })
     private TvShow tvShow;
 
@@ -28,8 +27,7 @@ public class TvShowNetwork {
     @JoinColumn(name = "network_id")
     private Network network;
 
-    public TvShowNetwork() {
-    }
+    public TvShowNetwork() {}
 
     public TvShowNetwork(TvShowNetworkId id, TvShow tvShow, Network network) {
         this.id = id;
@@ -37,6 +35,7 @@ public class TvShowNetwork {
         this.network = network;
     }
 
+    // Getters and setters
     public TvShowNetworkId getId() {
         return id;
     }

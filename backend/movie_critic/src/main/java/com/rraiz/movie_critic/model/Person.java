@@ -67,15 +67,12 @@ public class Person {
     @OneToMany(mappedBy = "person")
     private Set<Cast> cast;
 
-    @OneToMany(mappedBy = "person")
-    private Set<Created> created;
-
     // Default Constructor
     public Person() {
     }
 
     // Parameterized Constructor
-    public Person(int id, String name, boolean adult, String biography, LocalDate birthDate, LocalDate deathDate, Integer gender, String knownFor, String birthPlace, Integer popularity, String profilePath, String homepage, String imdbId, List<String> alsoKnownAs, Set<Crew> crew, Set<Cast> cast, Set<Created> created) {
+    public Person(int id, String name, boolean adult, String biography, LocalDate birthDate, LocalDate deathDate, Integer gender, String knownFor, String birthPlace, Integer popularity, String profilePath, String homepage, String imdbId, List<String> alsoKnownAs, Set<Crew> crew, Set<Cast> cast) {
         this.id = id;
         this.name = name;
         this.adult = adult;
@@ -92,7 +89,6 @@ public class Person {
         this.alsoKnownAs = alsoKnownAs;
         this.crew = crew;
         this.cast = cast;
-        this.created = created;
     }
 
     // Getters and setters
@@ -222,13 +218,5 @@ public class Person {
 
     public void setCast(Set<Cast> cast) {
         this.cast = cast;
-    }
-
-    public Set<Created> getCreated() {
-        return created;
-    }
-
-    public void setCreated(Set<Created> created) {
-        this.created = created;
     }
 }

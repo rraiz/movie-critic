@@ -3,11 +3,11 @@ package com.rraiz.movie_critic.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Column;
 
 @Embeddable
-public class TvShowNetworkId implements Serializable  {
+public class TvShowNetworkId implements Serializable {
 
     @Column(name = "tv_show_id")
     private FilmId tvShowId;
@@ -15,10 +15,10 @@ public class TvShowNetworkId implements Serializable  {
     @Column(name = "network_id")
     private Integer networkId;
 
-    // Constructors
-    public TvShowNetworkId() {
-    }
+    // Default constructor
+    public TvShowNetworkId() {}
 
+    // Parameterized constructor
     public TvShowNetworkId(FilmId tvShowId, Integer networkId) {
         this.tvShowId = tvShowId;
         this.networkId = networkId;
