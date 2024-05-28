@@ -30,7 +30,7 @@ public class MovieService {
         return movieRepository.findById(id).orElse(null);
     }
 
-    public Movie getMovieDetails(int movieId) {
+    public Movie getMovieDetails(int movieId) throws Exception {
         Movie m = tmdbApiService.fetchMovieDetails(movieId);
         addMovie(m);
         return m;
