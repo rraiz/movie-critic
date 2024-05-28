@@ -67,12 +67,15 @@ public class Person {
     @OneToMany(mappedBy = "person")
     private Set<Cast> cast;
 
+    @Column(nullable = true)
+    private LocalDate lastUpdated;
+
     // Default Constructor
     public Person() {
     }
 
     // Parameterized Constructor
-    public Person(int id, String name, boolean adult, String biography, LocalDate birthDate, LocalDate deathDate, Integer gender, String knownFor, String birthPlace, Integer popularity, String profilePath, String homepage, String imdbId, List<String> alsoKnownAs, Set<Crew> crew, Set<Cast> cast) {
+    public Person(int id, String name, boolean adult, String biography, LocalDate birthDate, LocalDate deathDate, Integer gender, String knownFor, String birthPlace, Integer popularity, String profilePath, String homepage, String imdbId, List<String> alsoKnownAs, Set<Crew> crew, Set<Cast> cast, LocalDate lastUpdated) {
         this.id = id;
         this.name = name;
         this.adult = adult;
@@ -89,6 +92,7 @@ public class Person {
         this.alsoKnownAs = alsoKnownAs;
         this.crew = crew;
         this.cast = cast;
+        this.lastUpdated = lastUpdated;
     }
 
     // Getters and setters
@@ -218,5 +222,13 @@ public class Person {
 
     public void setCast(Set<Cast> cast) {
         this.cast = cast;
+    }
+
+    public LocalDate getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDate lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

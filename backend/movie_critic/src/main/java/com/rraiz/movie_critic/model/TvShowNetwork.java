@@ -1,5 +1,8 @@
 package com.rraiz.movie_critic.model;
 
+import java.time.LocalDate;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -27,12 +30,16 @@ public class TvShowNetwork {
     @JoinColumn(name = "network_id")
     private Network network;
 
+    @Column(nullable = true)
+    private LocalDate lastUpdated;
+
     public TvShowNetwork() {}
 
-    public TvShowNetwork(TvShowNetworkId id, TvShow tvShow, Network network) {
+    public TvShowNetwork(TvShowNetworkId id, TvShow tvShow, Network network, LocalDate lastUpdated) {
         this.id = id;
         this.tvShow = tvShow;
         this.network = network;
+        this.lastUpdated = lastUpdated;
     }
 
     // Getters and setters
@@ -58,5 +65,13 @@ public class TvShowNetwork {
 
     public void setNetwork(Network network) {
         this.network = network;
+    }
+
+    public LocalDate getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDate lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

@@ -1,5 +1,6 @@
 package com.rraiz.movie_critic.model;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -27,15 +28,19 @@ public class Network {
     @OneToMany(mappedBy = "network")
     private Set<TvShowNetwork> tvShowNetworks;
 
+    @Column(nullable = true)
+    private LocalDate lastUpdated;
+
     public Network() {
     }
 
-    public Network(int id, String name, String origin_country, String logoPath, Set<TvShowNetwork> tvShowNetworks) {
+    public Network(int id, String name, String origin_country, String logoPath, Set<TvShowNetwork> tvShowNetworks, LocalDate lastUpdated) {
         this.id = id;
         this.name = name;
         this.origin_country = origin_country;
         this.logoPath = logoPath;
         this.tvShowNetworks = tvShowNetworks;
+        this.lastUpdated = lastUpdated;
     }
 
     public int getId() {
@@ -76,5 +81,13 @@ public class Network {
 
     public void setTvShowNetworks(Set<TvShowNetwork> tvShowNetworks) {
         this.tvShowNetworks = tvShowNetworks;
+    }
+
+    public LocalDate getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDate lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

@@ -1,5 +1,8 @@
 package com.rraiz.movie_critic.model;
 
+import java.time.LocalDate;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -27,13 +30,17 @@ public class Created {
     })
     private TvShow tvShow;
 
+    @Column(nullable = true)
+    private LocalDate lastUpdated;
+
     public Created() {
     }
 
-    public Created(CreatedId id, Person person, TvShow tvShow) {
+    public Created(CreatedId id, Person person, TvShow tvShow, LocalDate lastUpdated) {
         this.id = id;
         this.person = person;
         this.tvShow = tvShow;
+        this.lastUpdated = lastUpdated;
     }
 
     public CreatedId getId() {
@@ -58,5 +65,13 @@ public class Created {
 
     public void setTvShow(TvShow tvShow) {
         this.tvShow = tvShow;
+    }
+
+    public LocalDate getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDate lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

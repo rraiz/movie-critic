@@ -1,5 +1,6 @@
 package com.rraiz.movie_critic.model;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -81,12 +82,15 @@ public class Film {
     @OneToMany(mappedBy = "film")
     private Set<Produced> produced;
 
+    @Column(nullable = true)
+    private LocalDate lastUpdated;
+
     // Default Constructor
     public Film() {
     }
 
     // Parameterized Constructor
-    public Film(FilmId id, String title, boolean adult, String homepage, String backdrop_path, String poster_path, String original_name, String original_language, String overview, Double popularity, Integer vote_count, Double vote_average, List<String> genres, List<String> production_countries, List<String> spoken_languages, List<String> origin_countries, Set<Crew> crew, Set<Cast> cast, Set<Produced> produced){
+    public Film(FilmId id, String title, boolean adult, String homepage, String backdrop_path, String poster_path, String original_name, String original_language, String overview, Double popularity, Integer vote_count, Double vote_average, List<String> genres, List<String> production_countries, List<String> spoken_languages, List<String> origin_countries, Set<Crew> crew, Set<Cast> cast, Set<Produced> produced, LocalDate lastUpdated) {
         this.id = id;
         this.title = title;
         this.adult = adult;
@@ -106,6 +110,7 @@ public class Film {
         this.crew = crew;
         this.cast = cast;
         this.produced = produced;
+        this.lastUpdated = lastUpdated;
     }
 
     // Getters and Setters
@@ -259,5 +264,13 @@ public class Film {
 
     public void setProduced(Set<Produced> produced) {
         this.produced = produced;
+    }
+
+    public LocalDate getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDate lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

@@ -44,12 +44,15 @@ public class Episode {
     @JoinColumn(name = "season_id", nullable = false)
     private Season season;
 
+    @Column(nullable = true)
+    private LocalDate lastUpdated;
+
     // Default Constructor
     public Episode() {
     }
 
     // Parameterized Constructor
-    public Episode(LocalDate airDate, String name, Integer episodeNumber, String overview, Integer runtime, String stillPath, Double voteAverage, Integer voteCount, Season season) {
+    public Episode(LocalDate airDate, String name, Integer episodeNumber, String overview, Integer runtime, String stillPath, Double voteAverage, Integer voteCount, Season season, LocalDate lastUpdated) {
         this.airDate = airDate;
         this.name = name;
         this.episodeNumber = episodeNumber;
@@ -59,6 +62,7 @@ public class Episode {
         this.voteAverage = voteAverage;
         this.voteCount = voteCount;
         this.season = season;
+        this.lastUpdated = lastUpdated;
     }
 
     // Getters and Setters
@@ -140,5 +144,13 @@ public class Episode {
 
     public void setSeason(Season season) {
         this.season = season;
+    }
+
+    public LocalDate getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDate lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

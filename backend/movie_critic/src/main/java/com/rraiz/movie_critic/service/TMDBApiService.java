@@ -86,7 +86,7 @@ public class TMDBApiService {
         Set<Cast> cast = Set.of(); // Map cast if available
         Set<Produced> produced = Set.of(); // Map produced if available
 
-        return new Movie(filmId, title, adult, homepage, backdropPath, posterPath, originalName, originalLanguage, overview, popularity, voteCount, voteAverage, genres, productionCountries, spokenLanguages, originCountries, crew, cast, tagline, budget, releaseDate, revenue, runtime, collection, produced);
+        return new Movie(filmId, title, adult, homepage, backdropPath, posterPath, originalName, originalLanguage, overview, popularity, voteCount, voteAverage, genres, productionCountries, spokenLanguages, originCountries, crew, cast, tagline, budget, releaseDate, revenue, runtime, collection, produced, null);
     }
     
 }

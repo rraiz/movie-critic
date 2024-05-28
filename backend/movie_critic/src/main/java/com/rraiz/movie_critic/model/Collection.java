@@ -1,6 +1,8 @@
 package com.rraiz.movie_critic.model;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -25,18 +27,23 @@ public class Collection {
     @OneToMany(mappedBy = "collection")
     private Set<Movie> movies;
 
+    @Column(nullable = true)
+    private LocalDate lastUpdated;
+
+
     // Default Constructor
     public Collection() {
     }
 
     // Parameterized Constructor
-    public Collection(int id, String name, String overview, String posterPath, String backdropPath, Set<Movie> movies) {
+    public Collection(int id, String name, String overview, String posterPath, String backdropPath, Set<Movie> movies, LocalDate lastUpdated) {
         this.id = id;
         this.name = name;
         this.overview = overview;
         this.posterPath = posterPath;
         this.backdropPath = backdropPath;
         this.movies = movies;
+        this.lastUpdated = lastUpdated;
     }
 
     // Getters and Setters
@@ -86,5 +93,13 @@ public class Collection {
 
     public void setMovies(Set<Movie> movies) {
         this.movies = movies;
+    }
+
+    public LocalDate getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDate lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

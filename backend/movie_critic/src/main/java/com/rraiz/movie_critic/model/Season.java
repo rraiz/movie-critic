@@ -45,8 +45,11 @@ public class Season {
     })
     private TvShow tvShow;
 
+    @Column
+    private LocalDate lastUpdated;
+
     // Parameterized Constructor
-    public Season(int id, LocalDate airDate, String overview, String posterPath, Integer seasonNumber, Integer voteCount, Double voteAverage, Set<Episode> episodes, TvShow tvShow) {
+    public Season(int id, LocalDate airDate, String overview, String posterPath, Integer seasonNumber, Integer voteCount, Double voteAverage, Set<Episode> episodes, TvShow tvShow, LocalDate lastUpdated) {
         this.id = id;
         this.airDate = airDate;
         this.overview = overview;
@@ -56,6 +59,7 @@ public class Season {
         this.voteAverage = voteAverage;
         this.episodes = episodes;
         this.tvShow = tvShow;
+        this.lastUpdated = lastUpdated;
     }
 
     // Getters and Setters
@@ -129,5 +133,13 @@ public class Season {
 
     public void setTvShow(TvShow tvShow) {
         this.tvShow = tvShow;
+    }
+
+    public LocalDate getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDate lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

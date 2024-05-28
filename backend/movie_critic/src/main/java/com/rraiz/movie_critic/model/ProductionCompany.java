@@ -1,5 +1,6 @@
 package com.rraiz.movie_critic.model;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -39,11 +40,14 @@ public class ProductionCompany {
     @OneToMany(mappedBy = "productionCompany")
     private Set<Produced> produced;
 
+    @Column(nullable = true)
+    private LocalDate lastUpdated;
+
     public ProductionCompany() {
     }
 
     public ProductionCompany(int id, String description, String headquarters, String homepage, String logoPath, String name,
-            String originCountry, String parentCompany, Set<Produced> produced) {
+            String originCountry, String parentCompany, Set<Produced> produced, LocalDate lastUpdated) {
         this.id = id;
         this.description = description;
         this.headquarters = headquarters;
@@ -53,6 +57,7 @@ public class ProductionCompany {
         this.originCountry = originCountry;
         this.parentCompany = parentCompany;
         this.produced = produced;
+        this.lastUpdated = lastUpdated;
     }
 
     public int getId() {
@@ -125,5 +130,13 @@ public class ProductionCompany {
 
     public void setProduced(Set<Produced> produced) {
         this.produced = produced;
+    }
+
+    public LocalDate getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDate lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }
