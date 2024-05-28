@@ -51,43 +51,64 @@ public class TMDBApiService {
 
     private Movie mapApiResponseToMovie(String jsonResponse) throws Exception {
         JsonNode root = objectMapper.readTree(jsonResponse);
-
+    
         FilmId filmId = new FilmId(root.get("id").asInt(), 0);
-
-        String title = root.get("title").asText();
-        boolean adult = root.get("adult").asBoolean();
-        String homepage = root.has("homepage") ? root.get("homepage").asText() : null;
-        String backdropPath = root.has("backdrop_path") ? root.get("backdrop_path").asText() : null;
-        String posterPath = root.has("poster_path") ? root.get("poster_path").asText() : null;
-        String originalName = root.has("original_title") ? root.get("original_title").asText() : null;
-        String originalLanguage = root.has("original_language") ? root.get("original_language").asText() : null;
-        String overview = root.has("overview") ? root.get("overview").asText() : null;
-        Double popularity = root.has("popularity") ? root.get("popularity").asDouble() : null;
-        Integer voteCount = root.has("vote_count") ? root.get("vote_count").asInt() : null;
-        Double voteAverage = root.has("vote_average") ? root.get("vote_average").asDouble() : null;
-
+    
+        String title = getValueAsText(root.get("title"));
+        Boolean adult = getValueAsBoolean(root.get("adult"));
+        String homepage = getValueAsText(root.get("homepage"));
+        String backdropPath = getValueAsText(root.get("backdrop_path"));
+        String posterPath = getValueAsText(root.get("poster_path"));
+        String originalName = getValueAsText(root.get("original_title"));
+        String originalLanguage = getValueAsText(root.get("original_language"));
+        String overview = getValueAsText(root.get("overview"));
+        Double popularity = getValueAsDouble(root.get("popularity"));
+        Integer voteCount = getValueAsInt(root.get("vote_count"));
+        Double voteAverage = getValueAsDouble(root.get("vote_average"));
+    
         List<String> genres = root.get("genres").findValues("name").stream().map(JsonNode::asText).collect(Collectors.toList());
         List<String> productionCountries = root.get("production_countries").findValues("name").stream().map(JsonNode::asText).collect(Collectors.toList());
         List<String> spokenLanguages = root.get("spoken_languages").findValues("english_name").stream().map(JsonNode::asText).collect(Collectors.toList());
         List<String> originCountries = root.get("origin_country").findValues("name").stream().map(JsonNode::asText).collect(Collectors.toList());
-
-        String tagline = root.has("tagline") ? root.get("tagline").asText() : null;
-        Integer budget = root.has("budget") ? root.get("budget").asInt() : null;
-        LocalDate releaseDate = root.has("release_date") ? LocalDate.parse(root.get("release_date").asText(), DateTimeFormatter.ISO_DATE) : null;
-        Integer revenue = root.has("revenue") ? root.get("revenue").asInt() : null;
-        Integer runtime = root.has("runtime") ? root.get("runtime").asInt() : null;
-
+    
+        String tagline = getValueAsText(root.get("tagline"));
+        Integer budget = getValueAsInt(root.get("budget"));
+        LocalDate releaseDate = getValueAsLocalDate(root.get("release_date"));
+        Integer revenue = getValueAsInt(root.get("revenue"));
+        Integer runtime = getValueAsInt(root.get("runtime"));
+    
         Collection collection = null;
-        if (root.has("belongs_to_collection") && !root.get("belongs_to_collection").isNull()) {
-            // implement mapping of collection
+        if (root.get("belongs_to_collection") != null && !root.get("belongs_to_collection").isNull()) {
+            // Implement mapping of collection
         }
-
+    
         Set<Crew> crew = Set.of(); // Map crew if available
         Set<Cast> cast = Set.of(); // Map cast if available
         Set<Produced> produced = Set.of(); // Map produced if available
-
+    
         return new Movie(filmId, title, adult, homepage, backdropPath, posterPath, originalName, originalLanguage, overview, popularity, voteCount, voteAverage, genres, productionCountries, spokenLanguages, originCountries, crew, cast, tagline, budget, releaseDate, revenue, runtime, collection, produced, null);
     }
+    
+    private String getValueAsText(JsonNode node) {
+        return node != null && !node.isNull() ? node.asText() : null;
+    }
+    
+    private Integer getValueAsInt(JsonNode node) {
+        return node != null && !node.isNull() ? node.asInt() : null;
+    }
+    
+    private Double getValueAsDouble(JsonNode node) {
+        return node != null && !node.isNull() ? node.asDouble() : null;
+    }
+    
+    private Boolean getValueAsBoolean(JsonNode node) {
+        return node != null && !node.isNull() ? node.asBoolean() : null;
+    }
+    
+    private LocalDate getValueAsLocalDate(JsonNode node) {
+        return node != null && !node.isNull() ? LocalDate.parse(node.asText(), DateTimeFormatter.ISO_DATE) : null;
+    }
+    
     
 }
 
