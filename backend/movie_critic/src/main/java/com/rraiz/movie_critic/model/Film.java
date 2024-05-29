@@ -30,16 +30,16 @@ public class Film {
     private String homepage;
 
     @Column(nullable = true, columnDefinition = "TEXT")
-    private String backdrop_path;
+    private String backdropPath;
 
     @Column(nullable = true, columnDefinition = "TEXT")
-    private String poster_path;
+    private String posterPath;
 
     @Column(nullable = true, columnDefinition = "TEXT")
-    private String original_name;
+    private String originalName;
 
     @Column(nullable = true, columnDefinition = "TEXT")
-    private String original_language;
+    private String originalLanguage;
 
     @Column(nullable = true, columnDefinition = "TEXT")
     private String overview;
@@ -48,10 +48,10 @@ public class Film {
     private Double popularity;
 
     @Column(nullable = true)
-    private Integer vote_count;
+    private Integer voteCount;
 
     @Column(nullable = true)
-    private Double vote_average;
+    private Double voteAverage;
 
     @ElementCollection
     @CollectionTable(name = "genres")
@@ -61,17 +61,17 @@ public class Film {
     @ElementCollection
     @CollectionTable(name = "production_countries")
     @Column(name = "country", nullable = true, columnDefinition = "TEXT")
-    private List<String> production_countries;
+    private List<String> productionCountries;
 
     @ElementCollection
     @CollectionTable(name = "spoken_languages")
     @Column(name = "language", nullable = true, columnDefinition = "TEXT")
-    private List<String> spoken_languages;
+    private List<String> spokenLanguages;
 
     @ElementCollection
     @CollectionTable(name = "origin_countries")
     @Column(name = "country", nullable = true, columnDefinition = "TEXT")
-    private List<String> origin_countries;
+    private List<String> originCountries;
 
     @OneToMany(mappedBy = "film")
     private Set<Crew> crew;
@@ -90,23 +90,23 @@ public class Film {
     }
 
     // Parameterized Constructor
-    public Film(FilmId id, String title, boolean adult, String homepage, String backdrop_path, String poster_path, String original_name, String original_language, String overview, Double popularity, Integer vote_count, Double vote_average, List<String> genres, List<String> production_countries, List<String> spoken_languages, List<String> origin_countries, Set<Crew> crew, Set<Cast> cast, Set<Produced> produced, LocalDate lastUpdated) {
+    public Film(FilmId id, String title, boolean adult, String homepage, String backdropPath, String posterPath, String originalName, String originalLanguage, String overview, Double popularity, Integer voteCount, Double voteAverage, List<String> genres, List<String> productionCountries, List<String> spokenLanguages, List<String> originCountries, Set<Crew> crew, Set<Cast> cast, Set<Produced> produced, LocalDate lastUpdated) {
         this.id = id;
         this.title = title;
         this.adult = adult;
         this.homepage = homepage;
-        this.backdrop_path = backdrop_path;
-        this.poster_path = poster_path;
-        this.original_name = original_name;
-        this.original_language = original_language;
+        this.backdropPath = backdropPath;
+        this.posterPath = posterPath;
+        this.originalName = originalName;
+        this.originalLanguage = originalLanguage;
         this.overview = overview;
         this.popularity = popularity;
-        this.vote_count = vote_count;
-        this.vote_average = vote_average;
+        this.voteCount = voteCount;
+        this.voteAverage = voteAverage;
         this.genres = genres;
-        this.production_countries = production_countries;
-        this.spoken_languages = spoken_languages;
-        this.origin_countries = origin_countries;
+        this.productionCountries = productionCountries;
+        this.spokenLanguages = spokenLanguages;
+        this.originCountries = originCountries;
         this.crew = crew;
         this.cast = cast;
         this.produced = produced;
@@ -146,36 +146,36 @@ public class Film {
         this.homepage = homepage;
     }
 
-    public String getBackdrop_path() {
-        return backdrop_path;
+    public String getBackdropPath() {
+        return backdropPath;
     }
 
-    public void setBackdrop_path(String backdrop_path) {
-        this.backdrop_path = backdrop_path;
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
     }
 
-    public String getPoster_path() {
-        return poster_path;
+    public String getPosterPath() {
+        return posterPath;
     }
 
-    public void setPoster_path(String poster_path) {
-        this.poster_path = poster_path;
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
     }
 
-    public String getOriginal_name() {
-        return original_name;
+    public String getOriginalName() {
+        return originalName;
     }
 
-    public void setOriginal_name(String original_name) {
-        this.original_name = original_name;
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
     }
 
-    public String getOriginal_language() {
-        return original_language;
+    public String getOriginalLanguage() {
+        return originalLanguage;
     }
 
-    public void setOriginal_language(String original_language) {
-        this.original_language = original_language;
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
     }
 
     public String getOverview() {
@@ -194,20 +194,20 @@ public class Film {
         this.popularity = popularity;
     }
 
-    public Integer getVote_count() {
-        return vote_count;
+    public Integer getVoteCount() {
+        return voteCount;
     }
 
-    public void setVote_count(Integer vote_count) {
-        this.vote_count = vote_count;
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
     }
 
-    public Double getVote_average() {
-        return vote_average;
+    public Double getVoteAverage() {
+        return voteAverage;
     }
 
-    public void setVote_average(Double vote_average) {
-        this.vote_average = vote_average;
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
     }
 
     public List<String> getGenres() {
@@ -218,28 +218,28 @@ public class Film {
         this.genres = genres;
     }
 
-    public List<String> getProduction_countries() {
-        return production_countries;
+    public List<String> getProductionCountries() {
+        return productionCountries;
     }
 
-    public void setProduction_countries(List<String> production_countries) {
-        this.production_countries = production_countries;
+    public void setProductionCountries(List<String> productionCountries) {
+        this.productionCountries = productionCountries;
     }
 
-    public List<String> getSpoken_languages() {
-        return spoken_languages;
+    public List<String> getSpokenLanguages() {
+        return spokenLanguages;
     }
 
-    public void setSpoken_languages(List<String> spoken_languages) {
-        this.spoken_languages = spoken_languages;
+    public void setSpokenLanguages(List<String> spokenLanguages) {
+        this.spokenLanguages = spokenLanguages;
     }
 
-    public List<String> getOrigin_countries() {
-        return origin_countries;
+    public List<String> getOriginCountries() {
+        return originCountries;
     }
 
-    public void setOrigin_countries(List<String> origin_countries) {
-        this.origin_countries = origin_countries;
+    public void setOriginCountries(List<String> originCountries) {
+        this.originCountries = originCountries;
     }
 
     public Set<Crew> getCrew() {

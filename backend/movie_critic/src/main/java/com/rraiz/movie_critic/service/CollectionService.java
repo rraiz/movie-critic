@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import com.rraiz.movie_critic.model.Collection;
 import com.rraiz.movie_critic.repository.CollectionRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CollectionService {
 
@@ -16,6 +18,11 @@ public class CollectionService {
 
     public void addCollection(Collection collection) {
         collectionRepository.save(collection);
+    }
+
+    @Transactional
+    public Collection getCollectionById(int collectionId) {
+        return collectionRepository.findById(collectionId).orElse(null);
     }
 
 

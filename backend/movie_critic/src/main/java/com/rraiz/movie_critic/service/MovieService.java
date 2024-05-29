@@ -31,9 +31,12 @@ public class MovieService {
     }
 
     public Movie getMovieDetails(int movieId) throws Exception {
-        Movie m = tmdbApiService.fetchMovieDetails(movieId);
-        addMovie(m);
+        Movie m = getMovieById(movieId);
+        if (m == null) {
+            m = tmdbApiService.fetchMovieDetails(movieId);
+            addMovie(m);
+        }
         return m;
     }
-    
+
 }
