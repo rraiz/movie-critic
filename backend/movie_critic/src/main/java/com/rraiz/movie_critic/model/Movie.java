@@ -20,13 +20,13 @@ public class Movie extends Film {
     private String tagline;
 
     @Column(nullable = true)
-    private Integer budget;
+    private Long budget;
 
     @Column(nullable = true, name = "release_date")
     private LocalDate releaseDate;
 
     @Column(nullable = true)
-    private Integer revenue;
+    private Long revenue;
 
     @Column(nullable = true)
     private Integer runtime;
@@ -42,7 +42,7 @@ public class Movie extends Film {
     }
 
     // Parameterized Constructor
-    public Movie(FilmId id, String title, boolean adult, String homepage, String backdrop_path, String poster_path, String original_name, String original_language, String overview, Double popularity, Integer vote_count, Double vote_average, List<String> genres, List<String> production_countries, List<String> spoken_languages, List<String> origin_countries, Set<Crew> crew, Set<Cast> cast, String tagline, Integer budget, LocalDate releaseDate, Integer revenue, Integer runtime, Collection collection, Set<Produced> produced, LocalDate lastUpdated) {
+    public Movie(FilmId id, String title, boolean adult, String homepage, String backdrop_path, String poster_path, String original_name, String original_language, String overview, Double popularity, Integer vote_count, Double vote_average, List<String> genres, List<String> production_countries, List<String> spoken_languages, List<String> origin_countries, Set<Crew> crew, Set<Cast> cast, String tagline, Long budget, LocalDate releaseDate, Long revenue, Integer runtime, Collection collection, Set<Produced> produced, LocalDate lastUpdated) {
         super(id, title, adult, homepage, backdrop_path, poster_path, original_name, original_language, overview, popularity, vote_count, vote_average, genres, production_countries, spoken_languages, origin_countries, crew, cast, produced, lastUpdated);
         this.tagline = tagline;
         this.budget = budget;
@@ -61,11 +61,11 @@ public class Movie extends Film {
         this.tagline = tagline;
     }
 
-    public Integer getBudget() {
+    public Long getBudget() {
         return budget;
     }
 
-    public void setBudget(Integer budget) {
+    public void setBudget(Long budget) {
         this.budget = budget;
     }
 
@@ -77,11 +77,11 @@ public class Movie extends Film {
         this.releaseDate = releaseDate;
     }
 
-    public Integer getRevenue() {
+    public Long getRevenue() {
         return revenue;
     }
 
-    public void setRevenue(Integer revenue) {
+    public void setRevenue(Long revenue) {
         this.revenue = revenue;
     }
 

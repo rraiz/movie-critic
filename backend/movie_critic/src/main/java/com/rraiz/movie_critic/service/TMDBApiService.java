@@ -78,9 +78,9 @@ public class TMDBApiService {
         List<String> originCountries = root.get("origin_country").findValues("name").stream().map(JsonNode::asText).collect(Collectors.toList());
 
         String tagline = getValueAsText(root.get("tagline"));
-        Integer budget = getValueAsInt(root.get("budget"));
+        Long budget = getValueAsLong(root.get("budget"));
         LocalDate releaseDate = getValueAsLocalDate(root.get("release_date"));
-        Integer revenue = getValueAsInt(root.get("revenue"));
+        Long revenue = getValueAsLong(root.get("revenue"));
         Integer runtime = getValueAsInt(root.get("runtime"));
 
         Collection collection = null;
@@ -145,6 +145,10 @@ public class TMDBApiService {
 
     private Integer getValueAsInt(JsonNode node) {
         return node != null && !node.isNull() ? node.asInt() : null;
+    }
+
+    private Long getValueAsLong(JsonNode node) {
+        return node != null && !node.isNull() ? node.asLong() : null;
     }
 
     private Double getValueAsDouble(JsonNode node) {
