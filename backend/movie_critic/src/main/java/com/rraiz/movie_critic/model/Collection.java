@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "collection")
 public class Collection {
@@ -25,6 +27,7 @@ public class Collection {
     private String backdropPath;
 
     @OneToMany(mappedBy = "collection")
+    @JsonBackReference
     private Set<Movie> movies;
 
     @Column(nullable = true)

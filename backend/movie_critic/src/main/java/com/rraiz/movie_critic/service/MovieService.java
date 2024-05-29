@@ -1,5 +1,6 @@
 package com.rraiz.movie_critic.service;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.rraiz.movie_critic.model.FilmId;
@@ -13,10 +14,11 @@ public class MovieService {
 
     private final MovieRepository movieRepository;
 
-    private TMDBApiService tmdbApiService;
+    private final TMDBApiService tmdbApiService;
 
-    public MovieService(MovieRepository movieRepository) {
+    public MovieService(MovieRepository movieRepository, @Lazy TMDBApiService tmdbApiService) {
         this.movieRepository = movieRepository;
+        this.tmdbApiService = tmdbApiService;
     }
 
     @Transactional
@@ -34,7 +36,8 @@ public class MovieService {
         Movie m = getMovieById(movieId);
         if (m == null) {
             m = tmdbApiService.fetchMovieDetails(movieId);
-            addMovie(m);
+            if (m != null)
+                addMovie(m);
         }
         return m;
     }

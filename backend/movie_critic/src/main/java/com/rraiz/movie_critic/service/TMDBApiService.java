@@ -2,6 +2,7 @@ package com.rraiz.movie_critic.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -95,6 +96,8 @@ public class TMDBApiService {
                 collection.setBackdropPath(getValueAsText(collNode.get("backdrop_path")));
             }
             Set<Movie> movieList = collection.getMovies();
+            if(movieList == null)
+                movieList = new HashSet<>();
             movieList.add(movie);
             collection.setMovies(movieList);
             collectionService.addCollection(collection);
@@ -129,6 +132,7 @@ public class TMDBApiService {
         movie.setRevenue(revenue);
         movie.setRuntime(runtime);
         movie.setCollection(collection);
+        movie.setLastUpdated(LocalDate.now());
 
         movieService.addMovie(movie);
 

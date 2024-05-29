@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -31,6 +33,7 @@ public class Movie extends Film {
 
     @ManyToOne
     @JoinColumn(name = "collection_id")
+    @JsonManagedReference
     private Collection collection;
 
     // Default Constructor
