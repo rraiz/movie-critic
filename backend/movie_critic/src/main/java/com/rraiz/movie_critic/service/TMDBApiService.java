@@ -73,6 +73,11 @@ public class TMDBApiService {
         return fetchFromApi(url, this::mapApiResponseToTvShow);
     }
 
+    /**
+     * Maps the JSON response from the API to a Film object
+     * @param root
+     * @param film
+     */
     private void mapApiResponseToFilm(JsonNode root, Film film) {
         String title = getValueAsText(root.get("title"));
         Boolean adult = getValueAsBoolean(root.get("adult"));
@@ -161,6 +166,11 @@ public class TMDBApiService {
         return null; // Returns null if no production companies are found
     }
 
+    /**
+     * Maps the JSON response from the API to a Movie object
+     * @param root
+     * @return
+     */
     private Movie mapApiResponseToMovie(JsonNode root) {
         Movie movie = new Movie();
 
@@ -214,6 +224,11 @@ public class TMDBApiService {
         return null;
     }
 
+    /**
+     * Maps the JSON response from the API to a TvShow object
+     * @param root
+     * @return
+     */
     private TvShow mapApiResponseToTvShow(JsonNode root) {
         TvShow tvShow = new TvShow();
 
@@ -334,6 +349,8 @@ public class TMDBApiService {
         return null;
     }
 
+
+    
     // Helper methods to extract values from JSON nodes
     private String getValueAsText(JsonNode node) {
         return node != null && !node.isNull() ? node.asText() : null;
