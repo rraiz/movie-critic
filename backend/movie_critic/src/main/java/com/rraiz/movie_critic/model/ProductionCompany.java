@@ -3,6 +3,8 @@ package com.rraiz.movie_critic.model;
 import java.time.LocalDate;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,6 +41,7 @@ public class ProductionCompany {
     private String parentCompany;
 
     @OneToMany(mappedBy = "productionCompany", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<Produced> produced;
 
     @Column(nullable = true)

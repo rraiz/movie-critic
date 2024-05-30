@@ -65,6 +65,8 @@ public class TMDBApiService {
         Movie movie = new Movie();
 
         FilmId filmId = new FilmId(root.get("id").asInt(), 0);
+        movie.setId(filmId);
+        movieService.addMovie(movie);
 
         String title = getValueAsText(root.get("title"));
         Boolean adult = getValueAsBoolean(root.get("adult"));
@@ -95,7 +97,7 @@ public class TMDBApiService {
 
         // Map collection if available
         Collection collection = null;
-        if (root.get("belongs_to_collection") != null) {
+        if (!root.get("belongs_to_collection").isNull()) {
             JsonNode collNode = root.get("belongs_to_collection");
             Integer colId = getValueAsInt(collNode.get("id"));
             collection = collectionService.getCollectionById(colId);
@@ -119,7 +121,7 @@ public class TMDBApiService {
 
         // Map production companies if available
         Set<Produced> produced_set = null;
-        if (root.get("production_companies") != null) {
+        if (!root.get("production_companies").isNull()) {
 
             produced_set = new HashSet<>(); // Creates a set of produced movies
 
@@ -136,7 +138,7 @@ public class TMDBApiService {
                     productionCompany.setName(company.get("name").asText()); // name
                     productionCompany.setLogoPath(company.get("logo_path").asText()); // logo path
                     productionCompany.setOriginCountry(company.get("origin_country").asText()); // origin country
-
+                    productionCompanyService.addProductionCompany(productionCompany); // Saves the company to db
                 }
 
                 // Tries to find if the movie has been produced by the company in the database
@@ -164,7 +166,6 @@ public class TMDBApiService {
             }
         }
 
-        movie.setId(filmId);
         movie.setTitle(title);
         movie.setAdult(adult);
         movie.setHomepage(homepage);

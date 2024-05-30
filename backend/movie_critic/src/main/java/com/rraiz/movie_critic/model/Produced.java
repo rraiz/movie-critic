@@ -2,6 +2,8 @@ package com.rraiz.movie_critic.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -21,6 +23,7 @@ public class Produced {
     @ManyToOne
     @MapsId("companyId")
     @JoinColumn(name = "company_id")
+    @JsonBackReference
     private ProductionCompany productionCompany;
 
     @ManyToOne
@@ -29,6 +32,7 @@ public class Produced {
         @JoinColumn(name = "film_id"),
         @JoinColumn(name = "film_type")
     })
+    @JsonBackReference
     private Film film;
 
     @Column (nullable = true)

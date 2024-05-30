@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -81,6 +83,7 @@ public class Film {
     private Set<Cast> cast;
 
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<Produced> produced;
 
     @Column(nullable = true)
