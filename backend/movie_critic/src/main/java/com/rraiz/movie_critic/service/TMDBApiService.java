@@ -35,10 +35,12 @@ public class TMDBApiService {
     private final CollectionService collectionService;
     private final ProductionCompanyService productionCompanyService;
     private final PersonService personService;
+    private final NetworkService networkService;
 
     public TMDBApiService(RestTemplateBuilder restTemplateBuilder, @Value("${TMDB_API_KEY}") String apiKey,
             MovieService movieService, TvShowService tvShowService, CollectionService collectionService,
-            ProductionCompanyService productionCompanyService, PersonService personService) {
+            ProductionCompanyService productionCompanyService, PersonService personService,
+            NetworkService networkService) {
         this.restTemplate = restTemplateBuilder.build();
         this.apiKey = apiKey;
         this.objectMapper = new ObjectMapper();
@@ -47,6 +49,7 @@ public class TMDBApiService {
         this.collectionService = collectionService;
         this.productionCompanyService = productionCompanyService;
         this.personService = personService;
+        this.networkService = networkService;
     }
 
     private <T> T fetchFromApi(String url, Function<JsonNode, T> mappingFunction) {
@@ -99,7 +102,6 @@ public class TMDBApiService {
         // Map production companies if available
         Set<ProductionCompany> produced_set = mapFilmProductionCompanies(root, film);
 
-
         film.setTitle(title);
         film.setAdult(adult);
         film.setHomepage(homepage);
@@ -124,8 +126,7 @@ public class TMDBApiService {
         film.setLastUpdated(LocalDate.now());
     }
 
-    private Set<ProductionCompany> mapFilmProductionCompanies(JsonNode root, Film film)
-    {
+    private Set<ProductionCompany> mapFilmProductionCompanies(JsonNode root, Film film) {
         if (!root.get("production_companies").isNull()) {
 
             Set<ProductionCompany> produced_set = new HashSet<>(); // Creates a set of produced movies
@@ -139,12 +140,12 @@ public class TMDBApiService {
                 ProductionCompany productionCompany = productionCompanyService.getProductionCompanyById(companyId);
                 if (productionCompany == null) { // if not found then
                     productionCompany = new ProductionCompany(); // creates a new one
-                    productionCompany.setId(companyId); // Sets id
-                    productionCompany.setName(company.get("name").asText()); // name
-                    productionCompany.setLogoPath(company.get("logo_path").asText()); // logo path
-                    productionCompany.setOriginCountry(company.get("origin_country").asText()); // origin country
-                    productionCompanyService.addProductionCompany(productionCompany); // Saves the company to db
                 }
+                productionCompany.setId(companyId); // Sets id
+                productionCompany.setName(company.get("name").asText()); // name
+                productionCompany.setLogoPath(company.get("logo_path").asText()); // logo path
+                productionCompany.setOriginCountry(company.get("origin_country").asText()); // origin country
+                productionCompanyService.addProductionCompany(productionCompany); // Saves the company to db
 
                 Set<Film> producedFilm = productionCompany.getProduced(); // Gets the set of produced movies
                 if (producedFilm == null) // If the set is null
@@ -195,11 +196,12 @@ public class TMDBApiService {
             collection = collectionService.getCollectionById(colId);
             if (collection == null) {
                 collection = new Collection();
-                collection.setId(colId);
-                collection.setName(getValueAsText(collNode.get("name")));
-                collection.setPosterPath(getValueAsText(collNode.get("poster_path")));
-                collection.setBackdropPath(getValueAsText(collNode.get("backdrop_path")));
             }
+            collection.setId(colId);
+            collection.setName(getValueAsText(collNode.get("name")));
+            collection.setPosterPath(getValueAsText(collNode.get("poster_path")));
+            collection.setBackdropPath(getValueAsText(collNode.get("backdrop_path")));
+
             Set<Movie> movieList = collection.getMovies();
             if (movieList == null)
                 movieList = new HashSet<>();
@@ -220,7 +222,6 @@ public class TMDBApiService {
         tvShowService.addTvShow(tvShow);
         mapApiResponseToFilm(root, tvShow);
 
-
         LocalDate firstAirDate = getValueAsLocalDate(root.get("first_air_date"));
         LocalDate lastAirDate = getValueAsLocalDate(root.get("last_air_date"));
         Boolean inProduction = getValueAsBoolean(root.get("in_production"));
@@ -228,7 +229,8 @@ public class TMDBApiService {
         Integer numberOfSeasons = getValueAsInt(root.get("number_of_seasons"));
 
         Set<Person> creators = mapTvShowCreators(root, tvShow);
-
+        Set<Network> networks = mapTvShowNetworks(root, tvShow);
+        Set<Season> seasons = mapTvShowSeasons(root, tvShow);
 
         tvShow.setFirstAirDate(firstAirDate);
         tvShow.setLastAirDate(lastAirDate);
@@ -236,6 +238,8 @@ public class TMDBApiService {
         tvShow.setNumberOfEpisodes(numberOfEpisodes);
         tvShow.setNumberOfSeasons(numberOfSeasons);
         tvShow.setCreated(creators);
+        tvShow.setNetworks(networks);
+        tvShow.setSeasons(seasons);
         tvShowService.addTvShow(tvShow);
 
         return tvShow;
@@ -249,16 +253,15 @@ public class TMDBApiService {
                 Person person = personService.getPersonById(creatorId);
                 if (person == null) {
                     person = new Person();
-                    person.setId(creatorId);
-                    person.setName(creator.get("name").asText());
-                    person.setProfilePath(creator.get("profile_path").asText());
-                    personService.addPerson(person);
                 }
+                person.setId(creatorId);
+                person.setName(creator.get("name").asText());
+                person.setProfilePath(creator.get("profile_path").asText());
+
                 Set<TvShow> createdShows = person.getCreatedTvShows();
                 if (createdShows == null)
                     createdShows = new HashSet<>();
                 createdShows.add(tvShow);
-                
                 person.setCreatedTvShows(createdShows);
 
                 personService.addPerson(person);
@@ -269,6 +272,69 @@ public class TMDBApiService {
         return null;
     }
 
+    public Set<Network> mapTvShowNetworks(JsonNode root, TvShow tvShow) {
+        if (!root.get("networks").isNull()) {
+            Set<Network> networks = new HashSet<>();
+            for (JsonNode network : root.get("networks")) {
+                int networkId = network.get("id").asInt();
+                Network networkObj = networkService.getNetworkById(networkId);
+                if (networkObj == null) {
+                    networkObj = new Network();
+                }
+                networkObj.setId(networkId);
+                networkObj.setName(network.get("name").asText());
+                networkObj.setLogoPath(network.get("logo_path").asText());
+                networkObj.setOriginCountry(network.get("origin_country").asText());
+
+                Set<TvShow> tvShows = networkObj.getTvShows();
+                if (tvShows == null)
+                    tvShows = new HashSet<>();
+                tvShows.add(tvShow);
+                networkObj.setTvShows(tvShows);
+
+                networkService.addNetwork(networkObj);
+                networks.add(networkObj);
+            }
+            return networks;
+        }
+        return null;
+    }
+
+    public Set<Season> mapTvShowSeasons(JsonNode root, TvShow tvShow) {
+        if (!root.get("seasons").isNull()) {
+            Set<Season> seasons = new HashSet<>();
+            for (JsonNode season : root.get("seasons")) {
+                int seasonId = season.get("id").asInt();
+                Season seasonObj = tvShowService.getSeasonById(seasonId);
+                if (seasonObj == null) {
+                    seasonObj = new Season();
+                }
+                seasonObj.setId(seasonId);
+                seasonObj.setAirDate(getValueAsLocalDate(season.get("air_date")));
+                seasonObj.setName(getValueAsText(season.get("name")));
+                seasonObj.setOverview(getValueAsText(season.get("overview")));
+                seasonObj.setEpisodeCount(getValueAsInt(season.get("episode_count")));
+                seasonObj.setPosterPath(getValueAsText(season.get("poster_path")));
+                seasonObj.setSeasonNumber(getValueAsInt(season.get("season_number")));
+                seasonObj.setVoteAverage(getValueAsDouble(season.get("vote_average")));
+
+                seasonObj.setTvShow(tvShow);
+
+                Set<Season> tv_show_seasons = tvShow.getSeasons();
+                if (tv_show_seasons == null)
+                    tv_show_seasons = new HashSet<>();
+                tv_show_seasons.add(seasonObj);
+                tvShow.setSeasons(tv_show_seasons);
+
+                tvShowService.addSeason(seasonObj);
+                seasons.add(seasonObj);
+            }
+            return seasons;
+        }
+        return null;
+    }
+
+    // Helper methods to extract values from JSON nodes
     private String getValueAsText(JsonNode node) {
         return node != null && !node.isNull() ? node.asText() : null;
     }

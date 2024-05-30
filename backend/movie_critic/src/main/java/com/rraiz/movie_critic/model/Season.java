@@ -17,22 +17,25 @@ public class Season {
     @Id
     private int id;
 
-    @Column(nullable = true, name = "air_date")
+    @Column(nullable = true)
     private LocalDate airDate;
+
+    @Column(nullable = true, columnDefinition = "TEXT")
+    private String name;
 
     @Column(nullable = true, columnDefinition = "TEXT")
     private String overview;
 
-    @Column(nullable = true, name = "poster_path")
+    @Column(nullable = true)
+    private int episodeCount;
+
+    @Column(nullable = true)
     private String posterPath;
 
-    @Column(nullable = true, name = "season_number")
+    @Column(nullable = true)
     private Integer seasonNumber;
 
-    @Column(nullable = true, name = "vote_count")
-    private  Integer voteCount;
-
-    @Column(nullable = true, name = "vote_average")
+    @Column(nullable = true)
     private Double voteAverage;
 
     @OneToMany(mappedBy = "season")
@@ -48,14 +51,18 @@ public class Season {
     @Column
     private LocalDate lastUpdated;
 
+    public Season() {
+    }
+
     // Parameterized Constructor
-    public Season(int id, LocalDate airDate, String overview, String posterPath, Integer seasonNumber, Integer voteCount, Double voteAverage, Set<Episode> episodes, TvShow tvShow, LocalDate lastUpdated) {
+    public Season(int id, LocalDate airDate, String name, String overview, Integer episodeCount, String posterPath, Integer seasonNumber, Double voteAverage, Set<Episode> episodes, TvShow tvShow, LocalDate lastUpdated) {
         this.id = id;
         this.airDate = airDate;
+        this.name = name;
         this.overview = overview;
+        this.episodeCount = episodeCount;
         this.posterPath = posterPath;
         this.seasonNumber = seasonNumber;
-        this.voteCount = voteCount;
         this.voteAverage = voteAverage;
         this.episodes = episodes;
         this.tvShow = tvShow;
@@ -79,8 +86,24 @@ public class Season {
         this.airDate = airDate;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getOverview() {
         return overview;
+    }
+
+    public int getEpisodeCount() {
+        return episodeCount;
+    }
+
+    public void setEpisodeCount(int episodeCount) {
+        this.episodeCount = episodeCount;
     }
 
     public void setOverview(String overview) {
@@ -101,14 +124,6 @@ public class Season {
 
     public void setSeasonNumber(Integer seasonNumber) {
         this.seasonNumber = seasonNumber;
-    }
-
-    public Integer getVoteCount() {
-        return voteCount;
-    }
-
-    public void setVoteCount(Integer voteCount) {
-        this.voteCount = voteCount;
     }
 
     public Double getVoteAverage() {

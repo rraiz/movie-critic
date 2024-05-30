@@ -22,7 +22,7 @@ public class Network {
     private String name;
 
     @Column(nullable = true, columnDefinition = "TEXT")
-    private String origin_country;
+    private String originCountry;
 
     @Column(nullable = true, name = "logo_path", columnDefinition = "TEXT")
     private String logoPath;
@@ -37,10 +37,10 @@ public class Network {
     public Network() {
     }
 
-    public Network(int id, String name, String origin_country, String logoPath, Set<TvShow> tvShows, LocalDate lastUpdated) {
+    public Network(int id, String name, String originCountry, String logoPath, Set<TvShow> tvShows, LocalDate lastUpdated) {
         this.id = id;
         this.name = name;
-        this.origin_country = origin_country;
+        this.originCountry = originCountry;
         this.logoPath = logoPath;
         this.tvShows = tvShows;
         this.lastUpdated = lastUpdated;
@@ -62,12 +62,12 @@ public class Network {
         this.name = name;
     }
 
-    public String getOrigin_country() {
-        return origin_country;
+    public String getOriginCountry() {
+        return originCountry;
     }
 
-    public void setOrigin_country(String origin_country) {
-        this.origin_country = origin_country;
+    public void setOriginCountry(String originCountry) {
+        this.originCountry = originCountry;
     }
 
     public String getLogoPath() {
