@@ -9,6 +9,8 @@ import com.rraiz.movie_critic.repository.CastRepository;
 import com.rraiz.movie_critic.repository.CrewRepository;
 import com.rraiz.movie_critic.repository.PersonRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class PersonService {
 
@@ -22,14 +24,23 @@ public class PersonService {
         this.crewRepository = crewRepository;
     }
 
+    /* Person */
+    @Transactional
     public void addPerson(Person person) {
         personRepository.save(person);
     }
 
+    @Transactional
+    public Person getPersonById(int personId) {
+        return personRepository.findById(personId).orElse(null);
+    }
+
+    /* Cast */
     public void addCast(Cast cast) {
         castRepository.save(cast);
     }
 
+    /* Crew */
     public void addCrew(Crew crew) {
         crewRepository.save(crew);
     }

@@ -31,18 +31,22 @@ public class TMDBApiService {
     private final ObjectMapper objectMapper;
 
     private final MovieService movieService;
+    private final TvShowService tvShowService;
     private final CollectionService collectionService;
     private final ProductionCompanyService productionCompanyService;
+    private final PersonService personService;
 
     public TMDBApiService(RestTemplateBuilder restTemplateBuilder, @Value("${TMDB_API_KEY}") String apiKey,
-            MovieService movieService, CollectionService collectionService,
-            ProductionCompanyService productionCompanyService) {
+            MovieService movieService, TvShowService tvShowService, CollectionService collectionService,
+            ProductionCompanyService productionCompanyService, PersonService personService) {
         this.restTemplate = restTemplateBuilder.build();
         this.apiKey = apiKey;
         this.objectMapper = new ObjectMapper();
         this.movieService = movieService;
+        this.tvShowService = tvShowService;
         this.collectionService = collectionService;
         this.productionCompanyService = productionCompanyService;
+        this.personService = personService;
     }
 
     private <T> T fetchFromApi(String url, Function<JsonNode, T> mappingFunction) {
@@ -59,6 +63,11 @@ public class TMDBApiService {
     public Movie fetchMovieDetails(int movieId) {
         String url = String.format("%s/movie/%d?api_key=%s", TMDB_API_BASE_URL, movieId, apiKey);
         return fetchFromApi(url, this::mapApiResponseToMovie);
+    }
+
+    public TvShow fetchTvShowDetails(int tvShowId) {
+        String url = String.format("%s/tv/%d?api_key=%s", TMDB_API_BASE_URL, tvShowId, apiKey);
+        return fetchFromApi(url, this::mapApiResponseToTvShow);
     }
 
     private void mapApiResponseToFilm(JsonNode root, Film film) {
@@ -88,37 +97,7 @@ public class TMDBApiService {
         Set<Cast> cast = Set.of(); // Map cast if available
 
         // Map production companies if available
-        Set<ProductionCompany> produced_set = null;
-        if (!root.get("production_companies").isNull()) {
-
-            produced_set = new HashSet<>(); // Creates a set of produced movies
-
-            // Fore each production company
-            for (JsonNode company : root.get("production_companies")) {
-                // Extracts the id of the company
-                int companyId = company.get("id").asInt();
-
-                // Tries to find the company in the database
-                ProductionCompany productionCompany = productionCompanyService.getProductionCompanyById(companyId);
-                if (productionCompany == null) { // if not found then
-                    productionCompany = new ProductionCompany(); // creates a new one
-                    productionCompany.setId(companyId); // Sets id
-                    productionCompany.setName(company.get("name").asText()); // name
-                    productionCompany.setLogoPath(company.get("logo_path").asText()); // logo path
-                    productionCompany.setOriginCountry(company.get("origin_country").asText()); // origin country
-                    productionCompanyService.addProductionCompany(productionCompany); // Saves the company to db
-                }
-
-                Set<Film> producedFilm = productionCompany.getProduced(); // Gets the set of produced movies
-                if (producedFilm == null) // If the set is null
-                    producedFilm = new HashSet<>(); // Creates a new set
-                producedFilm.add(film); // Adds the film to the set
-                productionCompany.setProduced(producedFilm); // Sets the set to the production company
-
-                productionCompanyService.addProductionCompany(productionCompany); // Saves the production company to db
-                produced_set.add(productionCompany); // Adds the production company to the set
-            }
-        }
+        Set<ProductionCompany> produced_set = mapFilmProductionCompanies(root, film);
 
 
         film.setTitle(title);
@@ -145,6 +124,42 @@ public class TMDBApiService {
         film.setLastUpdated(LocalDate.now());
     }
 
+    private Set<ProductionCompany> mapFilmProductionCompanies(JsonNode root, Film film)
+    {
+        if (!root.get("production_companies").isNull()) {
+
+            Set<ProductionCompany> produced_set = new HashSet<>(); // Creates a set of produced movies
+
+            // Fore each production company
+            for (JsonNode company : root.get("production_companies")) {
+                // Extracts the id of the company
+                int companyId = company.get("id").asInt();
+
+                // Tries to find the company in the database
+                ProductionCompany productionCompany = productionCompanyService.getProductionCompanyById(companyId);
+                if (productionCompany == null) { // if not found then
+                    productionCompany = new ProductionCompany(); // creates a new one
+                    productionCompany.setId(companyId); // Sets id
+                    productionCompany.setName(company.get("name").asText()); // name
+                    productionCompany.setLogoPath(company.get("logo_path").asText()); // logo path
+                    productionCompany.setOriginCountry(company.get("origin_country").asText()); // origin country
+                    productionCompanyService.addProductionCompany(productionCompany); // Saves the company to db
+                }
+
+                Set<Film> producedFilm = productionCompany.getProduced(); // Gets the set of produced movies
+                if (producedFilm == null) // If the set is null
+                    producedFilm = new HashSet<>(); // Creates a new set
+                producedFilm.add(film); // Adds the film to the set
+                productionCompany.setProduced(producedFilm); // Sets the set to the production company
+
+                productionCompanyService.addProductionCompany(productionCompany); // Saves the production company to db
+                produced_set.add(productionCompany); // Adds the production company to the set
+            }
+            return produced_set; // Returns the set of production companies
+        }
+        return null; // Returns null if no production companies are found
+    }
+
     private Movie mapApiResponseToMovie(JsonNode root) {
         Movie movie = new Movie();
 
@@ -159,8 +174,22 @@ public class TMDBApiService {
         Integer runtime = getValueAsInt(root.get("runtime"));
 
         // Map collection if available
-        Collection collection = null;
+        Collection collection = mapMovieCollection(root, movie);
+
+        movie.setBudget(budget);
+        movie.setReleaseDate(releaseDate);
+        movie.setRevenue(revenue);
+        movie.setRuntime(runtime);
+        movie.setCollection(collection);
+        movieService.addMovie(movie);
+
+        return movie;
+    }
+
+    private Collection mapMovieCollection(JsonNode root, Movie movie) {
         if (!root.get("belongs_to_collection").isNull()) {
+            Collection collection = new Collection();
+
             JsonNode collNode = root.get("belongs_to_collection");
             Integer colId = getValueAsInt(collNode.get("id"));
             collection = collectionService.getCollectionById(colId);
@@ -177,16 +206,67 @@ public class TMDBApiService {
             movieList.add(movie);
             collection.setMovies(movieList);
             collectionService.addCollection(collection);
+
+            return collection;
         }
+        return null;
+    }
 
-        movie.setBudget(budget);
-        movie.setReleaseDate(releaseDate);
-        movie.setRevenue(revenue);
-        movie.setRuntime(runtime);
-        movie.setCollection(collection);
-        movieService.addMovie(movie);
+    private TvShow mapApiResponseToTvShow(JsonNode root) {
+        TvShow tvShow = new TvShow();
 
-        return movie;
+        FilmId filmId = new FilmId(root.get("id").asInt(), 1);
+        tvShow.setId(filmId);
+        tvShowService.addTvShow(tvShow);
+        mapApiResponseToFilm(root, tvShow);
+
+
+        LocalDate firstAirDate = getValueAsLocalDate(root.get("first_air_date"));
+        LocalDate lastAirDate = getValueAsLocalDate(root.get("last_air_date"));
+        Boolean inProduction = getValueAsBoolean(root.get("in_production"));
+        Integer numberOfEpisodes = getValueAsInt(root.get("number_of_episodes"));
+        Integer numberOfSeasons = getValueAsInt(root.get("number_of_seasons"));
+
+        Set<Person> creators = mapTvShowCreators(root, tvShow);
+
+
+        tvShow.setFirstAirDate(firstAirDate);
+        tvShow.setLastAirDate(lastAirDate);
+        tvShow.setInProduction(inProduction);
+        tvShow.setNumberOfEpisodes(numberOfEpisodes);
+        tvShow.setNumberOfSeasons(numberOfSeasons);
+        tvShow.setCreated(creators);
+        tvShowService.addTvShow(tvShow);
+
+        return tvShow;
+    }
+
+    public Set<Person> mapTvShowCreators(JsonNode root, TvShow tvShow) {
+        if (!root.get("created_by").isNull()) {
+            Set<Person> creators = new HashSet<>();
+            for (JsonNode creator : root.get("created_by")) {
+                int creatorId = creator.get("id").asInt();
+                Person person = personService.getPersonById(creatorId);
+                if (person == null) {
+                    person = new Person();
+                    person.setId(creatorId);
+                    person.setName(creator.get("name").asText());
+                    person.setProfilePath(creator.get("profile_path").asText());
+                    personService.addPerson(person);
+                }
+                Set<TvShow> createdShows = person.getCreatedTvShows();
+                if (createdShows == null)
+                    createdShows = new HashSet<>();
+                createdShows.add(tvShow);
+                
+                person.setCreatedTvShows(createdShows);
+
+                personService.addPerson(person);
+                creators.add(person);
+            }
+            return creators;
+        }
+        return null;
     }
 
     private String getValueAsText(JsonNode node) {
