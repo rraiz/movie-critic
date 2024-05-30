@@ -73,9 +73,16 @@ public class TMDBApiService {
         return fetchFromApi(url, this::mapApiResponseToTvShow);
     }
 
+    public Set<Episode> fetchSeasonEpisodes(int tvShowId, int seasonNumber) {
+        String url = String.format("%s/tv/%d/season/%d?api_key=%s", TMDB_API_BASE_URL, tvShowId, seasonNumber, apiKey);
+        return fetchFromApi(url, this::mapApiResponseToEpisodes);
+    }
+
     /**
-     * Maps the JSON response from the API to a Film object. 
-     * This method is used by both Movie and TvShow mapping methods to map common fields.
+     * Maps the JSON response from the API to a Film object.
+     * This method is used by both Movie and TvShow mapping methods to map common
+     * fields.
+     * 
      * @param root JSON response from the API
      * @param film Film object to map the response to
      */
@@ -169,6 +176,7 @@ public class TMDBApiService {
 
     /**
      * Maps the JSON response from the API to a Movie object
+     * 
      * @param root
      * @return Movie object
      */
@@ -227,6 +235,7 @@ public class TMDBApiService {
 
     /**
      * Maps the JSON response from the API to a TvShow object
+     * 
      * @param root
      * @return TvShow object
      */
@@ -253,7 +262,7 @@ public class TMDBApiService {
         tvShow.setInProduction(inProduction);
         tvShow.setNumberOfEpisodes(numberOfEpisodes);
         tvShow.setNumberOfSeasons(numberOfSeasons);
-        tvShow.setCreated(creators);
+        tvShow.setCreators(creators);
         tvShow.setNetworks(networks);
         tvShow.setSeasons(seasons);
         tvShowService.addTvShow(tvShow);
@@ -343,6 +352,9 @@ public class TMDBApiService {
                 tvShow.setSeasons(tv_show_seasons);
 
                 tvShowService.addSeason(seasonObj);
+                Set<Episode> episodes = fetchSeasonEpisodes(tvShow.getId().getFilmId(), seasonObj.getSeasonNumber());
+                seasonObj.setEpisodes(episodes);
+
                 seasons.add(seasonObj);
             }
             return seasons;
@@ -350,8 +362,42 @@ public class TMDBApiService {
         return null;
     }
 
+    private Set<Episode> mapApiResponseToEpisodes(JsonNode root) {
+        if (root.get("episodes").isNull()) {
+            Set<Episode> episodes = new HashSet<>();
 
-    
+            for (JsonNode episode : root.get("episodes")) {
+                int episodeId = episode.get("id").asInt();
+
+                Episode episodeObj = tvShowService.getEpisodeById(episodeId);
+                if (episodeObj == null) {
+                    episodeObj = new Episode();
+                }
+                episodeObj.setId(episodeId);
+                episodeObj.setAirDate(getValueAsLocalDate(episode.get("air_date")));
+                episodeObj.setEpisodeNumber(getValueAsInt(episode.get("episode_number")));
+                episodeObj.setEpisodeType(getValueAsText(episode.get("type")));
+                episodeObj.setName(getValueAsText(episode.get("name")));
+                episodeObj.setOverview(getValueAsText(episode.get("overview")));
+                episodeObj.setRuntime(getValueAsInt(episode.get("runtime")));
+                episodeObj.setStillPath(getValueAsText(episode.get("still_path")));
+                episodeObj.setVoteAverage(getValueAsDouble(episode.get("vote_average")));
+                episodeObj.setVoteCount(getValueAsInt(episode.get("vote_count")));
+
+                int seasonId = episode.get("season_id").asInt();
+                Season season = tvShowService.getSeasonById(seasonId);
+                if (season == null) {
+                    season = new Season();
+                    season.setId(seasonId);
+                }
+                episodeObj.setSeason(season);
+                episodes.add(episodeObj);
+            }
+            return episodes;
+        }
+        return null;
+    }
+
     // Helper methods to extract values from JSON nodes
     private String getValueAsText(JsonNode node) {
         return node != null && !node.isNull() ? node.asText() : null;

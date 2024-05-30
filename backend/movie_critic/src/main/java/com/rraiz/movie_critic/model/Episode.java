@@ -2,6 +2,8 @@ package com.rraiz.movie_critic.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -16,13 +18,16 @@ public class Episode {
     @Id
     private int id;
 
-    @Column(nullable = true, name = "air_date")
+    @Column(nullable = true)
     private LocalDate airDate;
 
     @Column(nullable = true, columnDefinition = "TEXT")
     private String name;
 
-    @Column(nullable = true, name = "episode_number")
+    @Column(nullable = true, columnDefinition = "TEXT")
+    private String episodeType;
+
+    @Column(nullable = true)
     private Integer episodeNumber;
 
     @Column(nullable = true, columnDefinition = "TEXT")
@@ -31,17 +36,18 @@ public class Episode {
     @Column(nullable = true)
     private Integer runtime;
 
-    @Column(nullable = true, name = "still_path")
+    @Column(nullable = true)
     private String stillPath;
 
-    @Column(nullable = true, name = "vote_average")
+    @Column(nullable = true)
     private Double voteAverage;
 
-    @Column(nullable = true, name = "vote_count")
+    @Column(nullable = true)
     private Integer voteCount;
 
     @ManyToOne
     @JoinColumn(name = "season_id", nullable = false)
+    @JsonBackReference
     private Season season;
 
     @Column(nullable = true)
@@ -52,8 +58,10 @@ public class Episode {
     }
 
     // Parameterized Constructor
-    public Episode(LocalDate airDate, String name, Integer episodeNumber, String overview, Integer runtime, String stillPath, Double voteAverage, Integer voteCount, Season season, LocalDate lastUpdated) {
+    public Episode(int id, LocalDate airDate, String episodeType, String name, Integer episodeNumber, String overview, Integer runtime, String stillPath, Double voteAverage, Integer voteCount, Season season, LocalDate lastUpdated) {
+        this.id = id;
         this.airDate = airDate;
+        this.episodeType = episodeType;
         this.name = name;
         this.episodeNumber = episodeNumber;
         this.overview = overview;
@@ -80,6 +88,14 @@ public class Episode {
 
     public void setAirDate(LocalDate airDate) {
         this.airDate = airDate;
+    }
+
+    public String getEpisodeType() {
+        return episodeType;
+    }
+
+    public void setEpisodeType(String episodeType) {
+        this.episodeType = episodeType;
     }
 
     public String getName() {

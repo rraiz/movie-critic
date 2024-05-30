@@ -3,6 +3,9 @@ package com.rraiz.movie_critic.model;
 import java.time.LocalDate;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -39,6 +42,7 @@ public class Season {
     private Double voteAverage;
 
     @OneToMany(mappedBy = "season")
+    @JsonManagedReference
     private Set<Episode> episodes;
 
     @ManyToOne
@@ -46,6 +50,7 @@ public class Season {
         @JoinColumn(name = "tv_show_id", referencedColumnName = "film_id"),
         @JoinColumn(name = "tv_show_type", referencedColumnName = "film_type")
     })
+    @JsonBackReference
     private TvShow tvShow;
 
     @Column

@@ -27,11 +27,12 @@ public class TvShow extends Film {
     private Integer numberOfSeasons;
 
     @OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<Season> seasons;
 
     @ManyToMany
     @JoinTable(
-        name = "created_tv_show",
+        name = "tv_show_creators",
         joinColumns = {
             @JoinColumn(name = "film_id"),
             @JoinColumn(name = "film_type")
@@ -39,7 +40,7 @@ public class TvShow extends Film {
         inverseJoinColumns = @JoinColumn(name = "person_id")
     )
     @JsonManagedReference
-    private Set<Person> created;
+    private Set<Person> creators;
 
     @ManyToMany
     @JoinTable(
@@ -60,7 +61,7 @@ public class TvShow extends Film {
     }
 
     // Parameterized Constructor
-    public TvShow(FilmId id, String title, boolean adult, String homepage, String backdrop_path, String poster_path, String original_name, String original_language, String overview, Double popularity, String tagline, Integer vote_count, Double vote_average, List<String> genres, List<String> production_countries, List<String> spoken_languages, List<String> origin_countries, Set<Crew> crew, Set<Cast> cast, Set<ProductionCompany> produced, LocalDate firstAirDate, LocalDate lastAirDate, boolean inProduction, Integer numberOfEpisodes, Integer numberOfSeasons, Set<Person> created, Set<Season> seasons, Set<Network> networks, LocalDate lastUpdated) {
+    public TvShow(FilmId id, String title, boolean adult, String homepage, String backdrop_path, String poster_path, String original_name, String original_language, String overview, Double popularity, String tagline, Integer vote_count, Double vote_average, List<String> genres, List<String> production_countries, List<String> spoken_languages, List<String> origin_countries, Set<Crew> crew, Set<Cast> cast, Set<ProductionCompany> produced, LocalDate firstAirDate, LocalDate lastAirDate, boolean inProduction, Integer numberOfEpisodes, Integer numberOfSeasons, Set<Person> creators, Set<Season> seasons, Set<Network> networks, LocalDate lastUpdated) {
         super(id, title, adult, homepage, backdrop_path, poster_path, original_name, original_language, overview, popularity, tagline, vote_count, vote_average, genres, production_countries, spoken_languages, origin_countries, crew, cast, produced, lastUpdated);
         this.firstAirDate = firstAirDate;
         this.lastAirDate = lastAirDate;
@@ -68,7 +69,7 @@ public class TvShow extends Film {
         this.numberOfEpisodes = numberOfEpisodes;
         this.numberOfSeasons = numberOfSeasons;
         this.seasons = seasons;
-        this.created = created;
+        this.creators = creators;
         this.networks = networks;
     }
 
@@ -113,12 +114,12 @@ public class TvShow extends Film {
         this.numberOfSeasons = numberOfSeasons;
     }
 
-    public Set<Person> getCreated() {
-        return created;
+    public Set<Person> getCreators() {
+        return creators;
     }
 
-    public void setCreated(Set<Person> created) {
-        this.created = created;
+    public void setCreators(Set<Person> creators) {
+        this.creators = creators;
     }
 
     public Set<Season> getSeasons() {

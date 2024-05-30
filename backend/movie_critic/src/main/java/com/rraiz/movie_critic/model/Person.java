@@ -70,7 +70,7 @@ public class Person {
     @OneToMany(mappedBy = "person")
     private Set<Cast> cast;
 
-    @ManyToMany(mappedBy = "created")
+    @ManyToMany(mappedBy = "creators")
     @JsonBackReference
     private Set<TvShow> createdTvShows;
 
