@@ -139,7 +139,6 @@ public class TMDBApiService {
         film.setSpokenLanguages(spokenLanguages);
         film.setOriginCountries(originCountries);
 
-        
         film.setCrew(crew);
         film.setCast(cast);
         film.setProduced(produced_set);

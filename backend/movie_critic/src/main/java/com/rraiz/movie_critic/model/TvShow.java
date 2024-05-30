@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "tv_show")
 public class TvShow extends Film {
@@ -25,13 +27,31 @@ public class TvShow extends Film {
     private Integer numberOfSeasons;
 
     @OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Created> created;
-
-    @OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Season> seasons;
 
-    @OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<TvShowNetwork> tvShowNetworks;
+    @ManyToMany
+    @JoinTable(
+        name = "created_tv_show",
+        joinColumns = {
+            @JoinColumn(name = "film_id"),
+            @JoinColumn(name = "film_type")
+        },
+        inverseJoinColumns = @JoinColumn(name = "person_id")
+    )
+    @JsonManagedReference
+    private Set<Person> created;
+
+    @ManyToMany
+    @JoinTable(
+        name = "tv_show_networks",
+        joinColumns = {
+            @JoinColumn(name = "film_id"),
+            @JoinColumn(name = "film_type")
+        },
+        inverseJoinColumns = @JoinColumn(name = "network_id")
+    )
+    @JsonManagedReference
+    private Set<Network> networks;
 
 
     // Default Constructor
@@ -40,16 +60,16 @@ public class TvShow extends Film {
     }
 
     // Parameterized Constructor
-    public TvShow(FilmId id, String title, boolean adult, String homepage, String backdrop_path, String poster_path, String original_name, String original_language, String overview, Double popularity, String tagline, Integer vote_count, Double vote_average, List<String> genres, List<String> production_countries, List<String> spoken_languages, List<String> origin_countries, Set<Crew> crew, Set<Cast> cast, Set<ProductionCompany> produced, LocalDate firstAirDate, LocalDate lastAirDate, boolean inProduction, Integer numberOfEpisodes, Integer numberOfSeasons, Set<Created> created, Set<Season> seasons, Set<TvShowNetwork> tvShowNetworks, LocalDate lastUpdated) {
+    public TvShow(FilmId id, String title, boolean adult, String homepage, String backdrop_path, String poster_path, String original_name, String original_language, String overview, Double popularity, String tagline, Integer vote_count, Double vote_average, List<String> genres, List<String> production_countries, List<String> spoken_languages, List<String> origin_countries, Set<Crew> crew, Set<Cast> cast, Set<ProductionCompany> produced, LocalDate firstAirDate, LocalDate lastAirDate, boolean inProduction, Integer numberOfEpisodes, Integer numberOfSeasons, Set<Person> created, Set<Season> seasons, Set<Network> networks, LocalDate lastUpdated) {
         super(id, title, adult, homepage, backdrop_path, poster_path, original_name, original_language, overview, popularity, tagline, vote_count, vote_average, genres, production_countries, spoken_languages, origin_countries, crew, cast, produced, lastUpdated);
         this.firstAirDate = firstAirDate;
         this.lastAirDate = lastAirDate;
         this.inProduction = inProduction;
         this.numberOfEpisodes = numberOfEpisodes;
         this.numberOfSeasons = numberOfSeasons;
-        this.created = created;
         this.seasons = seasons;
-        this.tvShowNetworks = tvShowNetworks;
+        this.created = created;
+        this.networks = networks;
     }
 
     // Getters and Setters
@@ -93,11 +113,11 @@ public class TvShow extends Film {
         this.numberOfSeasons = numberOfSeasons;
     }
 
-    public Set<Created> getCreated() {
+    public Set<Person> getCreated() {
         return created;
     }
 
-    public void setCreated(Set<Created> created) {
+    public void setCreated(Set<Person> created) {
         this.created = created;
     }
 
@@ -109,11 +129,11 @@ public class TvShow extends Film {
         this.seasons = seasons;
     }
 
-    public Set<TvShowNetwork> getTvShowNetworks() {
-        return tvShowNetworks;
+    public Set<Network> getNetworks() {
+        return networks;
     }
 
-    public void setTvShowNetworks(Set<TvShowNetwork> tvShowNetworks) {
-        this.tvShowNetworks = tvShowNetworks;
+    public void setNetworks(Set<Network> networks) {
+        this.networks = networks;
     }
 }

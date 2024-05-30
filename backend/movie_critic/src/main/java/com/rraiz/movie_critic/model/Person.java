@@ -4,11 +4,14 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -67,6 +70,10 @@ public class Person {
     @OneToMany(mappedBy = "person")
     private Set<Cast> cast;
 
+    @ManyToMany(mappedBy = "created")
+    @JsonBackReference
+    private Set<TvShow> createdTvShows;
+
     @Column(nullable = true)
     private LocalDate lastUpdated;
 
@@ -75,7 +82,7 @@ public class Person {
     }
 
     // Parameterized Constructor
-    public Person(int id, String name, boolean adult, String biography, LocalDate birthDate, LocalDate deathDate, Integer gender, String knownFor, String birthPlace, Integer popularity, String profilePath, String homepage, String imdbId, List<String> alsoKnownAs, Set<Crew> crew, Set<Cast> cast, LocalDate lastUpdated) {
+    public Person(int id, String name, boolean adult, String biography, LocalDate birthDate, LocalDate deathDate, Integer gender, String knownFor, String birthPlace, Integer popularity, String profilePath, String homepage, String imdbId, List<String> alsoKnownAs, Set<Crew> crew, Set<Cast> cast, Set<TvShow> createdTvShows,LocalDate lastUpdated) {
         this.id = id;
         this.name = name;
         this.adult = adult;
@@ -92,6 +99,7 @@ public class Person {
         this.alsoKnownAs = alsoKnownAs;
         this.crew = crew;
         this.cast = cast;
+        this.createdTvShows = createdTvShows;
         this.lastUpdated = lastUpdated;
     }
 
@@ -222,6 +230,14 @@ public class Person {
 
     public void setCast(Set<Cast> cast) {
         this.cast = cast;
+    }
+
+    public Set<TvShow> getCreatedTvShows() {
+        return createdTvShows;
+    }
+
+    public void setCreatedTvShows(Set<TvShow> createdTvShows) {
+        this.createdTvShows = createdTvShows;
     }
 
     public LocalDate getLastUpdated() {

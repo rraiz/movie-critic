@@ -3,10 +3,12 @@ package com.rraiz.movie_critic.model;
 import java.time.LocalDate;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -25,8 +27,9 @@ public class Network {
     @Column(nullable = true, name = "logo_path", columnDefinition = "TEXT")
     private String logoPath;
 
-    @OneToMany(mappedBy = "network")
-    private Set<TvShowNetwork> tvShowNetworks;
+    @ManyToMany(mappedBy = "networks")
+    @JsonBackReference
+    private Set<TvShow> tvShows;
 
     @Column(nullable = true)
     private LocalDate lastUpdated;
@@ -34,12 +37,12 @@ public class Network {
     public Network() {
     }
 
-    public Network(int id, String name, String origin_country, String logoPath, Set<TvShowNetwork> tvShowNetworks, LocalDate lastUpdated) {
+    public Network(int id, String name, String origin_country, String logoPath, Set<TvShow> tvShows, LocalDate lastUpdated) {
         this.id = id;
         this.name = name;
         this.origin_country = origin_country;
         this.logoPath = logoPath;
-        this.tvShowNetworks = tvShowNetworks;
+        this.tvShows = tvShows;
         this.lastUpdated = lastUpdated;
     }
 
@@ -75,12 +78,12 @@ public class Network {
         this.logoPath = logoPath;
     }
 
-    public Set<TvShowNetwork> getTvShowNetworks() {
-        return tvShowNetworks;
+    public Set<TvShow> getTvShows() {
+        return tvShows;
     }
 
-    public void setTvShowNetworks(Set<TvShowNetwork> tvShowNetworks) {
-        this.tvShowNetworks = tvShowNetworks;
+    public void setTvShows(Set<TvShow> tvShows) {
+        this.tvShows = tvShows;
     }
 
     public LocalDate getLastUpdated() {
