@@ -23,7 +23,7 @@ public class Person {
     @Id
     private int id;
 
-    @Column(nullable = true)
+    @Column(nullable = true, columnDefinition = "TEXT")
     private String name;
 
     @Column(nullable = true)
@@ -95,7 +95,6 @@ public class Person {
         this.popularity = popularity;
         this.profilePath = profilePath;
         this.homepage = homepage;
-        this.imdbId = imdbId;
         this.alsoKnownAs = alsoKnownAs;
         this.crew = crew;
         this.cast = cast;
