@@ -87,7 +87,7 @@ public class TMDBApiService {
      * @param film Film object to map the response to
      */
     private void mapApiResponseToFilm(JsonNode root, Film film) {
-        String title = getValueAsText(root.get("title"));
+        String title = getValueAsTitleOrName(root);
         Boolean adult = getValueAsBoolean(root.get("adult"));
         String homepage = getValueAsText(root.get("homepage"));
         String backdropPath = getValueAsText(root.get("backdrop_path"));
@@ -363,7 +363,9 @@ public class TMDBApiService {
     }
 
     private Set<Episode> mapApiResponseToEpisodes(JsonNode root) {
-        if (root.get("episodes").isNull()) {
+        Integer seasonId = getValueAsInt(root.get("id"));
+
+        if (!root.get("episodes").isNull()) {
             Set<Episode> episodes = new HashSet<>();
 
             for (JsonNode episode : root.get("episodes")) {
@@ -384,18 +386,27 @@ public class TMDBApiService {
                 episodeObj.setVoteAverage(getValueAsDouble(episode.get("vote_average")));
                 episodeObj.setVoteCount(getValueAsInt(episode.get("vote_count")));
 
-                int seasonId = episode.get("season_id").asInt();
                 Season season = tvShowService.getSeasonById(seasonId);
                 if (season == null) {
                     season = new Season();
                     season.setId(seasonId);
                 }
+
                 episodeObj.setSeason(season);
+                tvShowService.addEpisode(episodeObj);
+
                 episodes.add(episodeObj);
             }
             return episodes;
         }
         return null;
+    }
+
+    private String getValueAsTitleOrName(JsonNode node) {
+        if (node.hasNonNull("title")) {
+            return getValueAsText(node.get("title"));
+        } 
+        return getValueAsText(node.get("name"));
     }
 
     // Helper methods to extract values from JSON nodes
@@ -420,6 +431,14 @@ public class TMDBApiService {
     }
 
     private LocalDate getValueAsLocalDate(JsonNode node) {
-        return node != null && !node.isNull() ? LocalDate.parse(node.asText(), DateTimeFormatter.ISO_DATE) : null;
+
+        if (node != null && !node.isNull()) {
+            String date = node.asText();
+            if(date.equals(""))
+                return null;
+            return LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
+        }
+        return null;
+       
     }
 }
