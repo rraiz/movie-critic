@@ -74,9 +74,10 @@ public class TMDBApiService {
     }
 
     /**
-     * Maps the JSON response from the API to a Film object
-     * @param root
-     * @param film
+     * Maps the JSON response from the API to a Film object. 
+     * This method is used by both Movie and TvShow mapping methods to map common fields.
+     * @param root JSON response from the API
+     * @param film Film object to map the response to
      */
     private void mapApiResponseToFilm(JsonNode root, Film film) {
         String title = getValueAsText(root.get("title"));
@@ -169,7 +170,7 @@ public class TMDBApiService {
     /**
      * Maps the JSON response from the API to a Movie object
      * @param root
-     * @return
+     * @return Movie object
      */
     private Movie mapApiResponseToMovie(JsonNode root) {
         Movie movie = new Movie();
@@ -227,7 +228,7 @@ public class TMDBApiService {
     /**
      * Maps the JSON response from the API to a TvShow object
      * @param root
-     * @return
+     * @return TvShow object
      */
     private TvShow mapApiResponseToTvShow(JsonNode root) {
         TvShow tvShow = new TvShow();
