@@ -39,7 +39,7 @@ public class Movie extends Film {
     }
 
     // Parameterized Constructor
-    public Movie(FilmId id, String title, boolean adult, String homepage, String backdrop_path, String poster_path, String original_name, String original_language, String overview, Double popularity, String tagline, Integer vote_count, Double vote_average, List<String> genres, List<String> production_countries, List<String> spoken_languages, List<String> origin_countries, Set<Crew> crew, Set<Cast> cast, String tagline, Long budget, LocalDate releaseDate, Long revenue, Integer runtime, Collection collection, Set<ProductionCompany> produced, LocalDate lastUpdated) {
+    public Movie(FilmId id, String title, boolean adult, String homepage, String backdrop_path, String poster_path, String original_name, String original_language, String overview, Double popularity, String tagline, Integer vote_count, Double vote_average, List<String> genres, List<String> production_countries, List<String> spoken_languages, List<String> origin_countries, Set<Crew> crew, Set<Cast> cast, Long budget, LocalDate releaseDate, Long revenue, Integer runtime, Collection collection, Set<ProductionCompany> produced, LocalDate lastUpdated) {
         super(id, title, adult, homepage, backdrop_path, poster_path, original_name, original_language, overview, popularity, tagline, vote_count, vote_average, genres, production_countries, spoken_languages, origin_countries, crew, cast, produced, lastUpdated);
         this.budget = budget;
         this.releaseDate = releaseDate;

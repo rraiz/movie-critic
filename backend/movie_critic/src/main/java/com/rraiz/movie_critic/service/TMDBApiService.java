@@ -61,8 +61,7 @@ public class TMDBApiService {
         return fetchFromApi(url, this::mapApiResponseToMovie);
     }
 
-    private void mapApiResponseToFilm(JsonNode root, Film film)
-    {
+    private void mapApiResponseToFilm(JsonNode root, Film film) {
         String title = getValueAsText(root.get("title"));
         Boolean adult = getValueAsBoolean(root.get("adult"));
         String homepage = getValueAsText(root.get("homepage"));
@@ -85,6 +84,42 @@ public class TMDBApiService {
         List<String> originCountries = StreamSupport.stream(root.get("origin_country").spliterator(), false)
                 .map(JsonNode::asText).collect(Collectors.toList());
 
+        Set<Crew> crew = Set.of(); // Map crew if available
+        Set<Cast> cast = Set.of(); // Map cast if available
+
+        // Map production companies if available
+        Set<ProductionCompany> produced_set = null;
+        if (!root.get("production_companies").isNull()) {
+
+            produced_set = new HashSet<>(); // Creates a set of produced movies
+
+            // Fore each production company
+            for (JsonNode company : root.get("production_companies")) {
+                // Extracts the id of the company
+                int companyId = company.get("id").asInt();
+
+                // Tries to find the company in the database
+                ProductionCompany productionCompany = productionCompanyService.getProductionCompanyById(companyId);
+                if (productionCompany == null) { // if not found then
+                    productionCompany = new ProductionCompany(); // creates a new one
+                    productionCompany.setId(companyId); // Sets id
+                    productionCompany.setName(company.get("name").asText()); // name
+                    productionCompany.setLogoPath(company.get("logo_path").asText()); // logo path
+                    productionCompany.setOriginCountry(company.get("origin_country").asText()); // origin country
+                    productionCompanyService.addProductionCompany(productionCompany); // Saves the company to db
+                }
+
+                Set<Film> producedFilm = productionCompany.getProduced(); // Gets the set of produced movies
+                if (producedFilm == null) // If the set is null
+                    producedFilm = new HashSet<>(); // Creates a new set
+                producedFilm.add(film); // Adds the film to the set
+                productionCompany.setProduced(producedFilm); // Sets the set to the production company
+
+                productionCompanyService.addProductionCompany(productionCompany); // Saves the production company to db
+                produced_set.add(productionCompany); // Adds the production company to the set
+            }
+        }
+
 
         film.setTitle(title);
         film.setAdult(adult);
@@ -98,12 +133,17 @@ public class TMDBApiService {
         film.setTagline(tagline);
         film.setVoteCount(voteCount);
         film.setVoteAverage(voteAverage);
+
         film.setGenres(genres);
         film.setProductionCountries(productionCountries);
         film.setSpokenLanguages(spokenLanguages);
         film.setOriginCountries(originCountries);
 
-
+        
+        film.setCrew(crew);
+        film.setCast(cast);
+        film.setProduced(produced_set);
+        film.setLastUpdated(LocalDate.now());
     }
 
     private Movie mapApiResponseToMovie(JsonNode root) {
@@ -140,53 +180,11 @@ public class TMDBApiService {
             collectionService.addCollection(collection);
         }
 
-        Set<Crew> crew = Set.of(); // Map crew if available
-        Set<Cast> cast = Set.of(); // Map cast if available
-
-        // Map production companies if available
-        Set<ProductionCompany> produced_set = null;
-        if (!root.get("production_companies").isNull()) {
-
-            produced_set = new HashSet<>(); // Creates a set of produced movies
-
-            // Fore each production company
-            for (JsonNode company : root.get("production_companies")) {
-                // Extracts the id of the company
-                int companyId = company.get("id").asInt();
-
-                // Tries to find the company in the database
-                ProductionCompany productionCompany = productionCompanyService.getProductionCompanyById(companyId);
-                if (productionCompany == null) { // if not found then
-                    productionCompany = new ProductionCompany(); // creates a new one
-                    productionCompany.setId(companyId); // Sets id
-                    productionCompany.setName(company.get("name").asText()); // name
-                    productionCompany.setLogoPath(company.get("logo_path").asText()); // logo path
-                    productionCompany.setOriginCountry(company.get("origin_country").asText()); // origin country
-                    productionCompanyService.addProductionCompany(productionCompany); // Saves the company to db
-                }
-
-                Set<Film> producedFilm =  productionCompany.getProduced(); // Gets the set of produced movies
-                if (producedFilm == null) // If the set is null
-                    producedFilm = new HashSet<>(); // Creates a new set
-                producedFilm.add(movie); // Adds the movie to the set
-                productionCompany.setProduced(producedFilm); // Sets the set to the production company
-
-                productionCompanyService.addProductionCompany(productionCompany); // Saves the production company to db
-                produced_set.add(productionCompany); // Adds the production company to the set
-            }
-        }
-
-        movie.setCrew(crew);
-        movie.setCast(cast);
-        movie.setProduced(produced_set);
-        movie.setTagline(tagline);
         movie.setBudget(budget);
         movie.setReleaseDate(releaseDate);
         movie.setRevenue(revenue);
         movie.setRuntime(runtime);
         movie.setCollection(collection);
-        movie.setLastUpdated(LocalDate.now());
-
         movieService.addMovie(movie);
 
         return movie;
