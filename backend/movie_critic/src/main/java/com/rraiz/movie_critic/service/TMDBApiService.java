@@ -120,7 +120,7 @@ public class TMDBApiService {
         Set<Cast> cast = Set.of(); // Map cast if available
 
         // Map production companies if available
-        Set<Produced> produced_set = null;
+        Set<ProductionCompany> produced_set = null;
         if (!root.get("production_companies").isNull()) {
 
             produced_set = new HashSet<>(); // Creates a set of produced movies
@@ -141,28 +141,14 @@ public class TMDBApiService {
                     productionCompanyService.addProductionCompany(productionCompany); // Saves the company to db
                 }
 
-                // Tries to find if the movie has been produced by the company in the database
-                ProducedId producedId = new ProducedId(companyId, filmId);
-                Produced produced = productionCompanyService.getProducedById(producedId);
-                if (produced == null) { // if not found then
-                    produced = new Produced(); // creates a new one
-                    produced.setId(producedId); // Sets the id
-                }
-
-                movie.setId(filmId);
-                produced.setFilm(movie); // Sets the movie and the production company for the produced
-                produced.setProductionCompany(productionCompany);
-
-                // Adds the movie to the production company list of produced movies
-                Set<Produced> productionCompanyProduced = productionCompany.getProduced();
-                if (productionCompanyProduced == null) // if the list is null then
-                    productionCompanyProduced = new HashSet<>(); // creates a new one
-                productionCompanyProduced.add(produced); // Adds the movie produced to the list
+                Set<Film> producedFilm =  productionCompany.getProduced(); // Gets the set of produced movies
+                if (producedFilm == null) // If the set is null
+                    producedFilm = new HashSet<>(); // Creates a new set
+                producedFilm.add(movie); // Adds the movie to the set
+                productionCompany.setProduced(producedFilm); // Sets the set to the production company
 
                 productionCompanyService.addProductionCompany(productionCompany); // Saves the production company to db
-                productionCompanyService.addProduced(produced); // Saves the produced to db
-
-                produced_set.add(produced); // Adds the produced to the set of produced movies for the movie object
+                produced_set.add(productionCompany); // Adds the production company to the set
             }
         }
 

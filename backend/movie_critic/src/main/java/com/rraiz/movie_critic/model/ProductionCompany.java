@@ -3,13 +3,12 @@ package com.rraiz.movie_critic.model;
 import java.time.LocalDate;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -40,9 +39,9 @@ public class ProductionCompany {
     @Column(nullable = true, columnDefinition = "TEXT")
     private String parentCompany;
 
-    @OneToMany(mappedBy = "productionCompany", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Set<Produced> produced;
+    @ManyToMany(mappedBy = "produced")
+    @JsonBackReference
+    private Set<Film> produced;
 
     @Column(nullable = true)
     private LocalDate lastUpdated;
@@ -51,7 +50,7 @@ public class ProductionCompany {
     }
 
     public ProductionCompany(int id, String description, String headquarters, String homepage, String logoPath, String name,
-            String originCountry, String parentCompany, Set<Produced> produced, LocalDate lastUpdated) {
+            String originCountry, String parentCompany, Set<Film> produced, LocalDate lastUpdated) {
         this.id = id;
         this.description = description;
         this.headquarters = headquarters;
@@ -128,11 +127,11 @@ public class ProductionCompany {
         this.parentCompany = parentCompany;
     }
 
-    public Set<Produced> getProduced() {
+    public Set<Film> getProduced() {
         return produced;
     }
 
-    public void setProduced(Set<Produced> produced) {
+    public void setProduced(Set<Film> produced) {
         this.produced = produced;
     }
 

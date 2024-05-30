@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -14,6 +13,9 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -82,9 +84,17 @@ public class Film {
     @OneToMany(mappedBy = "film")
     private Set<Cast> cast;
 
-    @OneToMany(mappedBy = "film", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(
+        name = "produced_film",
+        joinColumns = {
+            @JoinColumn(name = "film_id"),
+            @JoinColumn(name = "film_type")
+        },
+        inverseJoinColumns = @JoinColumn(name = "production_company_id")
+    )
     @JsonManagedReference
-    private Set<Produced> produced;
+    private Set<ProductionCompany> produced;
 
     @Column(nullable = true)
     private LocalDate lastUpdated;
@@ -94,7 +104,7 @@ public class Film {
     }
 
     // Parameterized Constructor
-    public Film(FilmId id, String title, boolean adult, String homepage, String backdropPath, String posterPath, String originalName, String originalLanguage, String overview, Double popularity, Integer voteCount, Double voteAverage, List<String> genres, List<String> productionCountries, List<String> spokenLanguages, List<String> originCountries, Set<Crew> crew, Set<Cast> cast, Set<Produced> produced, LocalDate lastUpdated) {
+    public Film(FilmId id, String title, boolean adult, String homepage, String backdropPath, String posterPath, String originalName, String originalLanguage, String overview, Double popularity, Integer voteCount, Double voteAverage, List<String> genres, List<String> productionCountries, List<String> spokenLanguages, List<String> originCountries, Set<Crew> crew, Set<Cast> cast, Set<ProductionCompany> produced, LocalDate lastUpdated) {
         this.id = id;
         this.title = title;
         this.adult = adult;
@@ -262,11 +272,11 @@ public class Film {
         this.cast = cast;
     }
 
-    public Set<Produced> getProduced() {
+    public Set<ProductionCompany> getProduced() {
         return produced;
     }
 
-    public void setProduced(Set<Produced> produced) {
+    public void setProduced(Set<ProductionCompany> produced) {
         this.produced = produced;
     }
 
