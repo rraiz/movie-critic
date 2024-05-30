@@ -16,9 +16,6 @@ import jakarta.persistence.Table;
 @Table(name = "movie")
 public class Movie extends Film {
 
-    @Column(nullable = true, columnDefinition = "TEXT")
-    private String tagline;
-
     @Column(nullable = true)
     private Long budget;
 
@@ -42,9 +39,8 @@ public class Movie extends Film {
     }
 
     // Parameterized Constructor
-    public Movie(FilmId id, String title, boolean adult, String homepage, String backdrop_path, String poster_path, String original_name, String original_language, String overview, Double popularity, Integer vote_count, Double vote_average, List<String> genres, List<String> production_countries, List<String> spoken_languages, List<String> origin_countries, Set<Crew> crew, Set<Cast> cast, String tagline, Long budget, LocalDate releaseDate, Long revenue, Integer runtime, Collection collection, Set<ProductionCompany> produced, LocalDate lastUpdated) {
-        super(id, title, adult, homepage, backdrop_path, poster_path, original_name, original_language, overview, popularity, vote_count, vote_average, genres, production_countries, spoken_languages, origin_countries, crew, cast, produced, lastUpdated);
-        this.tagline = tagline;
+    public Movie(FilmId id, String title, boolean adult, String homepage, String backdrop_path, String poster_path, String original_name, String original_language, String overview, Double popularity, String tagline, Integer vote_count, Double vote_average, List<String> genres, List<String> production_countries, List<String> spoken_languages, List<String> origin_countries, Set<Crew> crew, Set<Cast> cast, String tagline, Long budget, LocalDate releaseDate, Long revenue, Integer runtime, Collection collection, Set<ProductionCompany> produced, LocalDate lastUpdated) {
+        super(id, title, adult, homepage, backdrop_path, poster_path, original_name, original_language, overview, popularity, tagline, vote_count, vote_average, genres, production_countries, spoken_languages, origin_countries, crew, cast, produced, lastUpdated);
         this.budget = budget;
         this.releaseDate = releaseDate;
         this.revenue = revenue;
@@ -53,14 +49,6 @@ public class Movie extends Film {
     }
 
     // Getters and Setters
-    public String getTagline() {
-        return tagline;
-    }
-
-    public void setTagline(String tagline) {
-        this.tagline = tagline;
-    }
-
     public Long getBudget() {
         return budget;
     }

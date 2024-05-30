@@ -52,6 +52,9 @@ public class Film {
     @Column(nullable = true)
     private Double popularity;
 
+    @Column(nullable = true, columnDefinition = "TEXT")
+    private String tagline;
+
     @Column(nullable = true)
     private Integer voteCount;
 
@@ -104,7 +107,7 @@ public class Film {
     }
 
     // Parameterized Constructor
-    public Film(FilmId id, String title, boolean adult, String homepage, String backdropPath, String posterPath, String originalName, String originalLanguage, String overview, Double popularity, Integer voteCount, Double voteAverage, List<String> genres, List<String> productionCountries, List<String> spokenLanguages, List<String> originCountries, Set<Crew> crew, Set<Cast> cast, Set<ProductionCompany> produced, LocalDate lastUpdated) {
+    public Film(FilmId id, String title, boolean adult, String homepage, String backdropPath, String posterPath, String originalName, String originalLanguage, String overview, Double popularity, String tagline, Integer voteCount, Double voteAverage, List<String> genres, List<String> productionCountries, List<String> spokenLanguages, List<String> originCountries, Set<Crew> crew, Set<Cast> cast, Set<ProductionCompany> produced, LocalDate lastUpdated) {
         this.id = id;
         this.title = title;
         this.adult = adult;
@@ -115,6 +118,7 @@ public class Film {
         this.originalLanguage = originalLanguage;
         this.overview = overview;
         this.popularity = popularity;
+        this.tagline = tagline;
         this.voteCount = voteCount;
         this.voteAverage = voteAverage;
         this.genres = genres;
@@ -206,6 +210,14 @@ public class Film {
 
     public void setPopularity(Double popularity) {
         this.popularity = popularity;
+    }
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    public void setTagline(String tagline) {
+        this.tagline = tagline;
     }
 
     public Integer getVoteCount() {

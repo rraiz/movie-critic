@@ -61,13 +61,8 @@ public class TMDBApiService {
         return fetchFromApi(url, this::mapApiResponseToMovie);
     }
 
-    private Movie mapApiResponseToMovie(JsonNode root) {
-        Movie movie = new Movie();
-
-        FilmId filmId = new FilmId(root.get("id").asInt(), 0);
-        movie.setId(filmId);
-        movieService.addMovie(movie);
-
+    private void mapApiResponseToFilm(JsonNode root, Film film)
+    {
         String title = getValueAsText(root.get("title"));
         Boolean adult = getValueAsBoolean(root.get("adult"));
         String homepage = getValueAsText(root.get("homepage"));
@@ -77,6 +72,7 @@ public class TMDBApiService {
         String originalLanguage = getValueAsText(root.get("original_language"));
         String overview = getValueAsText(root.get("overview"));
         Double popularity = getValueAsDouble(root.get("popularity"));
+        String tagline = getValueAsText(root.get("tagline"));
         Integer voteCount = getValueAsInt(root.get("vote_count"));
         Double voteAverage = getValueAsDouble(root.get("vote_average"));
 
@@ -89,7 +85,35 @@ public class TMDBApiService {
         List<String> originCountries = StreamSupport.stream(root.get("origin_country").spliterator(), false)
                 .map(JsonNode::asText).collect(Collectors.toList());
 
-        String tagline = getValueAsText(root.get("tagline"));
+
+        film.setTitle(title);
+        film.setAdult(adult);
+        film.setHomepage(homepage);
+        film.setBackdropPath(backdropPath);
+        film.setPosterPath(posterPath);
+        film.setOriginalName(originalName);
+        film.setOriginalLanguage(originalLanguage);
+        film.setOverview(overview);
+        film.setPopularity(popularity);
+        film.setTagline(tagline);
+        film.setVoteCount(voteCount);
+        film.setVoteAverage(voteAverage);
+        film.setGenres(genres);
+        film.setProductionCountries(productionCountries);
+        film.setSpokenLanguages(spokenLanguages);
+        film.setOriginCountries(originCountries);
+
+
+    }
+
+    private Movie mapApiResponseToMovie(JsonNode root) {
+        Movie movie = new Movie();
+
+        FilmId filmId = new FilmId(root.get("id").asInt(), 0);
+        movie.setId(filmId);
+        movieService.addMovie(movie);
+        mapApiResponseToFilm(root, movie);
+
         Long budget = getValueAsLong(root.get("budget"));
         LocalDate releaseDate = getValueAsLocalDate(root.get("release_date"));
         Long revenue = getValueAsLong(root.get("revenue"));
@@ -152,21 +176,6 @@ public class TMDBApiService {
             }
         }
 
-        movie.setTitle(title);
-        movie.setAdult(adult);
-        movie.setHomepage(homepage);
-        movie.setBackdropPath(backdropPath);
-        movie.setPosterPath(posterPath);
-        movie.setOriginalName(originalName);
-        movie.setOriginalLanguage(originalLanguage);
-        movie.setOverview(overview);
-        movie.setPopularity(popularity);
-        movie.setVoteCount(voteCount);
-        movie.setVoteAverage(voteAverage);
-        movie.setGenres(genres);
-        movie.setProductionCountries(productionCountries);
-        movie.setSpokenLanguages(spokenLanguages);
-        movie.setOriginCountries(originCountries);
         movie.setCrew(crew);
         movie.setCast(cast);
         movie.setProduced(produced_set);
