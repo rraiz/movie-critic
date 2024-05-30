@@ -3,6 +3,7 @@ package com.rraiz.movie_critic.model;
 import java.time.LocalDate;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -37,7 +38,7 @@ public class ProductionCompany {
     @Column(nullable = true, columnDefinition = "TEXT")
     private String parentCompany;
 
-    @OneToMany(mappedBy = "productionCompany")
+    @OneToMany(mappedBy = "productionCompany", cascade = CascadeType.ALL)
     private Set<Produced> produced;
 
     @Column(nullable = true)

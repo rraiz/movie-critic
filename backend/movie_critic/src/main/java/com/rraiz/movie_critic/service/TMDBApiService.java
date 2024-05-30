@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,15 +29,20 @@ public class TMDBApiService {
     private final RestTemplate restTemplate;
     private final String apiKey;
     private final ObjectMapper objectMapper;
+
     private final MovieService movieService;
     private final CollectionService collectionService;
+    private final ProductionCompanyService productionCompanyService;
 
-    public TMDBApiService(RestTemplateBuilder restTemplateBuilder, @Value("${TMDB_API_KEY}") String apiKey, MovieService movieService, CollectionService collectionService) {
+    public TMDBApiService(RestTemplateBuilder restTemplateBuilder, @Value("${TMDB_API_KEY}") String apiKey,
+            MovieService movieService, CollectionService collectionService,
+            ProductionCompanyService productionCompanyService) {
         this.restTemplate = restTemplateBuilder.build();
         this.apiKey = apiKey;
         this.objectMapper = new ObjectMapper();
         this.movieService = movieService;
         this.collectionService = collectionService;
+        this.productionCompanyService = productionCompanyService;
     }
 
     private <T> T fetchFromApi(String url, Function<JsonNode, T> mappingFunction) {
@@ -72,10 +78,14 @@ public class TMDBApiService {
         Integer voteCount = getValueAsInt(root.get("vote_count"));
         Double voteAverage = getValueAsDouble(root.get("vote_average"));
 
-        List<String> genres = root.get("genres").findValues("name").stream().map(JsonNode::asText).collect(Collectors.toList());
-        List<String> productionCountries = root.get("production_countries").findValues("name").stream().map(JsonNode::asText).collect(Collectors.toList());
-        List<String> spokenLanguages = root.get("spoken_languages").findValues("english_name").stream().map(JsonNode::asText).collect(Collectors.toList());
-        List<String> originCountries = root.get("origin_country").findValues("name").stream().map(JsonNode::asText).collect(Collectors.toList());
+        List<String> genres = root.get("genres").findValues("name").stream().map(JsonNode::asText)
+                .collect(Collectors.toList());
+        List<String> productionCountries = root.get("production_countries").findValues("name").stream()
+                .map(JsonNode::asText).collect(Collectors.toList());
+        List<String> spokenLanguages = root.get("spoken_languages").findValues("english_name").stream()
+                .map(JsonNode::asText).collect(Collectors.toList());
+        List<String> originCountries = StreamSupport.stream(root.get("origin_country").spliterator(), false)
+                .map(JsonNode::asText).collect(Collectors.toList());
 
         String tagline = getValueAsText(root.get("tagline"));
         Long budget = getValueAsLong(root.get("budget"));
@@ -83,6 +93,7 @@ public class TMDBApiService {
         Long revenue = getValueAsLong(root.get("revenue"));
         Integer runtime = getValueAsInt(root.get("runtime"));
 
+        // Map collection if available
         Collection collection = null;
         if (root.get("belongs_to_collection") != null) {
             JsonNode collNode = root.get("belongs_to_collection");
@@ -96,7 +107,7 @@ public class TMDBApiService {
                 collection.setBackdropPath(getValueAsText(collNode.get("backdrop_path")));
             }
             Set<Movie> movieList = collection.getMovies();
-            if(movieList == null)
+            if (movieList == null)
                 movieList = new HashSet<>();
             movieList.add(movie);
             collection.setMovies(movieList);
@@ -105,7 +116,53 @@ public class TMDBApiService {
 
         Set<Crew> crew = Set.of(); // Map crew if available
         Set<Cast> cast = Set.of(); // Map cast if available
-        Set<Produced> produced = Set.of(); // Map produced if available
+
+        // Map production companies if available
+        Set<Produced> produced_set = null;
+        if (root.get("production_companies") != null) {
+
+            produced_set = new HashSet<>(); // Creates a set of produced movies
+
+            // Fore each production company
+            for (JsonNode company : root.get("production_companies")) {
+                // Extracts the id of the company
+                int companyId = company.get("id").asInt();
+
+                // Tries to find the company in the database
+                ProductionCompany productionCompany = productionCompanyService.getProductionCompanyById(companyId);
+                if (productionCompany == null) { // if not found then
+                    productionCompany = new ProductionCompany(); // creates a new one
+                    productionCompany.setId(companyId); // Sets id
+                    productionCompany.setName(company.get("name").asText()); // name
+                    productionCompany.setLogoPath(company.get("logo_path").asText()); // logo path
+                    productionCompany.setOriginCountry(company.get("origin_country").asText()); // origin country
+
+                }
+
+                // Tries to find if the movie has been produced by the company in the database
+                ProducedId producedId = new ProducedId(companyId, filmId);
+                Produced produced = productionCompanyService.getProducedById(producedId);
+                if (produced == null) { // if not found then
+                    produced = new Produced(); // creates a new one
+                    produced.setId(producedId); // Sets the id
+                }
+
+                movie.setId(filmId);
+                produced.setFilm(movie); // Sets the movie and the production company for the produced
+                produced.setProductionCompany(productionCompany);
+
+                // Adds the movie to the production company list of produced movies
+                Set<Produced> productionCompanyProduced = productionCompany.getProduced();
+                if (productionCompanyProduced == null) // if the list is null then
+                    productionCompanyProduced = new HashSet<>(); // creates a new one
+                productionCompanyProduced.add(produced); // Adds the movie produced to the list
+
+                productionCompanyService.addProductionCompany(productionCompany); // Saves the production company to db
+                productionCompanyService.addProduced(produced); // Saves the produced to db
+
+                produced_set.add(produced); // Adds the produced to the set of produced movies for the movie object
+            }
+        }
 
         movie.setId(filmId);
         movie.setTitle(title);
@@ -125,7 +182,7 @@ public class TMDBApiService {
         movie.setOriginCountries(originCountries);
         movie.setCrew(crew);
         movie.setCast(cast);
-        movie.setProduced(produced);
+        movie.setProduced(produced_set);
         movie.setTagline(tagline);
         movie.setBudget(budget);
         movie.setReleaseDate(releaseDate);
