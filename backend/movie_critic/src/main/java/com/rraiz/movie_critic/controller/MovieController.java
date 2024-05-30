@@ -11,7 +11,7 @@ import com.rraiz.movie_critic.service.MovieService;
 import com.rraiz.movie_critic.util.ResponseUtil;
 
 @RestController
-@RequestMapping(path = "/api/v1/movies")
+@RequestMapping(path = "/api/v1/movie")
 public class MovieController {
 
     private final MovieService movieService;
