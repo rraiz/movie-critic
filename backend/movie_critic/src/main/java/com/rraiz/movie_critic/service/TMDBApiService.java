@@ -78,6 +78,16 @@ public class TMDBApiService {
         return fetchFromApi(url, this::mapApiResponseToEpisodes);
     }
 
+    public Object[] fetchFilmCredits(int filmId, int filmType) {
+        String url = String.format("%s/%s/%d/credits?api_key=%s", TMDB_API_BASE_URL, filmType == 0 ? "movie" : "tv",
+                filmId, apiKey);
+        if (filmType == 0) {
+            return fetchFromApi(url, this::mapApiResponseToMovieCredits);
+        } else {
+            return fetchFromApi(url, this::mapApiResponseToTvShowCredits);
+        }
+    }
+
     /**
      * Maps the JSON response from the API to a Film object.
      * This method is used by both Movie and TvShow mapping methods to map common
@@ -109,8 +119,11 @@ public class TMDBApiService {
         List<String> originCountries = StreamSupport.stream(root.get("origin_country").spliterator(), false)
                 .map(JsonNode::asText).collect(Collectors.toList());
 
-        Set<Crew> crew = Set.of(); // Map crew if available
-        Set<Cast> cast = Set.of(); // Map cast if available
+        Object[] credits = fetchFilmCredits(film.getId().getFilmId(), film.getId().getFilmType());
+        @SuppressWarnings("unchecked")
+        Set<Cast> cast = (Set<Cast>) credits[0];
+        @SuppressWarnings("unchecked")
+        Set<Crew> crew = (Set<Crew>) credits[1];
 
         // Map production companies if available
         Set<ProductionCompany> produced_set = mapFilmProductionCompanies(root, film);
@@ -172,6 +185,145 @@ public class TMDBApiService {
             return produced_set; // Returns the set of production companies
         }
         return null; // Returns null if no production companies are found
+    }
+
+    private Object[] mapApiResponseToMovieCredits(JsonNode root) {
+        return mapApiResponseToFilmCredits(root, 0);
+    }
+
+    private Object[] mapApiResponseToTvShowCredits(JsonNode root) {
+        return mapApiResponseToFilmCredits(root, 1);
+    }
+
+    private Object[] mapApiResponseToFilmCredits(JsonNode root, int filmType) {
+        Set<Cast> cast = null;
+        Set<Crew> crew = null;
+
+        int filmId = root.get("id").asInt();
+
+        if (!root.get("cast").isNull()) {
+            cast = new HashSet<>();
+            for (JsonNode castNode : root.get("cast")) {
+
+                // Person logic
+                int personId = castNode.get("id").asInt();
+                Person person = personService.getPersonById(personId);
+                if (person == null) {
+                    person = new Person();
+                }
+                person.setId(personId);
+                person.setName(getValueAsText(castNode.get("name")));
+                person.setGender(getValueAsInt(castNode.get("gender")));
+                person.setAdult(getValueAsBoolean(castNode.get("adult")));
+                person.setKnownFor(getValueAsText(castNode.get("known_for_department")));
+                person.setPopularity(getValueAsInt(castNode.get("popularity")));
+                person.setProfilePath(getValueAsText(castNode.get("profile_path")));
+                personService.addPerson(person);
+
+                // Film logic
+                FilmId filmIdObj = new FilmId(filmId, filmType); // Creates a new film id object
+                // Finds film depending if it is a movie or a tv-show
+                Film film = filmType == 0 ? movieService.getMovieById(filmId) : tvShowService.getTvShowById(filmId);
+
+                // if it coudnt have been found, then creates a new one as the respective type
+                if (film == null) {
+                    film = filmType == 0 ? new Movie() : new TvShow();
+                }
+                film.setId(filmIdObj); // Sets the id
+                if (filmType == 0) {
+                    movieService.addMovie((Movie) film); // adds the respective film type to the database
+                } else {
+                    tvShowService.addTvShow((TvShow) film);
+                }
+
+                // Cast logic
+                CastId castId = new CastId(personId, filmIdObj);
+                Cast castMember = personService.getCastById(castId);
+                if (castMember == null) {
+                    castMember = new Cast();
+                }
+                castMember.setId(castId);
+                castMember.setCharacter(getValueAsText(castNode.get("character")));
+                castMember.setOrdering(getValueAsInt(castNode.get("order")));
+                castMember.setLastUpdated(LocalDate.now());
+                castMember.setPerson(person);
+                castMember.setFilm(film);
+                personService.addCast(castMember);
+
+                // Adding the cast member to the person object
+                Set<Cast> played_in = person.getCast();
+                if (played_in == null)
+                    played_in = new HashSet<>();
+                played_in.add(castMember);
+                person.setCast(played_in);
+                personService.addPerson(person);
+
+                cast.add(castMember);
+            }
+        }
+
+        if (!root.get("crew").isNull()) {
+            crew = new HashSet<>();
+            for (JsonNode crewNode : root.get("crew")) {
+
+                // Person logic
+                int personId = crewNode.get("id").asInt();
+                Person person = personService.getPersonById(personId);
+                if (person == null) {
+                    person = new Person();
+                }
+                person.setId(personId);
+                person.setName(getValueAsText(crewNode.get("name")));
+                person.setGender(getValueAsInt(crewNode.get("gender")));
+                person.setAdult(getValueAsBoolean(crewNode.get("adult")));
+                person.setKnownFor(getValueAsText(crewNode.get("known_for_department")));
+                person.setPopularity(getValueAsInt(crewNode.get("popularity")));
+                person.setProfilePath(getValueAsText(crewNode.get("profile_path")));
+                personService.addPerson(person);
+
+                // Film logic
+                FilmId filmIdObj = new FilmId(filmId, filmType); // Creates a new film id object
+                // Finds film depending if it is a movie or a tv-show
+                Film film = filmType == 0 ? movieService.getMovieById(filmId) : tvShowService.getTvShowById(filmId);
+
+                // if it coudnt have been found, then creates a new one as the respective type
+                if (film == null) {
+                    film = filmType == 0 ? new Movie() : new TvShow();
+                }
+                film.setId(filmIdObj); // Sets the id
+                if (filmType == 0) {
+                    movieService.addMovie((Movie) film); // adds the respective film type to the database
+                } else {
+                    tvShowService.addTvShow((TvShow) film);
+                }
+
+                // Crew logic
+                CrewId crewId = new CrewId(personId, filmIdObj);
+                Crew crewMember = personService.getCrewById(crewId);
+                if (crewMember == null) {
+                    crewMember = new Crew();
+                }
+                crewMember.setId(crewId);
+                crewMember.setDepartment(getValueAsText(crewNode.get("department")));
+                crewMember.setJob(getValueAsText(crewNode.get("job")));
+                crewMember.setLastUpdated(LocalDate.now());
+                crewMember.setPerson(person);
+                crewMember.setFilm(film);
+                personService.addCrew(crewMember);
+
+                // Adding the crew member to the person object
+                Set<Crew> played_in = person.getCrew();
+                if (played_in == null)
+                    played_in = new HashSet<>();
+                played_in.add(crewMember);
+                person.setCrew(played_in);
+                personService.addPerson(person);
+
+                crew.add(crewMember);
+            }
+        }
+        Object[] credits = { cast, crew };
+        return credits;
     }
 
     /**
@@ -270,7 +422,7 @@ public class TMDBApiService {
         return tvShow;
     }
 
-    public Set<Person> mapTvShowCreators(JsonNode root, TvShow tvShow) {
+    private Set<Person> mapTvShowCreators(JsonNode root, TvShow tvShow) {
         if (!root.get("created_by").isNull()) {
             Set<Person> creators = new HashSet<>();
             for (JsonNode creator : root.get("created_by")) {
@@ -297,7 +449,7 @@ public class TMDBApiService {
         return null;
     }
 
-    public Set<Network> mapTvShowNetworks(JsonNode root, TvShow tvShow) {
+    private Set<Network> mapTvShowNetworks(JsonNode root, TvShow tvShow) {
         if (!root.get("networks").isNull()) {
             Set<Network> networks = new HashSet<>();
             for (JsonNode network : root.get("networks")) {
@@ -325,7 +477,7 @@ public class TMDBApiService {
         return null;
     }
 
-    public Set<Season> mapTvShowSeasons(JsonNode root, TvShow tvShow) {
+    private Set<Season> mapTvShowSeasons(JsonNode root, TvShow tvShow) {
         if (!root.get("seasons").isNull()) {
             Set<Season> seasons = new HashSet<>();
             for (JsonNode season : root.get("seasons")) {
@@ -402,14 +554,14 @@ public class TMDBApiService {
         return null;
     }
 
+    // Helper methods to extract values from JSON nodes
     private String getValueAsTitleOrName(JsonNode node) {
         if (node.hasNonNull("title")) {
             return getValueAsText(node.get("title"));
-        } 
+        }
         return getValueAsText(node.get("name"));
     }
 
-    // Helper methods to extract values from JSON nodes
     private String getValueAsText(JsonNode node) {
         return node != null && !node.isNull() ? node.asText() : null;
     }
@@ -434,11 +586,11 @@ public class TMDBApiService {
 
         if (node != null && !node.isNull()) {
             String date = node.asText();
-            if(date.equals(""))
+            if (date.equals(""))
                 return null;
             return LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
         }
         return null;
-       
+
     }
 }

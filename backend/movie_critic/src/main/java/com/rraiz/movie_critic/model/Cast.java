@@ -2,6 +2,8 @@ package com.rraiz.movie_critic.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -21,6 +23,7 @@ public class Cast {
     @ManyToOne
     @MapsId("personId")
     @JoinColumn(name = "person_id")
+    @JsonBackReference
     private Person person;
 
 
@@ -30,10 +33,14 @@ public class Cast {
         @JoinColumn(name = "film_id"),
         @JoinColumn(name = "film_type")
     })
+    @JsonBackReference
     private Film film;
 
     @Column(nullable = true, columnDefinition = "TEXT")
     private String character;
+
+    @Column(nullable = true)
+    private Integer ordering;
 
     @Column(nullable = true)
     private LocalDate lastUpdated;
@@ -41,11 +48,12 @@ public class Cast {
     public Cast() {
     }
 
-    public Cast(CastId id, Person person, Film film, String character, LocalDate lastUpdated) {
+    public Cast(CastId id, Person person, Film film, String character, Integer ordering, LocalDate lastUpdated) {
         this.id = id;
         this.person = person;
         this.film = film;
         this.character = character;
+        this.ordering = ordering;
         this.lastUpdated = lastUpdated;
     }
 
@@ -79,6 +87,14 @@ public class Cast {
 
     public void setCharacter(String character) {
         this.character = character;
+    }
+
+    public Integer getOrdering() {
+        return ordering;
+    }
+
+    public void setOrdering(Integer ordering) {
+        this.ordering = ordering;
     }
 
     public LocalDate getLastUpdated() {

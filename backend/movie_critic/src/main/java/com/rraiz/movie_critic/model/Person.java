@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -65,9 +66,11 @@ public class Person {
     private List<String> alsoKnownAs;
 
     @OneToMany(mappedBy = "person")
+    @JsonManagedReference
     private Set<Crew> crew;
 
     @OneToMany(mappedBy = "person")
+    @JsonManagedReference
     private Set<Cast> cast;
 
     @ManyToMany(mappedBy = "creators")

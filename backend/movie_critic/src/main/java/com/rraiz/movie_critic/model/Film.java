@@ -82,9 +82,11 @@ public class Film {
     private List<String> originCountries;
 
     @OneToMany(mappedBy = "film")
+    @JsonManagedReference
     private Set<Crew> crew;
 
     @OneToMany(mappedBy = "film")
+    @JsonManagedReference
     private Set<Cast> cast;
 
     @ManyToMany
