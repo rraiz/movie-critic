@@ -49,7 +49,7 @@ public class Person {
     private String birthPlace;
 
     @Column(nullable = true)
-    private Integer popularity;
+    private Double popularity;
 
     @Column(nullable = true, columnDefinition = "TEXT")
     private String profilePath;
@@ -85,7 +85,7 @@ public class Person {
     }
 
     // Parameterized Constructor
-    public Person(int id, String name, boolean adult, String biography, LocalDate birthDate, LocalDate deathDate, Integer gender, String knownFor, String birthPlace, Integer popularity, String profilePath, String homepage, String imdbId, List<String> alsoKnownAs, Set<Crew> crew, Set<Cast> cast, Set<TvShow> createdTvShows,LocalDate lastUpdated) {
+    public Person(int id, String name, boolean adult, String biography, LocalDate birthDate, LocalDate deathDate, Integer gender, String knownFor, String birthPlace, Double popularity, String profilePath, String homepage, String imdbId, List<String> alsoKnownAs, Set<Crew> crew, Set<Cast> cast, Set<TvShow> createdTvShows,LocalDate lastUpdated) {
         this.id = id;
         this.name = name;
         this.adult = adult;
@@ -178,11 +178,11 @@ public class Person {
         this.birthPlace = birthPlace;
     }
 
-    public Integer getPopularity() {
+    public Double getPopularity() {
         return popularity;
     }
 
-    public void setPopularity(Integer popularity) {
+    public void setPopularity(Double popularity) {
         this.popularity = popularity;
     }
 

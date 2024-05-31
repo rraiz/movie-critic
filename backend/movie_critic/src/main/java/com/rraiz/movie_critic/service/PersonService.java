@@ -1,5 +1,6 @@
 package com.rraiz.movie_critic.service;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.rraiz.movie_critic.model.Cast;
@@ -20,10 +21,13 @@ public class PersonService {
     private final CastRepository castRepository;
     private final CrewRepository crewRepository;
 
-    public PersonService(PersonRepository personRepository, CastRepository castRepository, CrewRepository crewRepository) {
+    private final TMDBApiService tmdbApiService;
+
+    public PersonService(PersonRepository personRepository, CastRepository castRepository, CrewRepository crewRepository, @Lazy TMDBApiService tmdbApiService) {
         this.personRepository = personRepository;
         this.castRepository = castRepository;
         this.crewRepository = crewRepository;
+        this.tmdbApiService = tmdbApiService;
     }
 
     /* Person */
@@ -35,6 +39,16 @@ public class PersonService {
     @Transactional
     public Person getPersonById(int personId) {
         return personRepository.findById(personId).orElse(null);
+    }
+
+    public Person getPersonDetails (int personId) throws Exception {
+        Person p = getPersonById(personId);
+        if (p == null || p.getLastUpdated() == null) {
+            p = tmdbApiService.fetchPersonDetails(personId);
+            if (p != null)
+                addPerson(p);
+        }
+        return p;
     }
 
     /* Cast */

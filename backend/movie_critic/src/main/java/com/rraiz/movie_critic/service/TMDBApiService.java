@@ -63,6 +63,16 @@ public class TMDBApiService {
         }
     }
 
+    public Object[] fetchPersonCredits(int personId) {
+        String url = String.format("%s/person/%d/combined_credits?api_key=%s", TMDB_API_BASE_URL, personId, apiKey);
+        return fetchFromApi(url, this::mapApiResponseToPersonCredits);
+    }
+
+    public Person fetchPersonDetails(int personId) {
+        String url = String.format("%s/person/%d?api_key=%s", TMDB_API_BASE_URL, personId, apiKey);
+        return fetchFromApi(url, this::mapApiResponseToPerson);
+    }
+
     public Movie fetchMovieDetails(int movieId) {
         String url = String.format("%s/movie/%d?api_key=%s", TMDB_API_BASE_URL, movieId, apiKey);
         return fetchFromApi(url, this::mapApiResponseToMovie);
@@ -87,6 +97,187 @@ public class TMDBApiService {
             return fetchFromApi(url, this::mapApiResponseToTvShowCredits);
         }
     }
+
+    private Person mapApiResponseToPerson(JsonNode root) {
+        Person person = personService.getPersonById(root.get("id").asInt());
+        if (person == null) {
+            person = new Person();
+
+        }
+        personService.addPerson(person);
+
+        person.setId(root.get("id").asInt());
+        person.setName(getValueAsText(root.get("name")));
+        person.setBiography(getValueAsText(root.get("biography")));
+        person.setGender(getValueAsInt(root.get("gender")));
+        person.setAdult(getValueAsBoolean(root.get("adult")));
+        person.setKnownFor(getValueAsText(root.get("known_for_department")));
+        person.setBirthDate(getValueAsLocalDate(root.get("birthday")));
+        person.setDeathDate(getValueAsLocalDate(root.get("deathday")));
+        person.setPopularity(getValueAsDouble(root.get("popularity")));
+        person.setProfilePath(getValueAsText(root.get("profile_path")));
+        person.setBirthPlace(getValueAsText(root.get("place_of_birth")));
+        person.setImdbId(getValueAsText(root.get("imdb_id")));
+        person.setHomepage(getValueAsText(root.get("homepage")));
+
+        List<String> also_known_as = StreamSupport.stream(root.get("also_known_as").spliterator(), false)
+                .map(JsonNode::asText).collect(Collectors.toList());
+
+
+        Object[] credits = fetchPersonCredits(person.getId());
+        @SuppressWarnings("unchecked")
+        Set<Cast> cast = (Set<Cast>) credits[0];
+        @SuppressWarnings("unchecked")
+        Set<Crew> crew = (Set<Crew>) credits[1];
+
+        person.setAlsoKnownAs(also_known_as);
+        person.setCast(cast);
+        person.setCrew(crew);
+
+        person.setLastUpdated(LocalDate.now());
+        personService.addPerson(person);
+       
+        return person;
+    }
+
+    private Object[] mapApiResponseToPersonCredits(JsonNode root)
+    {
+        Set<Cast> cast = null;
+        Set<Crew> crew = null;
+
+        int personId = root.get("id").asInt();
+        Person person = personService.getPersonById(personId);
+        if (person == null) {
+            person = new Person();
+        }
+        person.setId(personId);
+        personService.addPerson(person);
+
+        if (!root.get("cast").isNull()) {
+            cast = new HashSet<>();
+            for (JsonNode castNode : root.get("cast")) {
+
+                // Film logic
+                int media_type = castNode.get("media_type").asText().equals("movie") ? 0 : 1;
+                int filmId = castNode.get("id").asInt();
+                FilmId filmIdObj = new FilmId(filmId, media_type);
+                Film film = media_type == 0 ? movieService.getMovieById(filmId) : tvShowService.getTvShowById(filmId);
+                if (film == null) {
+                    film = media_type == 0 ? new Movie() : new TvShow();
+                }
+                film.setId(filmIdObj);
+                if (media_type == 0) {
+                    movieService.addMovie((Movie) film);
+                } else {
+                    tvShowService.addTvShow((TvShow) film);
+                }
+                film.setAdult(getValueAsBoolean(castNode.get("adult")));
+                film.setBackdropPath(getValueAsText(castNode.get("backdrop_path")));
+                film.setOriginalLanguage(getValueAsText(castNode.get("original_language")));
+                film.setOriginalName(getValueAsText(castNode.get("original_title")));
+                film.setOverview(getValueAsText(castNode.get("overview")));
+                film.setPopularity(getValueAsDouble(castNode.get("popularity")));
+                film.setPosterPath(getValueAsText(castNode.get("poster_path")));
+                film.setTitle(getValueAsTitleOrName(castNode));
+                film.setVoteAverage(getValueAsDouble(castNode.get("vote_average")));
+                film.setVoteCount(getValueAsInt(castNode.get("vote_count")));
+
+
+                // Cast logic
+                CastId castId = new CastId(personId, filmIdObj);
+                Cast castMember = personService.getCastById(castId);
+                if (castMember == null) {
+                    castMember = new Cast();
+                }
+                castMember.setId(castId);
+                castMember.setCharacter(getValueAsText(castNode.get("character")));
+                castMember.setOrdering(getValueAsInt(castNode.get("order")));
+                castMember.setLastUpdated(LocalDate.now());
+                castMember.setPerson(person);
+                castMember.setFilm(film);
+                personService.addCast(castMember);
+
+                // Adding the cast member to the film object
+                Set<Cast> played_in = film.getCast();
+                if (played_in == null)
+                    played_in = new HashSet<>();
+                played_in.add(castMember);
+                film.setCast(played_in);
+                if (media_type == 0) {
+                    movieService.addMovie((Movie) film);
+                } else {
+                    tvShowService.addTvShow((TvShow) film);
+                }
+
+                cast.add(castMember);
+            }
+        }
+
+        if (!root.get("crew").isNull()) {
+            crew = new HashSet<>();
+            for (JsonNode crewNode : root.get("crew")) {
+
+                // Film logic
+                int media_type = crewNode.get("media_type").asText().equals("movie") ? 0 : 1;
+                int filmId = crewNode.get("id").asInt();
+                FilmId filmIdObj = new FilmId(filmId, media_type);
+                Film film = media_type == 0 ? movieService.getMovieById(filmId) : tvShowService.getTvShowById(filmId);
+                if (film == null) {
+                    film = media_type == 0 ? new Movie() : new TvShow();
+                }
+                film.setId(filmIdObj);
+                if (media_type == 0) {
+                    movieService.addMovie((Movie) film);
+                } else {
+                    tvShowService.addTvShow((TvShow) film);
+                }
+                film.setAdult(getValueAsBoolean(crewNode.get("adult")));
+                film.setBackdropPath(getValueAsText(crewNode.get("backdrop_path")));
+                film.setOriginalLanguage(getValueAsText(crewNode.get("original_language")));
+                film.setOriginalName(getValueAsText(crewNode.get("original_title")));
+                film.setOverview(getValueAsText(crewNode.get("overview")));
+                film.setPopularity(getValueAsDouble(crewNode.get("popularity")));
+                film.setPosterPath(getValueAsText(crewNode.get("poster_path")));
+                film.setTitle(getValueAsTitleOrName(crewNode));
+                film.setVoteAverage(getValueAsDouble(crewNode.get("vote_average")));
+                film.setVoteCount(getValueAsInt(crewNode.get("vote_count")));
+
+
+                // Crew logic 
+                CrewId crewId = new CrewId(personId, filmIdObj);
+                Crew crewMember = personService.getCrewById(crewId);
+                if (crewMember == null) {
+                    crewMember = new Crew();
+                }
+                crewMember.setId(crewId);
+                crewMember.setDepartment(getValueAsText(crewNode.get("department")));
+                crewMember.setJob(getValueAsText(crewNode.get("job")));
+                crewMember.setLastUpdated(LocalDate.now());
+                crewMember.setPerson(person);
+                crewMember.setFilm(film);
+                personService.addCrew(crewMember);
+
+                // Adding the crew member to the film object
+                Set<Crew> played_in = film.getCrew();
+                if (played_in == null)
+                    played_in = new HashSet<>();
+                played_in.add(crewMember);
+                film.setCrew(played_in);
+                if (media_type == 0) {
+                    movieService.addMovie((Movie) film);
+                } else {
+                    tvShowService.addTvShow((TvShow) film);
+                }
+
+                crew.add(crewMember);
+            }
+        }
+
+        Object[] credits = { cast, crew };
+        return credits;
+    }
+
+
 
     /**
      * Maps the JSON response from the API to a Film object.
@@ -216,7 +407,7 @@ public class TMDBApiService {
                 person.setGender(getValueAsInt(castNode.get("gender")));
                 person.setAdult(getValueAsBoolean(castNode.get("adult")));
                 person.setKnownFor(getValueAsText(castNode.get("known_for_department")));
-                person.setPopularity(getValueAsInt(castNode.get("popularity")));
+                person.setPopularity(getValueAsDouble(castNode.get("popularity")));
                 person.setProfilePath(getValueAsText(castNode.get("profile_path")));
                 personService.addPerson(person);
 
@@ -277,7 +468,7 @@ public class TMDBApiService {
                 person.setGender(getValueAsInt(crewNode.get("gender")));
                 person.setAdult(getValueAsBoolean(crewNode.get("adult")));
                 person.setKnownFor(getValueAsText(crewNode.get("known_for_department")));
-                person.setPopularity(getValueAsInt(crewNode.get("popularity")));
+                person.setPopularity(getValueAsDouble(crewNode.get("popularity")));
                 person.setProfilePath(getValueAsText(crewNode.get("profile_path")));
                 personService.addPerson(person);
 
