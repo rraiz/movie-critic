@@ -5,7 +5,7 @@ function Footer() {
         <footer>
             <nav className={styles.navbar}>
             <p className={styles.bottom}>&copy; {new Date().getFullYear()} Movie Critic. Made by Rayan Raiszadeh. 
-            Film data from <a href="https://developer.imdb.com/non-commercial-datasets/">Imdb</a> and <a href="https://www.themoviedb.org/">TMDb</a></p>
+            Film data from <a href="https://www.themoviedb.org/">TMDb</a></p>
             </nav>
         </footer>
     )
