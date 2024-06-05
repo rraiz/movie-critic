@@ -3,6 +3,15 @@ import altPoster from '../../../public/alt-poster.png';
 
 export default function Tv({film}) {
 
+    const firstAirYear = new Date(film.firstAirDate).getFullYear();
+    let lastAirYear = new Date(film.lastAirDate).getFullYear();
+
+    if (film.inProduction) {
+        lastAirYear = 'Present';
+    } 
+
+    const creators = film.creators.map(creator => creator.name).join(', ');
+
     return (
         <div className='grid grid-cols-3 -mt-10'>
         <img 
@@ -10,11 +19,11 @@ export default function Tv({film}) {
             alt="Poster Image" 
         />
         <div className='col-span-2'>
-            <div className='flex items-baseline'>
-                <h1 className="font-bold text-[50px] text-[#FFFFFF] drop-shadow-md">{film.title}</h1>
-                <p className='text-[#d7dae1] ml-2'>{film.firstAirDate} - {film.lastAirDate}</p>
-            </div>
-            <p className='font-bold mb-2'>{film.tagline}</p>
+            <div className='flex items-baseline flex-wrap'>
+                <h1 className="font-bold text-[40px] text-[#FFFFFF] z-10">{film.title}</h1>
+                <p className='text-[#d7dae1] ml-4 mr-4'>{firstAirYear} - {lastAirYear}</p>
+                {creators && <p className='text-[#d7dae1]'>Created by {creators}</p>}            </div>
+            <p className='font-bold mb-2 mt-3'>{film.tagline}</p>
             <p className="whitespace-pre-wrap">{film.overview}</p>
         </div>
     </div>
