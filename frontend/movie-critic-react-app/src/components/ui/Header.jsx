@@ -19,7 +19,7 @@ function Header() {
                 <a className=" hover:text-gray-400" href="/about">About</a>
               </li>
               <li>
-                <a className=" hover:text-gray-400" href="/sign-in">Sign In</a>
+                <a className=" hover:text-gray-400" href="/film">Sign In</a>
               </li>
               <li>
                 <div className="relative flex items-center">

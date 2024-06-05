@@ -1,4 +1,4 @@
-import errorPic from './error-pic.jpg';
+import errorPic from '../../../public/error-pic.jpg'
 import './error.css';
 
 export default function Error() {
@@ -6,7 +6,7 @@ export default function Error() {
         <div className="bg-[#14181d] text-[#d7dae1] text-center min-h-screen flex flex-col items-center">
             <h1 className='text-[50px] font-bold'>404</h1>
             <p className='text-[20px] pb-[25px]'>Page was not found... </p>
-            <div className="absolute top-[575px] z-10">
+            <div className="absolute top-[600px] z-10">
                 <h1 className="font-bold text-[50px] p-5">You look lonely...</h1>
                 <a 
                     href="/" 
