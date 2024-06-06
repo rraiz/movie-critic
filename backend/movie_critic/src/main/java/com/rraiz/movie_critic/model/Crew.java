@@ -41,18 +41,30 @@ public class Crew {
     @Column(nullable = true, columnDefinition = "TEXT")
     private String job;
 
+    @Column(nullable = true, columnDefinition = "TEXT")
+    private String personName; // This is a denormalized field
+
+    @Column(nullable = true, columnDefinition = "TEXT")
+    private String profilPath; // This is a denormalized field
+
+    @Column(nullable = true, columnDefinition = "TEXT")
+    private String filmTitle; // This is a denormalized field
+
     @Column(nullable = true)
     private LocalDate lastUpdated;
 
     public Crew() {
     }
 
-    public Crew(CrewId id, Person person, Film film, String department, String job, LocalDate lastUpdated) {
+    public Crew(CrewId id, Person person, Film film, String department, String job, String personName, String profilePath, String filmTitle, LocalDate lastUpdated) {
         this.id = id;
         this.person = person;
         this.film = film;
         this.department = department;
         this.job = job;
+        this.personName = personName;
+        this.profilPath = profilePath;
+        this.filmTitle = filmTitle;
         this.lastUpdated = lastUpdated;
     }
 
@@ -98,6 +110,30 @@ public class Crew {
 
     public LocalDate getLastUpdated() {
         return lastUpdated;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
+    }
+
+    public String getProfilPath() {
+        return profilPath;
+    }
+
+    public void setProfilPath(String profilPath) {
+        this.profilPath = profilPath;
+    }
+
+    public String getFilmTitle() {
+        return filmTitle;
+    }
+
+    public void setFilmTitle(String filmTitle) {
+        this.filmTitle = filmTitle;
     }
 
     public void setLastUpdated(LocalDate lastUpdated) {
