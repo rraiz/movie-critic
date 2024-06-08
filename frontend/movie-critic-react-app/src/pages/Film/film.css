@@ -16,3 +16,11 @@
 .cover-bg {
     box-shadow: 0 0 20px rgba(0,0,0,0.5); /* Subtle shadow */
 }
+
+.card-shadow {
+    box-shadow: 0 0 10px rgba(0,0,0,0.4); /* Subtle shadow */
+}
+
+.small-shadow {
+    box-shadow: 0 0 5px rgba(0,0,0,0.5); /* Subtle shadow */
+}
