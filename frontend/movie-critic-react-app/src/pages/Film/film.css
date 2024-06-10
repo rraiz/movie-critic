@@ -24,3 +24,18 @@
 .small-shadow {
     box-shadow: 0 0 5px rgba(0,0,0,0.5); /* Subtle shadow */
 }
+
+
+/* Scrollbar */
+
+.scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #282828 transparent;
+  }
+  
+  .scrollbar {
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+  }
+
+  
