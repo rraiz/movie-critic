@@ -1,5 +1,7 @@
 package com.rraiz.movie_critic.service;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -73,4 +75,10 @@ public class TvShowService {
     public Episode getEpisodeById(int episode) {
         return episodeRepository.findById(episode).orElse(null);
     }
+
+    public List<TvShow> getTvShowsByName(String tvShowName) {
+        return tvShowRepository.findByNameContaining(tvShowName);
+    }
+
+
 }

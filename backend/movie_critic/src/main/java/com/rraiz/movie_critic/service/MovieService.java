@@ -1,5 +1,7 @@
 package com.rraiz.movie_critic.service;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,10 @@ public class MovieService {
                 addMovie(m);
         }
         return m;
+    }
+
+    public List<Movie> getMoviesByName(String movieName) {
+        return movieRepository.findByNameContaining(movieName);
     }
 
 }

@@ -45,7 +45,7 @@ public class Crew {
     private String personName; // This is a denormalized field
 
     @Column(nullable = true, columnDefinition = "TEXT")
-    private String profilPath; // This is a denormalized field
+    private String profilePath; // This is a denormalized field
 
     @Column(nullable = true, columnDefinition = "TEXT")
     private String filmTitle; // This is a denormalized field
@@ -63,7 +63,7 @@ public class Crew {
         this.department = department;
         this.job = job;
         this.personName = personName;
-        this.profilPath = profilePath;
+        this.profilePath = profilePath;
         this.filmTitle = filmTitle;
         this.lastUpdated = lastUpdated;
     }
@@ -120,12 +120,12 @@ public class Crew {
         this.personName = personName;
     }
 
-    public String getProfilPath() {
-        return profilPath;
+    public String getProfilePath() {
+        return profilePath;
     }
 
-    public void setProfilPath(String profilPath) {
-        this.profilPath = profilPath;
+    public void setProfilePath(String profilPath) {
+        this.profilePath = profilPath;
     }
 
     public String getFilmTitle() {
