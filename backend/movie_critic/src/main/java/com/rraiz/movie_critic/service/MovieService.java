@@ -45,7 +45,7 @@ public class MovieService {
     }
 
     public List<Movie> getMoviesByName(String movieName) {
-        return movieRepository.findByNameContaining(movieName);
+        return movieRepository.findByTitleContaining(movieName);
     }
 
 }

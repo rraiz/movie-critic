@@ -11,6 +11,6 @@ import com.rraiz.movie_critic.model.Movie;
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, FilmId>{
     
-    List<Movie> findByNameContaining(String name);
+    List<Movie> findByTitleContaining(String name);
     
 } 

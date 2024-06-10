@@ -77,7 +77,7 @@ public class TvShowService {
     }
 
     public List<TvShow> getTvShowsByName(String tvShowName) {
-        return tvShowRepository.findByNameContaining(tvShowName);
+        return tvShowRepository.findByTitleContaining(tvShowName);
     }
 
 

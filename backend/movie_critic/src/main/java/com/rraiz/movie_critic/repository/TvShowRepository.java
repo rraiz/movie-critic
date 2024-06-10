@@ -11,6 +11,6 @@ import com.rraiz.movie_critic.model.TvShow;
 @Repository
 public interface TvShowRepository extends JpaRepository<TvShow, FilmId>{
 
-    List<TvShow> findByNameContaining(String name);
+    List<TvShow> findByTitleContaining(String name);
 
 } 
