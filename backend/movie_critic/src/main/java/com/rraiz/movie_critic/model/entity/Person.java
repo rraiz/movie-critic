@@ -1,4 +1,4 @@
-package com.rraiz.movie_critic.model;
+package com.rraiz.movie_critic.model.entity;
 
 import java.time.LocalDate;
 import java.util.List;

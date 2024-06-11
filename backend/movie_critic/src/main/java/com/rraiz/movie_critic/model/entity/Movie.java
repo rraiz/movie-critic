@@ -1,10 +1,11 @@
-package com.rraiz.movie_critic.model;
+package com.rraiz.movie_critic.model.entity;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.rraiz.movie_critic.model.identifier.FilmId;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

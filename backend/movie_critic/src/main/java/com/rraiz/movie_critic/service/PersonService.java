@@ -3,11 +3,11 @@ package com.rraiz.movie_critic.service;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import com.rraiz.movie_critic.model.Cast;
-import com.rraiz.movie_critic.model.CastId;
-import com.rraiz.movie_critic.model.Crew;
-import com.rraiz.movie_critic.model.CrewId;
-import com.rraiz.movie_critic.model.Person;
+import com.rraiz.movie_critic.model.entity.Cast;
+import com.rraiz.movie_critic.model.entity.Crew;
+import com.rraiz.movie_critic.model.entity.Person;
+import com.rraiz.movie_critic.model.identifier.CastId;
+import com.rraiz.movie_critic.model.identifier.CrewId;
 import com.rraiz.movie_critic.repository.CastRepository;
 import com.rraiz.movie_critic.repository.CrewRepository;
 import com.rraiz.movie_critic.repository.PersonRepository;

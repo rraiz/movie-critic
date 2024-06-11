@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import com.rraiz.movie_critic.model.Episode;
-import com.rraiz.movie_critic.model.FilmId;
-import com.rraiz.movie_critic.model.Season;
-import com.rraiz.movie_critic.model.TvShow;
+import com.rraiz.movie_critic.model.entity.Episode;
+import com.rraiz.movie_critic.model.entity.Season;
+import com.rraiz.movie_critic.model.entity.TvShow;
+import com.rraiz.movie_critic.model.identifier.FilmId;
 import com.rraiz.movie_critic.repository.EpisodeRepository;
 import com.rraiz.movie_critic.repository.SeasonRepository;
 import com.rraiz.movie_critic.repository.TvShowRepository;

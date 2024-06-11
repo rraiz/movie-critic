@@ -1,4 +1,4 @@
-package com.rraiz.movie_critic.model;
+package com.rraiz.movie_critic.model.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.rraiz.movie_critic.model.identifier.FilmId;
 
 @Entity
 @Table(name = "tv_show")

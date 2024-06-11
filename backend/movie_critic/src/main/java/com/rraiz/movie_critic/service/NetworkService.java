@@ -2,7 +2,7 @@ package com.rraiz.movie_critic.service;
 
 import org.springframework.stereotype.Service;
 
-import com.rraiz.movie_critic.model.Network;
+import com.rraiz.movie_critic.model.entity.Network;
 import com.rraiz.movie_critic.repository.NetworkRepository;
 
 @Service

@@ -18,7 +18,20 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rraiz.movie_critic.model.*;
+import com.rraiz.movie_critic.model.entity.Cast;
+import com.rraiz.movie_critic.model.entity.Collection;
+import com.rraiz.movie_critic.model.entity.Crew;
+import com.rraiz.movie_critic.model.entity.Episode;
+import com.rraiz.movie_critic.model.entity.Film;
+import com.rraiz.movie_critic.model.entity.Movie;
+import com.rraiz.movie_critic.model.entity.Network;
+import com.rraiz.movie_critic.model.entity.Person;
+import com.rraiz.movie_critic.model.entity.ProductionCompany;
+import com.rraiz.movie_critic.model.entity.Season;
+import com.rraiz.movie_critic.model.entity.TvShow;
+import com.rraiz.movie_critic.model.identifier.CastId;
+import com.rraiz.movie_critic.model.identifier.CrewId;
+import com.rraiz.movie_critic.model.identifier.FilmId;
 
 @Service
 public class TMDBApiService {

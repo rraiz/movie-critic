@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.rraiz.movie_critic.model.FilmId;
-import com.rraiz.movie_critic.model.Movie;
+import com.rraiz.movie_critic.model.entity.Movie;
+import com.rraiz.movie_critic.model.identifier.FilmId;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, FilmId>{

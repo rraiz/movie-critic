@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import com.rraiz.movie_critic.model.FilmId;
-import com.rraiz.movie_critic.model.Movie;
+import com.rraiz.movie_critic.model.entity.Movie;
+import com.rraiz.movie_critic.model.identifier.FilmId;
 import com.rraiz.movie_critic.repository.MovieRepository;
 
 import jakarta.transaction.Transactional;

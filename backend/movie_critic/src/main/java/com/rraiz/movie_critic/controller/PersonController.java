@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rraiz.movie_critic.model.Person;
+import com.rraiz.movie_critic.model.entity.Person;
 import com.rraiz.movie_critic.service.PersonService;
 import com.rraiz.movie_critic.util.ResponseUtil;
 

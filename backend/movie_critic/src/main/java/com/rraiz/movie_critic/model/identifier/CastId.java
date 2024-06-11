@@ -1,4 +1,4 @@
-package com.rraiz.movie_critic.model;
+package com.rraiz.movie_critic.model.identifier;
 
 import java.io.Serializable;
 import java.util.Objects;

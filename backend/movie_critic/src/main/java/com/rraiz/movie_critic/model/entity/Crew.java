@@ -1,8 +1,9 @@
-package com.rraiz.movie_critic.model;
+package com.rraiz.movie_critic.model.entity;
 
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.rraiz.movie_critic.model.identifier.CrewId;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -14,18 +15,17 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "film_cast")
-public class Cast {
+@Table(name = "film_crew")
+public class Crew {
 
     @EmbeddedId
-    private CastId id;
+    private CrewId id;
 
     @ManyToOne
     @MapsId("personId")
     @JoinColumn(name = "person_id")
     @JsonBackReference
     private Person person;
-
 
     @ManyToOne
     @MapsId("filmId")
@@ -37,10 +37,10 @@ public class Cast {
     private Film film;
 
     @Column(nullable = true, columnDefinition = "TEXT")
-    private String character;
+    private String department;
 
-    @Column(nullable = true)
-    private Integer ordering;
+    @Column(nullable = true, columnDefinition = "TEXT")
+    private String job;
 
     @Column(nullable = true, columnDefinition = "TEXT")
     private String personName; // This is a denormalized field
@@ -54,26 +54,26 @@ public class Cast {
     @Column(nullable = true)
     private LocalDate lastUpdated;
 
-    public Cast() {
+    public Crew() {
     }
 
-    public Cast(CastId id, Person person, Film film, String character, Integer ordering, String personName, String profilePath, String filmTitle, LocalDate lastUpdated) {
+    public Crew(CrewId id, Person person, Film film, String department, String job, String personName, String profilePath, String filmTitle, LocalDate lastUpdated) {
         this.id = id;
         this.person = person;
         this.film = film;
-        this.character = character;
-        this.ordering = ordering;
+        this.department = department;
+        this.job = job;
         this.personName = personName;
         this.profilePath = profilePath;
         this.filmTitle = filmTitle;
         this.lastUpdated = lastUpdated;
     }
 
-    public CastId getId() {
+    public CrewId getId() {
         return id;
     }
 
-    public void setId(CastId id) {
+    public void setId(CrewId id) {
         this.id = id;
     }
 
@@ -93,20 +93,20 @@ public class Cast {
         this.film = film;
     }
 
-    public String getCharacter() {
-        return character;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setCharacter(String character) {
-        this.character = character;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
-    public Integer getOrdering() {
-        return ordering;
+    public String getJob() {
+        return job;
     }
 
-    public void setOrdering(Integer ordering) {
-        this.ordering = ordering;
+    public void setJob(String job) {
+        this.job = job;
     }
 
     public LocalDate getLastUpdated() {

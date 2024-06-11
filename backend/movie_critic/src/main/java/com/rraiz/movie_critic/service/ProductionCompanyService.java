@@ -2,7 +2,7 @@ package com.rraiz.movie_critic.service;
 
 import org.springframework.stereotype.Service;
 
-import com.rraiz.movie_critic.model.ProductionCompany;
+import com.rraiz.movie_critic.model.entity.ProductionCompany;
 import com.rraiz.movie_critic.repository.ProductionCompanyRepository;
 
 import jakarta.transaction.Transactional;

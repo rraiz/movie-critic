@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rraiz.movie_critic.model.Film;
-import com.rraiz.movie_critic.model.Movie;
-import com.rraiz.movie_critic.model.TvShow;
+import com.rraiz.movie_critic.model.entity.Film;
+import com.rraiz.movie_critic.model.entity.Movie;
+import com.rraiz.movie_critic.model.entity.TvShow;
 import com.rraiz.movie_critic.service.MovieService;
 import com.rraiz.movie_critic.service.TvShowService;
 import com.rraiz.movie_critic.util.ResponseUtil;
