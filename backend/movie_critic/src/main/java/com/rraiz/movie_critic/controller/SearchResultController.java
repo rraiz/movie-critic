@@ -33,22 +33,22 @@ public class SearchResultController {
     }
 
 
-    @GetMapping("/movie/{MovieName}")
-    public ResponseEntity<List<Movie>> getMovieName(@PathVariable String movieName){
+    @GetMapping("/movie/{movieName}")
+    public ResponseEntity<List<Movie>> getMovieName(@PathVariable("movieName") String movieName){
         List<Movie> movies =  movieService.getMoviesByName(movieName);
         Collections.sort(movies, Comparator.comparing(Film::getPopularity).reversed());
         return ResponseUtil.createResponseEntity(movies);
     }
 
-    @GetMapping("/tv/{TvShowName}")
-    public ResponseEntity<List<TvShow>> getTvShowName(@PathVariable String tvShowName){
+    @GetMapping("/tv/{tvShowName}")
+    public ResponseEntity<List<TvShow>> getTvShowName(@PathVariable("tvShowName") String tvShowName){
         List<TvShow> tvShows = tvShowService.getTvShowsByName(tvShowName);
         Collections.sort(tvShows, Comparator.comparing(Film::getPopularity).reversed());
         return ResponseUtil.createResponseEntity(tvShows);
     }
 
-    @GetMapping("/film/{FilmName}")
-    public ResponseEntity<List<Film>> getFilmNames(@PathVariable String filmName){
+    @GetMapping("/film/{filmName}")
+    public ResponseEntity<List<Film>> getFilmNames(@PathVariable("filmName") String filmName){
         List<Movie> movies =  movieService.getMoviesByName(filmName);
         List<TvShow> tvShows = tvShowService.getTvShowsByName(filmName);
         List<Film> films = new ArrayList<>();
