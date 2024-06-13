@@ -1,7 +1,7 @@
 export default function Details({ film, type }) {
     return (
         <div className='mt-[40px] ml-5'>
-            <h2 className="font-bold text-[24px] mb-2">Details</h2>
+            <h2 className="font-bold text-[24px] mb-2 text-[#fddb06]">Details</h2>
             <div className="">
                 <div className="flex text-gray-300 space-x-10">
                     <div className='flex-1 min-w-[315px] flex flex-col space-y-2'>
@@ -85,14 +85,14 @@ export default function Details({ film, type }) {
                                 {film?.inProduction !== undefined && (
                                     <div>
                                         <p><strong>Status</strong></p>
-                                        <p>{film.inProduction ? "in production" : "Ended"}</p>
+                                        <p>{film.inProduction ? "In production" : "Ended"}</p>
                                     </div>
                                 )}
                             </>
                         )}
                         {type === 'movie' && (
                             <>
-                                {film?.runtime && (
+                                {film?.runtime > 0 && (
                                     <div>
                                         <p><strong>Runtime</strong></p>
                                         <p>{film.runtime} minutes</p>
@@ -104,13 +104,13 @@ export default function Details({ film, type }) {
                                         <p>{film.releaseDate}</p>
                                     </div>
                                 )}
-                                {film?.revenue && (
+                                {film?.revenue > 0 && (
                                     <div>
                                         <p><strong>Revenue</strong></p>
                                         <p>${film.revenue.toLocaleString()}</p>
                                     </div>
                                 )}
-                                {film?.budget && (
+                                {film?.budget > 0 && (
                                     <div>
                                         <p><strong>Budget</strong></p>
                                         <p>${film.budget.toLocaleString()}</p>

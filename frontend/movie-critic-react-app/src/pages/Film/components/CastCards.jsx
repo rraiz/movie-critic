@@ -5,7 +5,7 @@ export default function CastCards({ members, type }) {
 
   return (
     <div className="col-span-3 mt-10">
-      <a className="ml-5 mt-3 font-bold text-[25px]">
+      <a className="ml-5 mt-3 font-bold text-[25px] text-[#fddb06]">
         {type === "movie" ? "Cast" : "Series Cast"}
       </a>
       <main className="flex overflow-x-auto space-x-4 p-4 items-stretch scrollbar">

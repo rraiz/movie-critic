@@ -28,10 +28,13 @@ export default function FilmOverview({ film, type }) {
     let directors;
     if (type === 'movie') {
         releaseYear = new Date(film.releaseDate).getFullYear();
-
+    
         // Get the names of the directors as a comma-separated string
         if (film.crew) {
-            directors = film.crew.filter(member => member.job === 'Director').map(member => member.personName).join(', ');
+            directors = film.crew
+                .filter(member => member.id.job === 'Director')
+                .map(member => member.personName)
+                .join(', ');
         }
     }
 
@@ -59,15 +62,15 @@ export default function FilmOverview({ film, type }) {
                 <div className="flex flex-col">
 
                     {/* Tagline */}
-                    <p className='font-bold mb-2 mt-3'>{film.tagline}</p>
+                    <p className='font-bold mb-2 mt-3 text-[gray-100]'>{film.tagline}</p>
 
                     {/* Overview */}
-                    <p className="whitespace-pre-wrap mb-5">{film.overview}</p>
+                    <p className="whitespace-pre-wrap mb-5 text-gray-300">{film.overview}</p>
 
                     {/* Genres Section */}
                     <div className="flex flex-wrap mb-2 mt-4">
                         {film.genres.map((genre, index) => (
-                            <div key={index} className="bg-[#2b2f335d] small-shadow text-[#eef1f8] px-3 py-1 rounded-full text-[15px] mr-2 mb-2 inline-block">
+                            <div key={index} className="bg-[#2828295e] small-shadow text-[#fddb06] px-3 py-1 rounded-full text-[15px] mr-2 mb-2 inline-block">
                                 {genre}
                             </div>
                         ))}

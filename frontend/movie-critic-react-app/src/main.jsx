@@ -9,6 +9,7 @@ import Footer from './components/ui/Footer.jsx'
 import Home from './pages/Home/Home.jsx'
 import Film from './pages/Film/Film.jsx'
 import Error from './pages/Error/Error.jsx'
+import Search from './pages/Search/Search.jsx'
 
 
 
@@ -24,6 +25,10 @@ const router = createBrowserRouter([{
 {
   path: '/movie/:id',
   element: <Film type={"movie"}/>,
+},
+{
+  path: '/search',
+  element: <Search />,
 }
 ]);
 
