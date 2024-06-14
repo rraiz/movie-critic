@@ -258,16 +258,22 @@ public class TMDBApiService {
                 film.setVoteAverage(getValueAsDouble(crewNode.get("vote_average")));
                 film.setVoteCount(getValueAsInt(crewNode.get("vote_count")));
 
+                String department = getValueAsText(crewNode.get("department"));
+                String job = getValueAsText(crewNode.get("job"));
+                if (department == null) {
+                    department = "Unknown";
+                }
+                if (job == null) {
+                    job = "Unknown";
+                }
 
                 // Crew logic 
-                CrewId crewId = new CrewId(personId, filmIdObj);
+                CrewId crewId = new CrewId(personId, filmIdObj, department, job);
                 Crew crewMember = personService.getCrewById(crewId);
                 if (crewMember == null) {
                     crewMember = new Crew();
                 }
                 crewMember.setId(crewId);
-                crewMember.setDepartment(getValueAsText(crewNode.get("department")));
-                crewMember.setJob(getValueAsText(crewNode.get("job")));
                 crewMember.setPersonName(person.getName());
                 crewMember.setProfilePath(person.getProfilePath());
                 crewMember.setFilmTitle(film.getTitle());
@@ -511,14 +517,22 @@ public class TMDBApiService {
                 }
 
                 // Crew logic
-                CrewId crewId = new CrewId(personId, filmIdObj);
+                String department = getValueAsText(crewNode.get("department"));
+                String job = getValueAsText(crewNode.get("job"));
+                if (department == null) {
+                    department = "Unknown";
+                }
+                if (job == null) {
+                    job = "Unknown";
+                }
+
+                // Crew logic 
+                CrewId crewId = new CrewId(personId, filmIdObj, department, job);
                 Crew crewMember = personService.getCrewById(crewId);
                 if (crewMember == null) {
                     crewMember = new Crew();
                 }
                 crewMember.setId(crewId);
-                crewMember.setDepartment(getValueAsText(crewNode.get("department")));
-                crewMember.setJob(getValueAsText(crewNode.get("job")));
                 crewMember.setPersonName(person.getName());
                 crewMember.setProfilePath(person.getProfilePath());
                 crewMember.setFilmTitle(film.getTitle());

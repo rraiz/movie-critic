@@ -37,12 +37,6 @@ public class Crew {
     private Film film;
 
     @Column(nullable = true, columnDefinition = "TEXT")
-    private String department;
-
-    @Column(nullable = true, columnDefinition = "TEXT")
-    private String job;
-
-    @Column(nullable = true, columnDefinition = "TEXT")
     private String personName; // This is a denormalized field
 
     @Column(nullable = true, columnDefinition = "TEXT")
@@ -57,12 +51,10 @@ public class Crew {
     public Crew() {
     }
 
-    public Crew(CrewId id, Person person, Film film, String department, String job, String personName, String profilePath, String filmTitle, LocalDate lastUpdated) {
+    public Crew(CrewId id, Person person, Film film, String personName, String profilePath, String filmTitle, LocalDate lastUpdated) {
         this.id = id;
         this.person = person;
         this.film = film;
-        this.department = department;
-        this.job = job;
         this.personName = personName;
         this.profilePath = profilePath;
         this.filmTitle = filmTitle;
@@ -91,22 +83,6 @@ public class Crew {
 
     public void setFilm(Film film) {
         this.film = film;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public String getJob() {
-        return job;
-    }
-
-    public void setJob(String job) {
-        this.job = job;
     }
 
     public LocalDate getLastUpdated() {
