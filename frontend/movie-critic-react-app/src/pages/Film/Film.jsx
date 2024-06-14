@@ -21,7 +21,7 @@ export default function Film({type}) {
             try {
                 const response = await fetch(`http://localhost:8080/api/v1/${type}/${id}`);
                 const data = await response.json();
-                setFilm(data); // Assuming the response has a title property
+                setFilm(data); 
             } catch (e) {
                 setError(true);
             } finally {

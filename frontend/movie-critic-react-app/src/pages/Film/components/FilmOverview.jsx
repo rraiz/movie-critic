@@ -70,7 +70,7 @@ export default function FilmOverview({ film, type }) {
                     {/* Genres Section */}
                     <div className="flex flex-wrap mb-2 mt-4">
                         {film.genres.map((genre, index) => (
-                            <div key={index} className="bg-[#2828295e] small-shadow text-[#fddb06] px-3 py-1 rounded-full text-[15px] mr-2 mb-2 inline-block">
+                        <div key={index} className="bg-[#46464a5e] font-[501] text-[#fddb06] px-[14px] py-[5px] rounded-full text-[14px] mr-3 mb-2 inline-block">
                                 {genre}
                             </div>
                         ))}

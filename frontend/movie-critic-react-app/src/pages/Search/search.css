@@ -1,0 +1,11 @@
+.line-clamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* Adjust this number to change the number of lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cover-bg {
+    box-shadow: 0 0 15px rgba(0,0,0,0.4); /* Subtle shadow */
+}
