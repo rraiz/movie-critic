@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.rraiz.movie_critic.feature.user.model.ApplicationUser;
 import com.rraiz.movie_critic.feature.user.model.Role;
+import com.rraiz.movie_critic.feature.user.repository.UserRepository;
 
 @Service
 public class UserService implements UserDetailsService{
@@ -19,16 +20,12 @@ public class UserService implements UserDetailsService{
     @Autowired
     private PasswordEncoder encoder;
 
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        System.out.println("User: " + username);
-        Set<Role> roles = new HashSet<Role>();
-        roles.add(new Role(1, "ROLE_USER"));
-
-        return new ApplicationUser(1, username, encoder.encode("password"), roles);
-        
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User is not valid"));
     }
     
 }
