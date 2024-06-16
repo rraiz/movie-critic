@@ -23,13 +23,9 @@ import com.rraiz.movie_critic.feature.security.repository.UserRepository;
 public class AuthenticationService {
 
     private UserRepository userRepository;
-
     private RoleRepository roleRepository;
-
     private PasswordEncoder passwordEncoder;
-
     private AuthenticationManager authenticationManager;
-
     private TokenService tokenService;
 
     public AuthenticationService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenService tokenService) {
@@ -52,7 +48,8 @@ public class AuthenticationService {
         Set<Role> authorities = new HashSet<>();
         authorities.add(userRole);
 
-        return userRepository.save(new ApplicationUser(0, username, encodedPassword, authorities));
+        ApplicationUser newUser = new ApplicationUser(0, username, encodedPassword, authorities);
+        return userRepository.save(newUser);
     }
 
     public LoginResponseDTO loginUser(String username, String password) {

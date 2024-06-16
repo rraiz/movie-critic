@@ -43,6 +43,7 @@ public class SecurityConfiguration {
     public AuthenticationManager authManager(UserDetailsService userService) {
         DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
         daoProvider.setUserDetailsService(userService);
+        daoProvider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(daoProvider);
     }
 
