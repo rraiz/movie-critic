@@ -1,4 +1,4 @@
-package com.rraiz.movie_critic.feature.user.service;
+package com.rraiz.movie_critic.feature.security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -6,8 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
-import com.rraiz.movie_critic.feature.user.repository.UserRepository;
+import com.rraiz.movie_critic.feature.security.repository.UserRepository;
 
 @Service
 public class UserService implements UserDetailsService{

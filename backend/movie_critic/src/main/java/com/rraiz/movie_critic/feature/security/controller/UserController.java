@@ -1,4 +1,4 @@
-package com.rraiz.movie_critic.feature.user.controller;
+package com.rraiz.movie_critic.feature.security.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/user")
 @CrossOrigin("*")
-public class AdminController {
-
-    @GetMapping("/hello")
-    public String helloAdminController() {
-        return "Hello from AdminController";
+public class UserController {
+    
+    @GetMapping("/")
+    public String helloUserController() {
+        return "User access level";
     }
-
+    
 }

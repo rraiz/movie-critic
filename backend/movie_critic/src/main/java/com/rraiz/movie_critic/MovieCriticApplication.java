@@ -9,10 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.rraiz.movie_critic.feature.user.model.ApplicationUser;
-import com.rraiz.movie_critic.feature.user.model.Role;
-import com.rraiz.movie_critic.feature.user.repository.RoleRepository;
-import com.rraiz.movie_critic.feature.user.repository.UserRepository;
+import com.rraiz.movie_critic.feature.security.model.ApplicationUser;
+import com.rraiz.movie_critic.feature.security.model.Role;
+import com.rraiz.movie_critic.feature.security.repository.RoleRepository;
+import com.rraiz.movie_critic.feature.security.repository.UserRepository;
 
 @SpringBootApplication
 public class MovieCriticApplication {

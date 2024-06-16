@@ -1,4 +1,4 @@
-package com.rraiz.movie_critic.feature.user.dto;
+package com.rraiz.movie_critic.feature.security.dto;
 
 public class RegistrationDTO {
     private String username;

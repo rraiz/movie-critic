@@ -1,4 +1,4 @@
-package com.rraiz.movie_critic.feature.user.model;
+package com.rraiz.movie_critic.feature.security.model;
 
 import java.util.Collection;
 import java.util.HashSet;
