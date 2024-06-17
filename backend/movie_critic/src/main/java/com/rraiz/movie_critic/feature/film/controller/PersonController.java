@@ -22,7 +22,7 @@ public class PersonController {
     }
 
     @GetMapping("/{personId}")
-    public ResponseEntity<PersonDto> getPersonById(@PathVariable("personId") int personId) throws Exception {
+    public ResponseEntity<PersonDto> getPersonById(@PathVariable int personId) throws Exception {
         Person person = personService.getPersonDetails(personId);
         return ResponseUtil.createResponseEntity(new PersonDto(person));
     }

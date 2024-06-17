@@ -36,7 +36,7 @@ public class MovieService {
 
     public Movie getMovieDetails(int movieId) throws Exception {
         Movie m = getMovieById(movieId);
-        if (m == null) {
+        if (m == null || m.getLastUpdated() == null) {
             m = tmdbApiService.fetchMovieDetails(movieId);
             if (m != null)
                 addMovie(m);

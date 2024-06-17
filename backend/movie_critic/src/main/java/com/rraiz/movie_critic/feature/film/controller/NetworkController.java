@@ -21,7 +21,7 @@ public class NetworkController {
     }
 
     @GetMapping("/{networkId}")
-    public ResponseEntity<Network> getNetworkById(@PathVariable("networkId") int networkId) {
+    public ResponseEntity<Network> getNetworkById(@PathVariable int networkId) {
         Network network = networkService.getNetworkById(networkId);
                 
         if (network != null) {

@@ -24,7 +24,7 @@ public class MovieController {
     }
 
     @GetMapping("/{movieId}")
-    public ResponseEntity<MovieDto> getMovieById(@PathVariable("movieId") int movieId) throws Exception {
+    public ResponseEntity<MovieDto> getMovieById(@PathVariable int movieId) throws Exception {
         Movie movie = movieService.getMovieDetails(movieId);
         return ResponseUtil.createResponseEntity(new MovieDto(movie));
     }

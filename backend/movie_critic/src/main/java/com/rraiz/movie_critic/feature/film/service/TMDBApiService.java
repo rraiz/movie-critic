@@ -77,32 +77,32 @@ public class TMDBApiService {
     }
 
     public Object[] fetchPersonCredits(int personId) {
-        String url = String.format("%s/person/%d/combined_credits?api_key=%s", TMDB_API_BASE_URL, personId, apiKey);
+        String url = "%s/person/%d/combined_credits?api_key=%s".formatted(TMDB_API_BASE_URL, personId, apiKey);
         return fetchFromApi(url, this::mapApiResponseToPersonCredits);
     }
 
     public Person fetchPersonDetails(int personId) {
-        String url = String.format("%s/person/%d?api_key=%s", TMDB_API_BASE_URL, personId, apiKey);
+        String url = "%s/person/%d?api_key=%s".formatted(TMDB_API_BASE_URL, personId, apiKey);
         return fetchFromApi(url, this::mapApiResponseToPerson);
     }
 
     public Movie fetchMovieDetails(int movieId) {
-        String url = String.format("%s/movie/%d?api_key=%s", TMDB_API_BASE_URL, movieId, apiKey);
+        String url = "%s/movie/%d?api_key=%s".formatted(TMDB_API_BASE_URL, movieId, apiKey);
         return fetchFromApi(url, this::mapApiResponseToMovie);
     }
 
     public TvShow fetchTvShowDetails(int tvShowId) {
-        String url = String.format("%s/tv/%d?api_key=%s", TMDB_API_BASE_URL, tvShowId, apiKey);
+        String url = "%s/tv/%d?api_key=%s".formatted(TMDB_API_BASE_URL, tvShowId, apiKey);
         return fetchFromApi(url, this::mapApiResponseToTvShow);
     }
 
     public Set<Episode> fetchSeasonEpisodes(int tvShowId, int seasonNumber) {
-        String url = String.format("%s/tv/%d/season/%d?api_key=%s", TMDB_API_BASE_URL, tvShowId, seasonNumber, apiKey);
+        String url = "%s/tv/%d/season/%d?api_key=%s".formatted(TMDB_API_BASE_URL, tvShowId, seasonNumber, apiKey);
         return fetchFromApi(url, this::mapApiResponseToEpisodes);
     }
 
     public Object[] fetchFilmCredits(int filmId, int filmType) {
-        String url = String.format("%s/%s/%d/credits?api_key=%s", TMDB_API_BASE_URL, filmType == 0 ? "movie" : "tv",
+        String url = "%s/%s/%d/credits?api_key=%s".formatted(TMDB_API_BASE_URL, filmType == 0 ? "movie" : "tv",
                 filmId, apiKey);
         if (filmType == 0) {
             return fetchFromApi(url, this::mapApiResponseToMovieCredits);
