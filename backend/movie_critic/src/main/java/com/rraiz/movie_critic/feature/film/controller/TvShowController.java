@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rraiz.movie_critic.feature.film.dto.filmDto.TvShowDto;
 import com.rraiz.movie_critic.feature.film.model.entity.TvShow;
 import com.rraiz.movie_critic.feature.film.service.TvShowService;
 import com.rraiz.movie_critic.util.ResponseUtil;
@@ -23,9 +24,9 @@ public class TvShowController {
     }
 
     @GetMapping("/{tvShowId}")
-    public ResponseEntity<TvShow> getTvShowById(@PathVariable("tvShowId") int tvShowId) throws Exception {
+    public ResponseEntity<TvShowDto> getTvShowById(@PathVariable("tvShowId") int tvShowId) throws Exception {
         TvShow tvShow = tvShowService.getTvShowDetails(tvShowId);
-        return ResponseUtil.createResponseEntity(tvShow);
+        return ResponseUtil.createResponseEntity(new TvShowDto(tvShow));
     }
     
 }

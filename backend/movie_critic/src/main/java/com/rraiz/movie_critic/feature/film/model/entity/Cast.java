@@ -1,7 +1,5 @@
 package com.rraiz.movie_critic.feature.film.model.entity;
 
-import java.time.LocalDate;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.rraiz.movie_critic.feature.film.model.identifier.CastId;
 
@@ -43,31 +41,15 @@ public class Cast {
     @Column(nullable = true)
     private Integer ordering;
 
-    @Column(nullable = true, columnDefinition = "TEXT")
-    private String personName; // This is a denormalized field
-
-    @Column(nullable = true, columnDefinition = "TEXT")
-    private String profilePath; // This is a denormalized field
-
-    @Column(nullable = true, columnDefinition = "TEXT")
-    private String filmTitle; // This is a denormalized field
-
-    @Column(nullable = true)
-    private LocalDate lastUpdated;
-
     public Cast() {
     }
 
-    public Cast(CastId id, Person person, Film film, String character, Integer ordering, String personName, String profilePath, String filmTitle, LocalDate lastUpdated) {
+    public Cast(CastId id, Person person, Film film, String character, Integer ordering) {
         this.id = id;
         this.person = person;
         this.film = film;
         this.character = character;
         this.ordering = ordering;
-        this.personName = personName;
-        this.profilePath = profilePath;
-        this.filmTitle = filmTitle;
-        this.lastUpdated = lastUpdated;
     }
 
     public CastId getId() {
@@ -108,37 +90,5 @@ public class Cast {
 
     public void setOrdering(Integer ordering) {
         this.ordering = ordering;
-    }
-
-    public LocalDate getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public String getPersonName() {
-        return personName;
-    }
-
-    public void setPersonName(String personName) {
-        this.personName = personName;
-    }
-
-    public String getProfilePath() {
-        return profilePath;
-    }
-
-    public void setProfilePath(String profilPath) {
-        this.profilePath = profilPath;
-    }
-
-    public String getFilmTitle() {
-        return filmTitle;
-    }
-
-    public void setFilmTitle(String filmTitle) {
-        this.filmTitle = filmTitle;
-    }
-
-    public void setLastUpdated(LocalDate lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 }

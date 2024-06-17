@@ -205,10 +205,6 @@ public class TMDBApiService {
                 castMember.setId(castId);
                 castMember.setCharacter(getValueAsText(castNode.get("character")));
                 castMember.setOrdering(getValueAsInt(castNode.get("order")));
-                castMember.setPersonName(person.getName());
-                castMember.setProfilePath(person.getProfilePath());
-                castMember.setFilmTitle(film.getTitle());
-                castMember.setLastUpdated(LocalDate.now());
                 castMember.setPerson(person);
                 castMember.setFilm(film);
                 personService.addCast(castMember);
@@ -274,10 +270,6 @@ public class TMDBApiService {
                     crewMember = new Crew();
                 }
                 crewMember.setId(crewId);
-                crewMember.setPersonName(person.getName());
-                crewMember.setProfilePath(person.getProfilePath());
-                crewMember.setFilmTitle(film.getTitle());
-                crewMember.setLastUpdated(LocalDate.now());
                 crewMember.setPerson(person);
                 crewMember.setFilm(film);
                 personService.addCrew(crewMember);
@@ -461,10 +453,6 @@ public class TMDBApiService {
                 castMember.setId(castId);
                 castMember.setCharacter(getValueAsText(castNode.get("character")));
                 castMember.setOrdering(getValueAsInt(castNode.get("order")));
-                castMember.setPersonName(person.getName());
-                castMember.setProfilePath(person.getProfilePath());
-                castMember.setFilmTitle(film.getTitle());
-                castMember.setLastUpdated(LocalDate.now());
                 castMember.setPerson(person);
                 castMember.setFilm(film);
                 personService.addCast(castMember);
@@ -533,10 +521,6 @@ public class TMDBApiService {
                     crewMember = new Crew();
                 }
                 crewMember.setId(crewId);
-                crewMember.setPersonName(person.getName());
-                crewMember.setProfilePath(person.getProfilePath());
-                crewMember.setFilmTitle(film.getTitle());
-                crewMember.setLastUpdated(LocalDate.now());
                 crewMember.setPerson(person);
                 crewMember.setFilm(film);
                 personService.addCrew(crewMember);
