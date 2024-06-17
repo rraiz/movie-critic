@@ -47,10 +47,10 @@ export default function Details({ film, type }) {
                                 <p>{film.productionCountries.join(', ')}</p>
                             </div>
                         )}
-                        {film?.produced && (
+                        {film?.productionCompanies && (
                             <div>
                                 <p><strong>Production Companies</strong></p>
-                                <p>{film.produced.map(company => company.name).join(', ')}</p>
+                                <p>{film.productionCompanies.map(company => company.name).join(', ')}</p>
                             </div>
                         )}
                     </div>

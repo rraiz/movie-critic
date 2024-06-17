@@ -1,8 +1,16 @@
 import React from 'react';
+import altPoster from '../../../../public/alt-poster.png';
 import "../search.css";
 
 export default function Card({ film }) {
-    const poster = `https://image.tmdb.org/t/p/original/${film.posterPath}`;
+
+    let poster;
+    if(film.posterPath != null) {
+         poster = `https://image.tmdb.org/t/p/original/${film.posterPath}`;
+    }
+    else {
+         poster = altPoster;
+    }
 
     const id = film.id.filmType;
     const num = film.id.filmId;

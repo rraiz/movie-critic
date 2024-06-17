@@ -32,7 +32,7 @@ export default function FilmOverview({ film, type }) {
         // Get the names of the directors as a comma-separated string
         if (film.crew) {
             directors = film.crew
-                .filter(member => member.id.job === 'Director')
+                .filter(member => member.job === 'Director')
                 .map(member => member.personName)
                 .join(', ');
         }
