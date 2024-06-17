@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rraiz.movie_critic.feature.film.dto.personDto.PersonDto;
 import com.rraiz.movie_critic.feature.film.model.entity.Person;
 import com.rraiz.movie_critic.feature.film.service.PersonService;
 import com.rraiz.movie_critic.util.ResponseUtil;
@@ -21,9 +22,9 @@ public class PersonController {
     }
 
     @GetMapping("/{personId}")
-    public ResponseEntity<Person> getPersonById(@PathVariable("personId") int personId) throws Exception {
+    public ResponseEntity<PersonDto> getPersonById(@PathVariable("personId") int personId) throws Exception {
         Person person = personService.getPersonDetails(personId);
-        return ResponseUtil.createResponseEntity(person);
+        return ResponseUtil.createResponseEntity(new PersonDto(person));
     }
 
     

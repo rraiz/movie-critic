@@ -5,8 +5,6 @@ import com.rraiz.movie_critic.feature.film.model.entity.Cast;
 public class CastDto {
 
     private Integer personId;
-    private Integer filmId;
-    private Integer filmType;
     private String character;
     private Integer ordering;
     private String personName;
@@ -18,8 +16,6 @@ public class CastDto {
 
     public CastDto(Cast cast) {
         this.personId = cast.getId().getPersonId();
-        this.filmId = cast.getId().getFilmId().getFilmId();
-        this.filmType = cast.getId().getFilmId().getFilmType();
         this.character = cast.getCharacter();
         this.ordering = cast.getOrdering();
         this.personName = cast.getPerson().getName();
@@ -32,22 +28,6 @@ public class CastDto {
 
     public void setPersonId(Integer personId) {
         this.personId = personId;
-    }
-
-    public Integer getFilmId() {
-        return filmId;
-    }
-
-    public void setFilmId(Integer filmId) {
-        this.filmId = filmId;
-    }
-
-    public Integer getFilmType() {
-        return filmType;
-    }
-
-    public void setFilmType(Integer filmType) {
-        this.filmType = filmType;
     }
 
     public String getCharacter() {
