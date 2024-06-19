@@ -25,6 +25,14 @@
     box-shadow: 0 0 5px rgba(0,0,0,0.5); /* Subtle shadow */
 }
 
+.card-line-clamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6; /* Adjust this number to change the number of lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 
 /* Scrollbar */
 

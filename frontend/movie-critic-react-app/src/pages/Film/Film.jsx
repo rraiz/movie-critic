@@ -51,7 +51,7 @@ export default function Film({type}) {
 
     return (
         <div className='bg-[#14181d]'>
-            <div className="text-[#FFFFFF] min-h-screen max-w-[950px] mx-auto">
+            <div className="text-[#FFFFFF] min-h-screen max-w-[1000px] mx-auto">
                 <main>
                     <Backdrop backdropPath={film.backdropPath} />
                     {type === 'movie' ? <Movie film={film} /> : <Tv film={film} />}

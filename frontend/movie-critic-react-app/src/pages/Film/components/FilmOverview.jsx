@@ -39,16 +39,16 @@ export default function FilmOverview({ film, type }) {
     }
 
     return (
-        <div className='grid grid-cols-3 -mt-10'>
+        <div className='flex -mt-10'>
             
             {/* Poster Image Section */}
             <img
                 src={film.posterPath ? `https://image.tmdb.org/t/p/original/${film.posterPath}` : altPoster}
-                className="max-w-[250px] mr-auto col-span-1 rounded-md cover-bg border border-black z-10"
+                className="max-w-[250px] rounded-md cover-bg  z-10"
                 alt="Poster Image"
             />
 
-            <div className='col-span-2 z-10'>
+            <div className='flex-1 ml-[70px] z-10'>
 
                 {/* Header Section: Title, Air Years, Creators */}
                 <div className='flex items-baseline flex-wrap gap-x-4'>
