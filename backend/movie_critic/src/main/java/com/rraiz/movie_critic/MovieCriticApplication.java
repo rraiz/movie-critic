@@ -33,7 +33,7 @@ public class MovieCriticApplication {
 			Set<Role> roles = new HashSet<>();
 			roles.add(adminRole);
 
-			ApplicationUser admin = new ApplicationUser(1, "admin", password.encode("password"), roles);
+			ApplicationUser admin = new ApplicationUser(1, "admin", password.encode("password"), null, roles);
 
 			userRepository.save(admin);
 

@@ -36,7 +36,7 @@ public class AuthenticationService {
         this.tokenService = tokenService;
     }
 
-    public ApplicationUser registerUser(String username, String password) {
+    public ApplicationUser registerUser(String username, String password, String email) {
 
         if (userRepository.findByUsername(username).isPresent()) {
             return null;
@@ -48,7 +48,7 @@ public class AuthenticationService {
         Set<Role> authorities = new HashSet<>();
         authorities.add(userRole);
 
-        ApplicationUser newUser = new ApplicationUser(0, username, encodedPassword, authorities);
+        ApplicationUser newUser = new ApplicationUser(0, username, encodedPassword, email, authorities);
         return userRepository.save(newUser);
     }
 

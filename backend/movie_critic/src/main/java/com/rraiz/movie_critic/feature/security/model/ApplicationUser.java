@@ -34,6 +34,10 @@ public class ApplicationUser implements UserDetails {
     @JsonIgnore
     private String password;
 
+    @JsonIgnore
+    @Column(columnDefinition = "TEXT")
+    private String email;
+
     @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable (
         name = "user_role_junction",
@@ -46,10 +50,11 @@ public class ApplicationUser implements UserDetails {
         this.authorities = new HashSet<Role>();
     }
 
-    public ApplicationUser(Integer userId, String username, String password, Set<Role> authorities) {
+    public ApplicationUser(Integer userId, String username, String password, String email, Set<Role> authorities) {
         this.userId = userId;
         this.username = username;
         this.password = password;
+        this.email = email;
         this.authorities = authorities;
     }
 
@@ -86,6 +91,14 @@ public class ApplicationUser implements UserDetails {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
