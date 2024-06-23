@@ -1,35 +1,19 @@
 import { useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 import Error from '../Error/Error';
 import Card from './components/Card.jsx';
 
 export default function Search() {
+
     const query = new URLSearchParams(useLocation().search).get("query");
-    const searchQuery = query ? query.replace(/\s/g, '%20') : '';
 
-    const [error, setError] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [film, setFilm] = useState([]);
+    const {data: film, isLoading, error} = useQuery({
+        queryFn: () => fetchFilms(query),
+        queryKey: ['films', {query}],
+    });
 
-    useEffect(() => {
-        const fetchFilm = async () => {
-            if (!searchQuery) return;
 
-            setIsLoading(true);
-            try {
-                const response = await fetch(`http://localhost:8080/api/v1/search/film/${searchQuery}`);
-                const data = await response.json();
-                setFilm(data);
-            } catch (e) {
-                setError(true);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchFilm();
-    }, [searchQuery]);
 
     if (isLoading) {
         return (
@@ -44,8 +28,9 @@ export default function Search() {
     }
 
     if (error) {
-        return <Error />;
+        return <Error />
     }
+
 
     return (
         <div className='bg-[#14181d]'>
@@ -70,3 +55,13 @@ export default function Search() {
         </div>
     );
 }
+
+const fetchFilms = async (query) => {
+    const searchQuery = query ? query.replace(/\s/g, '%20') : '';
+    if (!searchQuery) return [];
+    const response = await fetch(`http://localhost:8080/api/v1/search/film/${searchQuery}`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.json();
+};

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+
 import "./film.css";
 
 import Error from '../Error/Error';
@@ -11,26 +12,10 @@ import Backdrop from './components/Backdrop';
 export default function Film({type}) {
 
     const { id } = useParams();
-    const [error, setError] = useState(false);
-    const [isLoading, setIsLoading] = useState(false); 
-    const [film, setFilm] = useState(null);
-
-    useEffect(() => {
-        const fetchFilm = async () => {
-            setIsLoading(true);
-            try {
-                const response = await fetch(`http://localhost:8080/api/v1/${type}/${id}`);
-                const data = await response.json();
-                setFilm(data); 
-            } catch (e) {
-                setError(true);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchFilm();
-    }, []);
+    const {data: film, isLoading, error} = useQuery({
+        queryFn: () => fetchFilm(type, id),
+        queryKey: ["film", {type, id}],
+    });
 
     if (isLoading) {
         return (
@@ -40,14 +25,13 @@ export default function Film({type}) {
                   <h1>Loading...</h1>  
                 </main>
             </div>
-        </div>
+            </div>
         )
     }
 
     if (error || !film) {
         return <Error />;
     }
-
 
     return (
         <div className='bg-[#14181d]'>
@@ -60,3 +44,11 @@ export default function Film({type}) {
         </div>
     );
 }
+
+const fetchFilm = async (type, id) => {
+    const response = await fetch(`http://localhost:8080/api/v1/${type}/${id}`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.json();
+};

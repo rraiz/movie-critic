@@ -1,14 +1,32 @@
 import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 
 export default function SignUpPage() {
   const [errors, setErrors] = useState({});
+
+  const mutation = useMutation({
+    mutationFn: (userInfo) => registerUser(userInfo),
+    onError: (error) => {
+      console.error('Error:', error);
+      alert('Server error. Please try again later.');
+    },
+    onSuccess: (data) => {
+      if (Object.keys(data).length === 0) {
+        setErrors({ username: 'Username already exists' });
+        console.log('Error:', data);
+      } else {
+        console.log('Success:', data);
+        window.location.href = '/login';
+      }
+    },
+  });
 
   const submitForm = (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
     const payload = Object.fromEntries(formData.entries());
-    
+
     const username = payload.username;
     const email = payload.email;
     const password = payload.password;
@@ -54,8 +72,7 @@ export default function SignUpPage() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // Proceed with form submission or further processing
-      console.log('Form data is valid:', payload);
+      mutation.mutate({ username, email, password });
     }
   };
 
@@ -76,7 +93,7 @@ export default function SignUpPage() {
                 className="relative block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Enter your username"
               />
-              {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
+              <p className="text-red-500 text-sm min-h-[20px]">{errors.username}</p>
             </div>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-200">Email</label>
@@ -89,7 +106,7 @@ export default function SignUpPage() {
                 className="relative block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Enter your email"
               />
-              {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+              <p className="text-red-500 text-sm min-h-[20px]">{errors.email}</p>
             </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-200">Password</label>
@@ -102,7 +119,7 @@ export default function SignUpPage() {
                 className="relative block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Enter your password"
               />
-              {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+              <p className="text-red-500 text-sm min-h-[20px]">{errors.password}</p>
             </div>
             <div>
               <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-200">Confirm Password</label>
@@ -115,13 +132,13 @@ export default function SignUpPage() {
                 className="relative block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Confirm your password"
               />
-              {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
+              <p className="text-red-500 text-sm min-h-[20px]">{errors.confirmPassword}</p>
             </div>
           </div>
           <div>
             <button
               type="submit"
-              className="relative flex justify-center w-full px-4 py-2  text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md group hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md group hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Sign Up
             </button>
@@ -138,4 +155,21 @@ export default function SignUpPage() {
       </div>
     </div>
   );
+}
+
+async function registerUser(userInfo) {
+  const response = await fetch('http://localhost:8080/auth/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userInfo),
+  });
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+
+  const text = await response.text();
+  return text ? JSON.parse(text) : {};
 }
