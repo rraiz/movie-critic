@@ -34,7 +34,7 @@ function Header() {
             </a>
           </li>
           <li>
-            <a className=" hover:text-gray-400" href="/film">
+            <a className=" hover:text-gray-400" href="/login">
               Sign In
             </a>
           </li>
