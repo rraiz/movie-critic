@@ -35,7 +35,7 @@ public class ApplicationUser implements UserDetails {
     private String password;
 
     @JsonIgnore
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", unique = true)
     private String email;
 
     @ManyToMany(fetch=FetchType.EAGER)

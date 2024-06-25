@@ -4,30 +4,32 @@ import com.rraiz.movie_critic.feature.security.model.ApplicationUser;
 
 public class LoginResponseDTO {
 
-    private ApplicationUser user;
-    private String jwt;
+    private String username;
+    private String message;
 
     public LoginResponseDTO() {
     }
 
-    public LoginResponseDTO(ApplicationUser user, String jwt) {
-        this.user = user;
-        this.jwt = jwt;
+    public LoginResponseDTO(ApplicationUser user, String message) {
+        if (user != null) {
+            this.username = user.getUsername();
+        }
+        this.message = message;
     }
 
-    public ApplicationUser getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(ApplicationUser user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getJwt() {
-        return jwt;
+    public String getMessage() {
+        return message;
     }
 
-    public void setJwt(String jwt) {
-        this.jwt = jwt;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

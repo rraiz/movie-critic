@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rraiz.movie_critic.feature.security.dto.LoginResponseDTO;
 import com.rraiz.movie_critic.feature.security.dto.RegistrationDTO;
-import com.rraiz.movie_critic.feature.security.model.ApplicationUser;
 import com.rraiz.movie_critic.feature.security.service.AuthenticationService;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/auth")
@@ -23,13 +24,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ApplicationUser registerUser(@RequestBody RegistrationDTO body) {
-        return authenticationService.registerUser(body.getUsername(), body.getPassword(), body.getEmail());
+    public LoginResponseDTO registerUser(@RequestBody RegistrationDTO body, HttpServletResponse response) {
+        return authenticationService.registerUser(body.getUsername(), body.getPassword(), body.getEmail(), response);
     }
 
     @PostMapping("/login")
-    public LoginResponseDTO LoginUser(@RequestBody RegistrationDTO body) {
-        return authenticationService.loginUser(body.getUsername(), body.getPassword());
+    public LoginResponseDTO LoginUser(@RequestBody RegistrationDTO body, HttpServletResponse response) {
+        return authenticationService.loginUser(body.getUsername(), body.getPassword(), response);
     }
     
     
