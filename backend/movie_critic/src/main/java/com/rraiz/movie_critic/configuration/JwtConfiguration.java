@@ -18,6 +18,11 @@ import com.rraiz.movie_critic.feature.security.util.RSAKeyProperties;
 @Configuration
 public class JwtConfiguration {
 
+    /**
+     * RSA key properties for JWT encoding and decoding.
+     * Contains the RSA public and private keys pair used for JWT token signing and
+     * verification.
+     */
     private final RSAKeyProperties keys;
 
     public JwtConfiguration(RSAKeyProperties keys) {
