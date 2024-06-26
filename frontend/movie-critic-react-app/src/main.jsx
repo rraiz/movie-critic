@@ -4,6 +4,8 @@ import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import './assets/index.css'
 
+import SessionManager from './components/SessionManager.jsx'
+
 import Header from './components/ui/Header.jsx'
 import Footer from './components/ui/Footer.jsx'
 
@@ -47,9 +49,11 @@ const router = createBrowserRouter([{
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
+    <SessionManager>
       <Header />
       <RouterProvider router={router}></RouterProvider>
       <Footer />
+    </SessionManager>
     </QueryClientProvider>
   </React.StrictMode>,
 )
