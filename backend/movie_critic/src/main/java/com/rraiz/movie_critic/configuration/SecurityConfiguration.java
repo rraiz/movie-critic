@@ -101,7 +101,7 @@ public class SecurityConfiguration {
                     auth.anyRequest().authenticated(); // All other requests require authentication
                 })
 
-                // Configure the application to use OAuth2 Resource Server for JWT handling
+                // Configure the application to use OAuth2 Resource Server for JWT handling.
                 .oauth2ResourceServer(
                         oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
 

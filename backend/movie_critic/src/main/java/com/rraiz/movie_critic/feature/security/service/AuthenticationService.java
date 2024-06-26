@@ -48,6 +48,7 @@ public class AuthenticationService {
 
         if (userRepository.findByEmail(email).isPresent()) {
             response.setStatus(HttpServletResponse.SC_CONFLICT);
+
             return new LoginResponseDTO(null, "Email already exists.");
         }
 
@@ -63,16 +64,17 @@ public class AuthenticationService {
         return new LoginResponseDTO(newUser, "Registration successful");
     }
 
-    public LoginResponseDTO loginUser(String username, String password, HttpServletResponse response) {
+    public LoginResponseDTO loginUser(String username, String password, boolean rememberMe, HttpServletResponse response) {
         try {
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password));
             String token = tokenService.generateJwt(auth);
+            int age = rememberMe ? 2592000 : -1;
             ResponseCookie cookie = ResponseCookie.from("accessToken", token)
                     .httpOnly(true)
                     .secure(false)
                     .path("/")
-                    .maxAge(2592000)
+                    .maxAge(age)
                     .build();
 
             ApplicationUser user = userRepository.findByUsername(username).get();

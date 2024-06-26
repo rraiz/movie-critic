@@ -12,6 +12,9 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+
 @Service
 public class TokenService {
 
@@ -37,6 +40,24 @@ public class TokenService {
             .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
+
+    /**
+     * Extracts the JWT token from the cookies in the request.
+     *
+     * @param request the HTTP request
+     * @return the JWT token if found, otherwise null
+     */
+    public String getJwtFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("accessToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
     
 }

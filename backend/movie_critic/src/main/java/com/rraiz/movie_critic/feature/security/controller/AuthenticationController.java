@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class AuthenticationController {
 
     private AuthenticationService authenticationService;
@@ -30,7 +30,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public LoginResponseDTO LoginUser(@RequestBody RegistrationDTO body, HttpServletResponse response) {
-        return authenticationService.loginUser(body.getUsername(), body.getPassword(), response);
+        return authenticationService.loginUser(body.getUsername(), body.getPassword(), body.getRememberMe(), response);
     }
     
     

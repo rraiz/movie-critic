@@ -3,13 +3,15 @@ package com.rraiz.movie_critic.configuration;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.rraiz.movie_critic.feature.security.service.TokenService;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +22,10 @@ import jakarta.servlet.http.HttpServletResponse;
  * Spring Security filters.
  */
 public class JwtCookieFilter extends OncePerRequestFilter {
+
+
+    @Autowired
+    private TokenService tokenService;
 
     /** The AntPathMatcher used to match URL patterns */
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
@@ -46,7 +52,7 @@ public class JwtCookieFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = getJwtFromCookie(request); // Extract the JWT token from cookies
+        String token = tokenService.getJwtFromCookie(request); // Extract the JWT token from cookies
         if (token != null) {
             /**
              * The wrapper wraps the request to inject the Authorization header. 
@@ -75,23 +81,5 @@ public class JwtCookieFilter extends OncePerRequestFilter {
             return;
         }
         filterChain.doFilter(request, response); // Forward the original request
-    }
-
-    /**
-     * Extracts the JWT token from the cookies in the request.
-     *
-     * @param request the HTTP request
-     * @return the JWT token if found, otherwise null
-     */
-    private String getJwtFromCookie(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies(); 
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("accessToken".equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
     }
 }
