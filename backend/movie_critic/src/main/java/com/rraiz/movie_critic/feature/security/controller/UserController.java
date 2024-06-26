@@ -1,5 +1,7 @@
 package com.rraiz.movie_critic.feature.security.controller;
 
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping("/check-session")
-    public String checkSession() {
+    public Map<String, Object> checkSession() {
         return userService.checkSession();
     }
     

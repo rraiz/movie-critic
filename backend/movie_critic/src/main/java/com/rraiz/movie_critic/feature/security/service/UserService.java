@@ -1,5 +1,7 @@
 package com.rraiz.movie_critic.feature.security.service;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,9 +29,9 @@ public class UserService implements UserDetailsService{
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User is not valid"));
     }
 
-    public String checkSession() {
+    public Map<String, Object> checkSession() {
         String jwt = tokenService.getJwtFromCookie(request);
-        return "";
+        return tokenService.decodeJwt(jwt);
     }
     
 }

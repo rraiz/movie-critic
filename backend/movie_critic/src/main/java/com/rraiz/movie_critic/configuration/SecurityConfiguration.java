@@ -10,22 +10,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
-import com.rraiz.movie_critic.feature.security.util.RSAKeyProperties;
+import com.rraiz.movie_critic.feature.security.service.TokenService;
 
 /**
  * SecurityConfiguration class configures the security settings for the
@@ -38,15 +28,16 @@ public class SecurityConfiguration {
     /** List of public URLs that do not require authentication. */
     public static final String[] PUBLIC_URLS = { "/auth/**", "/api/**" };
 
-    private final RSAKeyProperties keys;
+    private final TokenService tokenService;
 
     /**
      * Constructor to initialize RSA key properties.
      *
-     * @param keys RSA key properties for JWT encoding and decoding
+     * @param keys         RSA key properties for JWT encoding and decoding
+     * @param tokenService the token service for handling JWT tokens
      */
-    public SecurityConfiguration(RSAKeyProperties keys) {
-        this.keys = keys;
+    public SecurityConfiguration(TokenService tokenService) {
+        this.tokenService = tokenService;
     }
 
     /**
@@ -111,41 +102,10 @@ public class SecurityConfiguration {
         // Add the custom JwtCookieFilter before the BearerTokenAuthenticationFilter.
         // This filter extracts JWT tokens from cookies and injects them into the
         // Authorization header.
-        http.addFilterBefore(new JwtCookieFilter(), BearerTokenAuthenticationFilter.class);
+        http.addFilterBefore(new JwtCookieFilter(tokenService), BearerTokenAuthenticationFilter.class);
 
         // Return the configured SecurityFilterChain
         return http.build();
-    }
-
-    /**
-     * Configures the JwtDecoder with the RSA public key.
-     * This decoder is responsible for verifying JWT tokens using the provided RSA
-     * public key.
-     *
-     * @return JwtDecoder configured JWT decoder
-     */
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        // Create a NimbusJwtDecoder with the RSA public key
-        return NimbusJwtDecoder.withPublicKey(keys.getPublicKey()).build();
-    }
-
-    /**
-     * Configures the JwtEncoder with RSA key pair.
-     * This encoder is responsible for signing JWT tokens using the provided RSA key
-     * pair.
-     *
-     * @return JwtEncoder configured JWT encoder
-     */
-    @Bean
-    public JwtEncoder jwtEncoder() {
-        // Create a JWK (JSON Web Key) representing the RSA key pair
-        JWK jwk = new RSAKey.Builder(keys.getPublicKey()).privateKey(keys.getPrivateKey()).build();
-
-        // Create a JWKSource that provides the JWK set containing the RSA key pair
-        JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
-
-        return new NimbusJwtEncoder(jwks); // Return a NimbusJwtEncoder configured with the JWKSource
     }
 
     /**

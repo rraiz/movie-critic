@@ -1,13 +1,15 @@
 package com.rraiz.movie_critic.feature.security.service;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-//import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,8 @@ public class TokenService {
     @Autowired
     private JwtEncoder jwtEncoder;
 
-    //@Autowired
-    //private JwtDecoder jwtDecoder;
+    @Autowired
+    private JwtDecoder jwtDecoder;
 
     public String generateJwt(Authentication auth) {
 
@@ -40,6 +42,17 @@ public class TokenService {
             .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
+
+    /**
+     * Decodes the JWT token and returns the claims.
+     *
+     * @param jwt the JWT token
+     * @return the claims from the JWT token
+     */
+    public Map<String, Object> decodeJwt(String jwt) {
+        Jwt decodedJwt = jwtDecoder.decode(jwt);
+        return decodedJwt.getClaims();
     }
 
     /**
