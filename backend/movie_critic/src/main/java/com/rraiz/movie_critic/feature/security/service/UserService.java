@@ -2,36 +2,53 @@ package com.rraiz.movie_critic.feature.security.service;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.rraiz.movie_critic.feature.security.dto.LoginResponseDTO;
+import com.rraiz.movie_critic.feature.security.model.ApplicationUser;
 import com.rraiz.movie_critic.feature.security.repository.UserRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Service
-public class UserService implements UserDetailsService{
+public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final HttpServletRequest request;
+    private final TokenService tokenService;
 
-    @Autowired
-    private HttpServletRequest request;
-
-    @Autowired
-    private TokenService tokenService;
+    public UserService(UserRepository userRepository, HttpServletRequest request, TokenService tokenService) {
+        this.userRepository = userRepository;
+        this.request = request;
+        this.tokenService = tokenService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User is not valid"));
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User is not valid"));
     }
 
-    public Map<String, Object> checkSession() {
-        String jwt = tokenService.getJwtFromCookie(request);
-        return tokenService.decodeJwt(jwt);
+    public LoginResponseDTO checkSession(HttpServletResponse response) {
+        try {
+            String jwt = tokenService.getJwtFromCookie(request);
+            Map<String, Object> claims = tokenService.decodeJwt(jwt);
+
+            if (claims == null || !claims.containsKey("sub")) {
+                throw new UsernameNotFoundException("Invalid JWT token");
+            }
+
+            String username = (String) claims.get("sub");
+            ApplicationUser user = (ApplicationUser) loadUserByUsername(username);
+
+            return new LoginResponseDTO(user, "Session is valid", true);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return new LoginResponseDTO(null, e.getMessage(), false);
+        }
     }
-    
 }

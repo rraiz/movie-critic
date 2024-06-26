@@ -6,15 +6,17 @@ public class LoginResponseDTO {
 
     private String username;
     private String message;
+    private boolean authenticated;
 
     public LoginResponseDTO() {
     }
 
-    public LoginResponseDTO(ApplicationUser user, String message) {
+    public LoginResponseDTO(ApplicationUser user, String message, boolean authenticated) {
         if (user != null) {
             this.username = user.getUsername();
         }
         this.message = message;
+        this.authenticated = authenticated;
     }
 
     public String getUsername() {
@@ -31,5 +33,13 @@ public class LoginResponseDTO {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public boolean getAuthenticated() {
+        return authenticated;
+    }
+
+    public void setAuthenticated(boolean authenticated) {
+        this.authenticated = authenticated;
     }
 }

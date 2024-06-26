@@ -43,13 +43,13 @@ public class AuthenticationService {
     public LoginResponseDTO registerUser(String username, String password, String email, HttpServletResponse response) {
         if (userRepository.findByUsername(username).isPresent()) {
             response.setStatus(HttpServletResponse.SC_CONFLICT);
-            return new LoginResponseDTO(null, "Username already exists.");
+            return new LoginResponseDTO(null, "Username already exists.", false);
         }
 
         if (userRepository.findByEmail(email).isPresent()) {
             response.setStatus(HttpServletResponse.SC_CONFLICT);
 
-            return new LoginResponseDTO(null, "Email already exists.");
+            return new LoginResponseDTO(null, "Email already exists.", false);
         }
 
         String encodedPassword = passwordEncoder.encode(password);
@@ -61,10 +61,11 @@ public class AuthenticationService {
         ApplicationUser newUser = new ApplicationUser(0, username, encodedPassword, email, authorities);
         userRepository.save(newUser);
 
-        return new LoginResponseDTO(newUser, "Registration successful");
+        return new LoginResponseDTO(newUser, "Registration successful", true);
     }
 
-    public LoginResponseDTO loginUser(String username, String password, boolean rememberMe, HttpServletResponse response) {
+    public LoginResponseDTO loginUser(String username, String password, boolean rememberMe,
+            HttpServletResponse response) {
         try {
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password));
@@ -80,7 +81,8 @@ public class AuthenticationService {
             ApplicationUser user = userRepository.findByUsername(username).get();
 
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
-            return new LoginResponseDTO(user, "Login successful");
+
+            return new LoginResponseDTO(user, "Login successful", true);
         } catch (AuthenticationException e) {
             // Clear the cookie on authentication failure
             ResponseCookie clearCookie = ResponseCookie.from("accessToken", "")
@@ -94,7 +96,7 @@ public class AuthenticationService {
 
             // Set the response status to UNAUTHORIZED and return an error message
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return new LoginResponseDTO(null, "Invalid username or password");
+            return new LoginResponseDTO(null, "Invalid username or password", false);
         }
     }
 
