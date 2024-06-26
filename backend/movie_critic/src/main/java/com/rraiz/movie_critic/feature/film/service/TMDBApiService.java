@@ -21,13 +21,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rraiz.movie_critic.feature.film.model.entity.Cast;
 import com.rraiz.movie_critic.feature.film.model.entity.Collection;
 import com.rraiz.movie_critic.feature.film.model.entity.Crew;
-import com.rraiz.movie_critic.feature.film.model.entity.Episode;
 import com.rraiz.movie_critic.feature.film.model.entity.Film;
 import com.rraiz.movie_critic.feature.film.model.entity.Movie;
 import com.rraiz.movie_critic.feature.film.model.entity.Network;
 import com.rraiz.movie_critic.feature.film.model.entity.Person;
 import com.rraiz.movie_critic.feature.film.model.entity.ProductionCompany;
-import com.rraiz.movie_critic.feature.film.model.entity.Season;
 import com.rraiz.movie_critic.feature.film.model.entity.TvShow;
 import com.rraiz.movie_critic.feature.film.model.identifier.CastId;
 import com.rraiz.movie_critic.feature.film.model.identifier.CrewId;
@@ -94,11 +92,6 @@ public class TMDBApiService {
     public TvShow fetchTvShowDetails(int tvShowId) {
         String url = "%s/tv/%d?api_key=%s".formatted(TMDB_API_BASE_URL, tvShowId, apiKey);
         return fetchFromApi(url, this::mapApiResponseToTvShow);
-    }
-
-    public Set<Episode> fetchSeasonEpisodes(int tvShowId, int seasonNumber) {
-        String url = "%s/tv/%d/season/%d?api_key=%s".formatted(TMDB_API_BASE_URL, tvShowId, seasonNumber, apiKey);
-        return fetchFromApi(url, this::mapApiResponseToEpisodes);
     }
 
     public Object[] fetchFilmCredits(int filmId, int filmType) {
@@ -621,7 +614,6 @@ public class TMDBApiService {
 
         Set<Person> creators = mapTvShowCreators(root, tvShow);
         Set<Network> networks = mapTvShowNetworks(root, tvShow);
-        Set<Season> seasons = mapTvShowSeasons(root, tvShow);
 
         tvShow.setFirstAirDate(firstAirDate);
         tvShow.setLastAirDate(lastAirDate);
@@ -630,7 +622,6 @@ public class TMDBApiService {
         tvShow.setNumberOfSeasons(numberOfSeasons);
         tvShow.setCreators(creators);
         tvShow.setNetworks(networks);
-        tvShow.setSeasons(seasons);
         tvShowService.addTvShow(tvShow);
 
         return tvShow;
@@ -687,83 +678,6 @@ public class TMDBApiService {
                 networks.add(networkObj);
             }
             return networks;
-        }
-        return null;
-    }
-
-    private Set<Season> mapTvShowSeasons(JsonNode root, TvShow tvShow) {
-        if (!root.get("seasons").isNull()) {
-            Set<Season> seasons = new HashSet<>();
-            for (JsonNode season : root.get("seasons")) {
-                int seasonId = season.get("id").asInt();
-                Season seasonObj = tvShowService.getSeasonById(seasonId);
-                if (seasonObj == null) {
-                    seasonObj = new Season();
-                }
-                seasonObj.setId(seasonId);
-                seasonObj.setAirDate(getValueAsLocalDate(season.get("air_date")));
-                seasonObj.setName(getValueAsText(season.get("name")));
-                seasonObj.setOverview(getValueAsText(season.get("overview")));
-                seasonObj.setEpisodeCount(getValueAsInt(season.get("episode_count")));
-                seasonObj.setPosterPath(getValueAsText(season.get("poster_path")));
-                seasonObj.setSeasonNumber(getValueAsInt(season.get("season_number")));
-                seasonObj.setVoteAverage(getValueAsDouble(season.get("vote_average")));
-
-                seasonObj.setTvShow(tvShow);
-
-                Set<Season> tv_show_seasons = tvShow.getSeasons();
-                if (tv_show_seasons == null)
-                    tv_show_seasons = new HashSet<>();
-                tv_show_seasons.add(seasonObj);
-                tvShow.setSeasons(tv_show_seasons);
-
-                tvShowService.addSeason(seasonObj);
-                Set<Episode> episodes = fetchSeasonEpisodes(tvShow.getId().getFilmId(), seasonObj.getSeasonNumber());
-                seasonObj.setEpisodes(episodes);
-
-                seasons.add(seasonObj);
-            }
-            return seasons;
-        }
-        return null;
-    }
-
-    private Set<Episode> mapApiResponseToEpisodes(JsonNode root) {
-        Integer seasonId = getValueAsInt(root.get("id"));
-
-        if (!root.get("episodes").isNull()) {
-            Set<Episode> episodes = new HashSet<>();
-
-            for (JsonNode episode : root.get("episodes")) {
-                int episodeId = episode.get("id").asInt();
-
-                Episode episodeObj = tvShowService.getEpisodeById(episodeId);
-                if (episodeObj == null) {
-                    episodeObj = new Episode();
-                }
-                episodeObj.setId(episodeId);
-                episodeObj.setAirDate(getValueAsLocalDate(episode.get("air_date")));
-                episodeObj.setEpisodeNumber(getValueAsInt(episode.get("episode_number")));
-                episodeObj.setEpisodeType(getValueAsText(episode.get("type")));
-                episodeObj.setName(getValueAsText(episode.get("name")));
-                episodeObj.setOverview(getValueAsText(episode.get("overview")));
-                episodeObj.setRuntime(getValueAsInt(episode.get("runtime")));
-                episodeObj.setStillPath(getValueAsText(episode.get("still_path")));
-                episodeObj.setVoteAverage(getValueAsDouble(episode.get("vote_average")));
-                episodeObj.setVoteCount(getValueAsInt(episode.get("vote_count")));
-
-                Season season = tvShowService.getSeasonById(seasonId);
-                if (season == null) {
-                    season = new Season();
-                    season.setId(seasonId);
-                }
-
-                episodeObj.setSeason(season);
-                tvShowService.addEpisode(episodeObj);
-
-                episodes.add(episodeObj);
-            }
-            return episodes;
         }
         return null;
     }

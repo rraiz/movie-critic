@@ -8,7 +8,6 @@ import java.util.Set;
 
 import com.rraiz.movie_critic.feature.film.model.entity.Network;
 import com.rraiz.movie_critic.feature.film.model.entity.Person;
-import com.rraiz.movie_critic.feature.film.model.entity.Season;
 import com.rraiz.movie_critic.feature.film.model.entity.TvShow;
 
 public class TvShowDto extends FilmDto {
@@ -22,7 +21,6 @@ public class TvShowDto extends FilmDto {
 
     // Referenced objects as a set
     private Set<PersonDto> creators;
-    private Set<Season> seasons;
     private Set<Network> networks;
 
     private LocalDate lastUpdated;
@@ -50,7 +48,6 @@ public class TvShowDto extends FilmDto {
             }
         }
         this.creators = creators;
-        this.seasons = tv.getSeasons();
         this.networks = tv.getNetworks();
         this.lastUpdated = tv.getLastUpdated();
     }
@@ -101,14 +98,6 @@ public class TvShowDto extends FilmDto {
 
     public void setCreators(Set<PersonDto> creators) {
         this.creators = creators;
-    }
-
-    public Set<Season> getSeasons() {
-        return seasons;
-    }
-
-    public void setSeasons(Set<Season> seasons) {
-        this.seasons = seasons;
     }
 
     public Set<Network> getNetworks() {
