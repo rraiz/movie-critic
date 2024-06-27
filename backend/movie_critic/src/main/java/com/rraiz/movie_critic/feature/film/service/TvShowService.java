@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.rraiz.movie_critic.feature.film.model.entity.TvShow;
 import com.rraiz.movie_critic.feature.film.model.identifier.FilmId;
 import com.rraiz.movie_critic.feature.film.repository.TvShowRepository;
+import com.rraiz.movie_critic.util.TMDBApiService;
 
 import jakarta.transaction.Transactional;
 
@@ -37,8 +38,8 @@ public class TvShowService {
 
     public TvShow getTvShowDetails(int tvShowId) throws Exception {
         TvShow tv = getTvShowById(tvShowId);
-        if (tv == null || tv.getLastUpdated() == null){
-            tv = tmdbApiService.fetchTvShowDetails(tvShowId);
+        if (tv == null || tv.getLastUpdated() == null || true){
+            tv = tmdbApiService.fetchTvShow(tvShowId);
             if (tv != null)
                 addTvShow(tv);;
         }

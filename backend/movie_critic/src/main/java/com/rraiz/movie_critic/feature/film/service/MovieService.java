@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.rraiz.movie_critic.feature.film.model.entity.Movie;
 import com.rraiz.movie_critic.feature.film.model.identifier.FilmId;
 import com.rraiz.movie_critic.feature.film.repository.MovieRepository;
+import com.rraiz.movie_critic.util.TMDBApiService;
 
 import jakarta.transaction.Transactional;
 
@@ -37,7 +38,7 @@ public class MovieService {
     public Movie getMovieDetails(int movieId) throws Exception {
         Movie m = getMovieById(movieId);
         if (m == null || m.getLastUpdated() == null) {
-            m = tmdbApiService.fetchMovieDetails(movieId);
+            m = tmdbApiService.fetchMovie(movieId);
             if (m != null)
                 addMovie(m);
         }

@@ -11,6 +11,7 @@ import com.rraiz.movie_critic.feature.film.model.identifier.CrewId;
 import com.rraiz.movie_critic.feature.film.repository.CastRepository;
 import com.rraiz.movie_critic.feature.film.repository.CrewRepository;
 import com.rraiz.movie_critic.feature.film.repository.PersonRepository;
+import com.rraiz.movie_critic.util.TMDBApiService;
 
 import jakarta.transaction.Transactional;
 
@@ -44,7 +45,7 @@ public class PersonService {
     public Person getPersonDetails (int personId) throws Exception {
         Person p = getPersonById(personId);
         if (p == null || p.getLastUpdated() == null) {
-            p = tmdbApiService.fetchPersonDetails(personId);
+            p = tmdbApiService.fetchPerson(personId);
             if (p != null)
                 addPerson(p);
         }

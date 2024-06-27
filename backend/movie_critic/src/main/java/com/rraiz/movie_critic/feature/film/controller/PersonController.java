@@ -24,6 +24,9 @@ public class PersonController {
     @GetMapping("/{personId}")
     public ResponseEntity<PersonDto> getPersonById(@PathVariable int personId) throws Exception {
         Person person = personService.getPersonDetails(personId);
+        if (person == null) {
+            return ResponseUtil.createResponseEntity(null);
+        }
         return ResponseUtil.createResponseEntity(new PersonDto(person));
     }
 

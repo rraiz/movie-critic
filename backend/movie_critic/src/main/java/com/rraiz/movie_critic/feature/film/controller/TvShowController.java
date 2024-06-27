@@ -26,6 +26,9 @@ public class TvShowController {
     @GetMapping("/{tvShowId}")
     public ResponseEntity<TvShowDto> getTvShowById(@PathVariable int tvShowId) throws Exception {
         TvShow tvShow = tvShowService.getTvShowDetails(tvShowId);
+        if (tvShow == null) {
+            return ResponseUtil.createResponseEntity(null);
+        }
         return ResponseUtil.createResponseEntity(new TvShowDto(tvShow));
     }
     
