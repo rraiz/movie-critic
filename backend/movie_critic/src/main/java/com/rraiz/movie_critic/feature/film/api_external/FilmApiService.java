@@ -153,16 +153,12 @@ public class FilmApiService {
         Set<Crew> crew = null;
 
         int filmId = root.get("id").asInt();
-        Film film = filmType == 0 ? movieService.getMovieById(filmId) : tvShowService.getTvShowById(filmId);
+        Film film = getFilmById(filmId, filmType);
         if (film == null) {
-            film = filmType == 0 ? new Movie() : new TvShow();
+            film = createNewFilm(filmType);
         }
-        film.setId(new FilmId(filmId, filmType)); // Sets the id
-        if (filmType == 0) {
-            movieService.addMovie((Movie) film); // adds the respective film type to the database
-        } else {
-            tvShowService.addTvShow((TvShow) film);
-        }
+        film.setId(new FilmId(filmId, filmType));
+        addFilmToDatabase(film, filmType);
 
 
         if (!root.get("cast").isNull()) {
@@ -240,6 +236,30 @@ public class FilmApiService {
         film.setTitle(apiUtil.getValueAsTitleOrName(filmNode));
         film.setVoteAverage(apiUtil.getValueAsDouble(filmNode.get("vote_average")));
         film.setVoteCount(apiUtil.getValueAsInt(filmNode.get("vote_count")));
+    }
+
+    public Film getFilmById(int filmId, int filmType) {
+        if (filmType == 0) {
+            return movieService.getMovieById(filmId);
+        } else {
+            return tvShowService.getTvShowById(filmId);
+        }
+    }
+
+    public Film createNewFilm(int filmType) {
+        if (filmType == 0) {
+            return new Movie();
+        } else {
+            return new TvShow();
+        }
+    }
+    
+    public void addFilmToDatabase(Film film, int filmType) {
+        if (filmType == 0) {
+            movieService.addMovie((Movie) film);
+        } else {
+            tvShowService.addTvShow((TvShow) film);
+        }
     }
 
 }
