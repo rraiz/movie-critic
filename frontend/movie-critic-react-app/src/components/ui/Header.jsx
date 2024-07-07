@@ -1,9 +1,16 @@
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
 import { FaSearch } from 'react-icons/fa';
+import { isLoggedIn, getUsername } from '../../components/SessionUtils';
 
 function Header() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    if (isLoggedIn()) {
+      setAuthenticated(true);
+    }
+  }, []);
 
   function onSubmit(e) {
     e.preventDefault();
@@ -33,11 +40,19 @@ function Header() {
               About
             </a>
           </li>
-          <li>
-            <a className=" hover:text-gray-400" href="/login">
-              Sign In
-            </a>
-          </li>
+          {authenticated ? (
+            <li>
+              <a className=" hover:text-gray-400" href="/profile">
+                Profile
+              </a>
+            </li>
+          ) : (
+            <li>
+              <a className=" hover:text-gray-400" href="/login">
+                Sign In
+              </a>
+            </li>
+          )}
           <li>
             <form onSubmit={onSubmit} className="relative flex items-center">
               <input
