@@ -30,7 +30,7 @@ export function useIsLoggedIn() {
   const [cookies] = useCookies(['authenticated', 'sessionChecked']);
 
   const isLoggedIn = () => {
-    return cookies.authenticated === 'true' && cookies.sessionChecked === 'true';
+    return cookies.authenticated && cookies.sessionChecked;
   };
 
   return isLoggedIn;
