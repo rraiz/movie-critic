@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import { useIsLoggedIn, useClearSessionCookie } from '../useSessionCookies';
+import { useIsLoggedIn, useClearSessionCookie, useGetUsername} from '../useSessionCookies';
 import { logout } from '../SessionUtils';
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const isLoggedIn = useIsLoggedIn(); // Use the custom hook
   const clearSessionCookie = useClearSessionCookie();
+  const getUsername = useGetUsername();
 
   function onSubmit(e) {
     e.preventDefault();
@@ -40,7 +41,7 @@ export default function Header() {
           
           {isLoggedIn() ? (
             <li>
-              <a className=" hover:text-gray-400">
+              <a className="hover:text-gray-400" href={`/${getUsername()}`}>
                 My List
               </a>
             </li>

@@ -29,13 +29,13 @@ export default function Home() {
         {moviesLoading ? (
           <div className="text-white text-center">Loading Popular Movies...</div>
         ) : (
-          <FilmList title="Popular Movies" films={popularMovies} />
+          <FilmList title="Popular Movies" films={popularMovies} type="movie" />
         )}
 
         {tvLoading ? (
           <div className="text-white text-center">Loading Popular TV Shows...</div>
         ) : (
-          <FilmList title="Popular TV Shows" films={popularTVShows} />
+          <FilmList title="Popular TV Shows" films={popularTVShows} type="tv" />
         )}
 
         {moviesError && <div className="text-white text-center">Error loading popular movies: {moviesError.message}</div>}
