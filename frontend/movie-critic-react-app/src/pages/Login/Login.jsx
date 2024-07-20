@@ -1,16 +1,39 @@
-import React, { useState } from 'react';
+// Login.jsx
+
+import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { setSessionCookie } from '../../components/SessionUtils';
+import { useSetSessionCookie } from '../../components/useSessionCookies';
+
+async function loginUser(credentials) {
+  const response = await fetch('http://localhost:8080/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(credentials),
+    credentials: 'include', // Include cookies in the request
+  });
+
+  if (!response.ok) {
+    // Throw an error with response status
+    const error = new Error('Login failed');
+    error.status = response.status;
+    throw error;
+  }
+
+  return response.json();
+}
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const setSessionCookie = useSetSessionCookie(); // Use the custom hook
 
   const { mutate, isPending } = useMutation({
     mutationFn: (credentials) => loginUser(credentials),
     onSuccess: (data) => {
-      // Redirect to the desired page after successful login.
+      // Set the session cookie and redirect to the desired page after successful login.
       setSessionCookie(data);
       window.location.href = '/';
     },
@@ -105,24 +128,4 @@ export default function Login() {
       </div>
     </div>
   );
-}
-
-async function loginUser(credentials) {
-  const response = await fetch('http://localhost:8080/auth/login', {
-    method: 'POST', 
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(credentials),
-    credentials: 'include', // Include cookies in the request
-  });
-
-  if (!response.ok) {
-    // Throw an error with response status
-    const error = new Error('Login failed');
-    error.status = response.status;
-    throw error;
-  }
-
-  return response.json();
 }

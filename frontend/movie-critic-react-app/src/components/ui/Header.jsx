@@ -1,16 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import { isLoggedIn, getUsername } from '../../components/SessionUtils';
+import { useIsLoggedIn } from '../useSessionCookies';
 
 function Header() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [authenticated, setAuthenticated] = useState(false);
-
-  useEffect(() => {
-    if (isLoggedIn()) {
-      setAuthenticated(true);
-    }
-  }, []);
+  const isLoggedIn = useIsLoggedIn(); // Use the custom hook
 
   function onSubmit(e) {
     e.preventDefault();
@@ -40,7 +34,7 @@ function Header() {
               About
             </a>
           </li>
-          {authenticated ? (
+          {isLoggedIn() ? (
             <li>
               <a className=" hover:text-gray-400" href="/profile">
                 Profile

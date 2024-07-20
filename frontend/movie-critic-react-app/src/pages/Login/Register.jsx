@@ -1,23 +1,33 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { useSetSessionCookie } from '../../components/useSessionCookies'; // Adjust the import path as needed
+
 
 export default function SignUpPage() {
   const [errors, setErrors] = useState({});
+  const setSessionCookie = useSetSessionCookie(); // Use the custom hook
 
   const mutation = useMutation({
     mutationFn: (userInfo) => registerUser(userInfo),
     onError: (error) => {
-      console.error('Error:', error);
-      alert('Server error. Please try again later.');
+      if (error.status === 409) {
+
+        if (error.response.message === "Username already exists.") {
+          setErrors({ username: 'Username already exists' });
+        }
+
+        if (error.response.message === "Email already exists.") {
+          setErrors({ email: 'Email already exists' });
+        }
+      }
+      else {
+        alert('Server error. Please try again later.');
+      }
     },
     onSuccess: (data) => {
-      if (Object.keys(data).length === 0) {
-        setErrors({ username: 'Username already exists' });
-        console.log('Error:', data);
-      } else {
-        console.log('Success:', data);
-        window.location.href = '/login';
-      }
+      console.log('Success:', data);
+      setSessionCookie(data);
+      window.location.href = '/';
     },
   });
 
@@ -167,7 +177,11 @@ async function registerUser(userInfo) {
   });
 
   if (!response.ok) {
-    throw new Error('Network response was not ok');
+    const errorResponse = await response.json();
+    const error = new Error();
+    error.status = response.status;
+    error.response = errorResponse;
+    throw error;
   }
 
   const text = await response.text();
