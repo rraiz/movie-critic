@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     private UserService userService;
@@ -30,5 +30,11 @@ public class UserController {
     public LoginResponseDTO checkSession(HttpServletResponse response) {
         return userService.checkSession(response);
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletResponse response) {
+        return userService.logout(response);
+    }
+
 
 }

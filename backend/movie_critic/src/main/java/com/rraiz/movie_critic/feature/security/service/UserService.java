@@ -2,6 +2,8 @@ package com.rraiz.movie_critic.feature.security.service;
 
 import java.util.Map;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -50,5 +52,17 @@ public class UserService implements UserDetailsService {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return new LoginResponseDTO(null, e.getMessage(), false);
         }
+    }
+
+    public String logout(HttpServletResponse response) {
+            ResponseCookie clearCookie = ResponseCookie.from("accessToken", "")
+                    .httpOnly(true)
+                    .secure(false)
+                    .path("/")
+                    .maxAge(0) // Delete the cookie
+                    .build();
+
+            response.addHeader(HttpHeaders.SET_COOKIE, clearCookie.toString());
+            return "Logout successful";
     }
 }
