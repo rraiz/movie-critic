@@ -8,7 +8,7 @@ export default function CastCards({ members, type }) {
       <a className="ml-5 mt-3 font-bold text-[25px] text-[#fddb06]">
         {type === "movie" ? "Cast" : "Series Cast"}
       </a>
-      <main className="flex overflow-x-auto space-x-4 p-4 items-stretch scrollbar">
+      <main className="flex overflow-x-auto space-x-4 p-4 items-stretch ">
         {sortedMembers.map((member) => (
           <Card key={member.id} member={member} />
         ))}

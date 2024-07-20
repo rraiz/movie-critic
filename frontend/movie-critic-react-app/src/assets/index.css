@@ -6,4 +6,10 @@
 
 * {
   font-family: 'Poppins', sans-serif;
+
+  scrollbar-width: thin; /* Set the scrollbar width */
+  scrollbar-color: #282828 #14181d; /* Color of the thumb and track */
 }
+
+
+

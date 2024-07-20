@@ -1,16 +1,24 @@
 import { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import { useIsLoggedIn } from '../useSessionCookies';
+import { useIsLoggedIn, useClearSessionCookie } from '../useSessionCookies';
+import { logout } from '../SessionUtils';
 
-function Header() {
+export default function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const isLoggedIn = useIsLoggedIn(); // Use the custom hook
+  const clearSessionCookie = useClearSessionCookie();
 
   function onSubmit(e) {
     e.preventDefault();
     const query = encodeURIComponent(searchQuery);
     window.location.href = `/search?query=${query}`;
   }
+
+  const handleLogout = async () => {
+    clearSessionCookie();
+    const log = logout();
+    window.location.href = '/';
+  };
 
   return (
     <header className="bg-[#14181d] p-4">
@@ -25,28 +33,39 @@ function Header() {
             </a>
           </li>
           <li>
-            <a className=" hover:text-gray-400" href="/films">
-              Films
-            </a>
-          </li>
-          <li>
             <a className=" hover:text-gray-400" href="/about">
               About
             </a>
           </li>
+          
           {isLoggedIn() ? (
             <li>
-              <a className=" hover:text-gray-400" href="/profile">
-                Profile
+              <a className=" hover:text-gray-400">
+                My List
               </a>
             </li>
           ) : (
-            <li>
-              <a className=" hover:text-gray-400" href="/login">
-                Sign In
-              </a>
-            </li>
+            null
           )}
+
+
+          {isLoggedIn() ? (
+          <li>
+            <button 
+              className="hover:text-gray-400"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </li>
+        ) : (
+          <li>
+            <a className="hover:text-gray-400" href="/login">
+              Sign In
+            </a>
+          </li>
+        )}
+
           <li>
             <form onSubmit={onSubmit} className="relative flex items-center">
               <input
@@ -71,4 +90,3 @@ function Header() {
   );
 }
 
-export default Header;

@@ -9,3 +9,13 @@ export async function fetchSession() {
   }
   return response.json();
 }
+
+export async function logout() {
+  const response = await fetch('http://localhost:8080/user/logout', {
+    credentials: 'include'
+  });
+  if (!response.ok) {
+    throw new Error('Logout failed');
+  }
+  return response;
+}
