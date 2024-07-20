@@ -1,6 +1,10 @@
 # Movie Critic
 
-Movie Critic is a full-stack web application developed to track and review movies. It uses Java, JavaScript, Spring Boot, React, and PostgreSQL to provide a dynamic and responsive user experience.
+## Description
+
+Movie Critic was developed as a place for film enthusiasts to track and review their favorite films. The application fetches movie data from the TMDb API and stores it in a PostgreSQL database, ensuring efficient data retrieval and storage. Users can securely log in and interact with the application, enjoying features like adding movies to their watchlist and submitting real-time reviews.
+
+Movie Critic is a full-stack web application that uses Java, JavaScript, Spring Boot, React, and PostgreSQL to provide a dynamic and responsive user experience.
 
 ## Features
 
@@ -35,10 +39,6 @@ Movie Critic is a full-stack web application developed to track and review movie
 ### Security
 - Spring Security
 - JWT
-
-## Description
-
-Movie Critic was developed as a place for film enthusiasts to track and review their favorite films. The application fetches movie data from the TMDb API and stores it in a PostgreSQL database, ensuring efficient data retrieval and storage. Users can securely log in and interact with the application, enjoying features such as adding movies to their watchlist, marking films as watched, and submitting real-time reviews.
 
 ## Contact
 
