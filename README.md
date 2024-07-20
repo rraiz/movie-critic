@@ -12,7 +12,6 @@ Movie Critic is a full-stack web application developed to track and review movie
 - Improved performance by caching the movie data into a PostgreSQL database.
 
 ### User Features
-- Able to register and login
 - See the latest and most popular films currently.
 - Search for a specific film.
 - Add films to a watchlist.
