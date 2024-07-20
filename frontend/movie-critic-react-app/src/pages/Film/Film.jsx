@@ -8,6 +8,7 @@ import Error from '../Error/Error';
 import Movie from './Movie';
 import Tv from './Tv';
 import Backdrop from './components/Backdrop';
+import UserReviews from './UserReviews';
 
 export default function Film({type}) {
 
@@ -39,6 +40,7 @@ export default function Film({type}) {
                 <main>
                     <Backdrop backdropPath={film.backdropPath} />
                     {type === 'movie' ? <Movie film={film} /> : <Tv film={film} />}
+                    <UserReviews />
                 </main>
             </div>
         </div>
