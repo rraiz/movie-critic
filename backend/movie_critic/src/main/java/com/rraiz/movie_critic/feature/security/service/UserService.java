@@ -37,14 +37,8 @@ public class UserService implements UserDetailsService {
 
     public LoginResponseDTO checkSession(HttpServletResponse response) {
         try {
-            String jwt = tokenService.getJwtFromCookie(request);
-            Map<String, Object> claims = tokenService.decodeJwt(jwt);
 
-            if (claims == null || !claims.containsKey("sub")) {
-                throw new UsernameNotFoundException("Invalid JWT token");
-            }
-
-            String username = (String) claims.get("sub");
+            String username = getUsername();
             ApplicationUser user = (ApplicationUser) loadUserByUsername(username);
 
             return new LoginResponseDTO(user, "Session is valid", true);
@@ -64,5 +58,16 @@ public class UserService implements UserDetailsService {
 
             response.addHeader(HttpHeaders.SET_COOKIE, clearCookie.toString());
             return "Logout successful";
+    }
+
+    public String getUsername() {
+        String jwt = tokenService.getJwtFromCookie(request);
+        Map<String, Object> claims = tokenService.decodeJwt(jwt);
+
+        if (claims == null || !claims.containsKey("sub")) {
+            throw new UsernameNotFoundException("Invalid JWT token");
+        }
+
+        return (String) claims.get("sub");
     }
 }
