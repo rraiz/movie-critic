@@ -1,12 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useQuery, useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import WriteReview from './components/WriteReview';
 import { FaStar, FaStarHalf } from 'react-icons/fa';
 import { useIsLoggedIn } from '../../components/useSessionCookies';
 
-export default function UserReviews() {
+// Create a client
+const queryClient = new QueryClient();
+
+export default function UserReviews({type, id}) {
     const isLoggedIn = useIsLoggedIn();
-    const [reviews, setReviews] = useState([]);
+    const queryClient = useQueryClient();
     const [averageRating, setAverageRating] = useState(0);
+
+    const { data: reviews = [], isLoading, error } = useQuery({
+        queryKey: ['reviews'],
+        queryFn: async () => {
+            const film_type = type === 'movie' ? 0 : 1;
+            const response = await fetch(`http://localhost:8080/api/v1/review/${film_type}/${id}/reviews`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }
+    });
 
     useEffect(() => {
         if (reviews.length > 0) {
@@ -19,7 +35,7 @@ export default function UserReviews() {
     }, [reviews]);
 
     const addReview = (newReview) => {
-        setReviews([newReview, ...reviews]);
+        queryClient.setQueryData(['reviews'], (oldReviews) => [newReview, ...(oldReviews || [])]);
     };
 
     const renderStars = (rating) => {
@@ -41,6 +57,9 @@ export default function UserReviews() {
         return stars;
     };
 
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error fetching reviews</div>;
+
     return (
         <div className="mt-8 ml-4">
             <h2 className="text-2xl font-bold mb-4 text-[#fddb06]">User Reviews</h2>
@@ -54,17 +73,17 @@ export default function UserReviews() {
             {isLoggedIn() ? <WriteReview addReview={addReview} /> : null}
             
             {reviews.map((review, index) => (
-                <div key={index} className="border-b border-gray-700 py-6 pb-10">
+                <div key={review.reviewId} className="border-b border-gray-700 py-6 pb-10">
                     <div className="flex items-center pb-5">
-                        <img src={`https://i.pravatar.cc/50?img=${index + 1}`} alt={review.name} className="w-10 h-10 rounded-full mr-3" />
+                        <img src={`https://i.pravatar.cc/50?img=${index + 1}`} alt={review.username} className="w-10 h-10 rounded-full mr-3" />
                         <div>
-                            <p className="font-bold">{review.name}</p>
+                            <p className="font-bold">{review.username}</p>
                             <div className="flex">
                                 {renderStars(review.rating)}
                             </div>
                         </div>
                     </div>
-                    <p>{review.review}</p>
+                    <p>{review.reviewText || ''}</p>
                 </div>
             ))}
         </div>

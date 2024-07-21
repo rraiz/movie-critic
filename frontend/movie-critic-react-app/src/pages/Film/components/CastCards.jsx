@@ -10,7 +10,7 @@ export default function CastCards({ members, type }) {
       </a>
       <main className="flex overflow-x-auto space-x-4 p-4 items-stretch ">
         {sortedMembers.map((member) => (
-          <Card key={member.id} member={member} />
+          <Card key={member.personId} member={member} />
         ))}
       </main>
     </div>

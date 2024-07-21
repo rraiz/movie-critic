@@ -40,7 +40,7 @@ export default function Film({type}) {
                 <main>
                     <Backdrop backdropPath={film.backdropPath} />
                     {type === 'movie' ? <Movie film={film} /> : <Tv film={film} />}
-                    <UserReviews />
+                    <UserReviews type={type} id={film.id}/>
                 </main>
             </div>
         </div>
