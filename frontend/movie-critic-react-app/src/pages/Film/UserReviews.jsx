@@ -63,7 +63,7 @@ export default function UserReviews({ type, id }) {
 
     const editReview = async (reviewId, updatedReviewText, updatedRating) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/review/${film_type}/${id}/editReview/${reviewId}`, {
+            const response = await fetch(`http://localhost:8080/api/v1/review/updateReview/${reviewId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export default function UserReviews({ type, id }) {
 
     const deleteReview = async (reviewId) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/review/${film_type}/${id}/deleteReview/${reviewId}`, {
+            const response = await fetch(`http://localhost:8080/api/v1/review/deleteReview/${reviewId}`, {
                 method: 'DELETE',
                 credentials: 'include'
             });
