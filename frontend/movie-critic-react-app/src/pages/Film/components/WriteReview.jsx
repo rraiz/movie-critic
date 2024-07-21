@@ -6,7 +6,7 @@ const WriteReview = ({ addReview }) => {
 
     const username = useGetUsername();
 
-    const [newReview, setNewReview] = useState({ name: username(), rating: 0, review: '' });
+    const [newReview, setNewReview] = useState({rating: 0, reviewText: '' });
     const [isFormVisible, setFormVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -40,7 +40,7 @@ const WriteReview = ({ addReview }) => {
             return;
         }
         addReview(newReview);
-        setNewReview({ name: username(), rating: 0, review: '' });
+        setNewReview({rating: 0, reviewText: '' });
         setFormVisible(false);
         setErrorMessage('');
     };
@@ -101,8 +101,8 @@ const WriteReview = ({ addReview }) => {
                     <div className="mb-4">
                         <label className="block text-md font-medium text-gray-200 pt-2">Review (optional)</label>
                         <textarea
-                            name="review"
-                            value={newReview.review}
+                            name="reviewText"
+                            value={newReview.reviewText}
                             onChange={handleReviewChange}
                             className="mt-1 w-full rounded-md bg-gray-800 focus:outline-none focus:bg-[#2e3d51bd] pl-2 pt-2 pr-2 pb-2 resize-none"
                             rows="4"

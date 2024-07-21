@@ -12,10 +12,11 @@ export default function UserReviews({type, id}) {
     const queryClient = useQueryClient();
     const [averageRating, setAverageRating] = useState(0);
 
+    const film_type = type === 'movie' ? 0 : 1;
+
     const { data: reviews = [], isLoading, error } = useQuery({
         queryKey: ['reviews'],
         queryFn: async () => {
-            const film_type = type === 'movie' ? 0 : 1;
             const response = await fetch(`http://localhost:8080/api/v1/review/${film_type}/${id}/reviews`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -34,8 +35,27 @@ export default function UserReviews({type, id}) {
         }
     }, [reviews]);
 
-    const addReview = (newReview) => {
-        queryClient.setQueryData(['reviews'], (oldReviews) => [newReview, ...(oldReviews || [])]);
+    const addReview = async (newReview) => {
+        console.log(newReview);
+        try {
+            const response = await fetch(`http://localhost:8080/api/v1/review/${film_type}/${id}/addReview`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(newReview),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to add review');
+            }
+
+            // Refresh the reviews after successfully adding a review
+            queryClient.invalidateQueries(['reviews', type, id]);
+        } catch (error) {
+            console.error('Error adding review:', error);
+        }
     };
 
     const renderStars = (rating) => {
@@ -83,7 +103,9 @@ export default function UserReviews({type, id}) {
                             </div>
                         </div>
                     </div>
-                    <p>{review.reviewText || ''}</p>
+                    <div className="text-gray-200 whitespace-pre-wrap">
+                        <p>{review.reviewText || ''}</p>
+                    </div>
                 </div>
             ))}
         </div>
