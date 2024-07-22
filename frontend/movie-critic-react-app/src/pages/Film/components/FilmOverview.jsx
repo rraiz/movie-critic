@@ -44,7 +44,7 @@ export default function FilmOverview({ film, type }) {
             {/* Poster Image Section */}
             <img
                 src={film.posterPath ? `https://image.tmdb.org/t/p/original/${film.posterPath}` : altPoster}
-                className="max-w-[250px] rounded-md cover-bg  z-10"
+                className="max-w-[250px] max-h-[375px] rounded-md cover-bg  z-10"
                 alt="Poster Image"
             />
 

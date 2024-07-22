@@ -5,19 +5,22 @@ import EditReview from './components/EditReview';
 import { useIsLoggedIn, useGetUsername } from '../../components/useSessionCookies';
 import { FaStar, FaStarHalf } from 'react-icons/fa';
 
-// Create a client
+// Create a client for react-query
 const queryClient = new QueryClient();
 
 export default function UserReviews({ type, id }) {
+    // Get login status and username from session cookies
     const isLoggedIn = useIsLoggedIn();
     const getUsername = useGetUsername();
     const username = getUsername();
-    const queryClient = useQueryClient();
-    const [averageRating, setAverageRating] = useState(0);
+    const queryClient = useQueryClient(); // Get the react-query client
+    const [averageRating, setAverageRating] = useState(0); // State for average rating
     const [editingReviewId, setEditingReviewId] = useState(null); // State to track the review being edited
 
+    // Determine the film type
     const film_type = type === 'movie' ? 0 : 1;
 
+    // Fetch reviews using react-query
     const { data: reviews = [], isLoading, error } = useQuery({
         queryKey: ['reviews', film_type, id],
         queryFn: async () => {
@@ -29,6 +32,7 @@ export default function UserReviews({ type, id }) {
         }
     });
 
+    // Calculate average rating whenever reviews change
     useEffect(() => {
         if (reviews.length > 0) {
             const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
@@ -39,6 +43,7 @@ export default function UserReviews({ type, id }) {
         }
     }, [reviews]);
 
+    // Function to add a new review
     const addReview = async (newReview) => {
         try {
             const response = await fetch(`http://localhost:8080/api/v1/review/${film_type}/${id}/addReview`, {
@@ -61,6 +66,7 @@ export default function UserReviews({ type, id }) {
         }
     };
 
+    // Function to edit an existing review
     const editReview = async (reviewId, updatedReviewText, updatedRating) => {
         try {
             const response = await fetch(`http://localhost:8080/api/v1/review/updateReview/${reviewId}`, {
@@ -83,6 +89,7 @@ export default function UserReviews({ type, id }) {
         }
     };
 
+    // Function to delete an existing review
     const deleteReview = async (reviewId) => {
         try {
             const response = await fetch(`http://localhost:8080/api/v1/review/deleteReview/${reviewId}`, {
@@ -101,6 +108,7 @@ export default function UserReviews({ type, id }) {
         }
     };
 
+    // Function to render star ratings
     const renderStars = (rating) => {
         const stars = [];
         for (let i = 1; i <= 5; i++) {
@@ -120,6 +128,7 @@ export default function UserReviews({ type, id }) {
         return stars;
     };
 
+    // Return loading or error states if necessary
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error fetching reviews</div>;
 
