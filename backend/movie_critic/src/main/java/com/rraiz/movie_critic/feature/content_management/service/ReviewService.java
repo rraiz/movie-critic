@@ -40,7 +40,7 @@ public class ReviewService {
         if (film.isEmpty()) {
             return null;
         } else {
-            List<Review> reviews = reviewRepository.findByFilm(film.get());
+            List<Review> reviews = reviewRepository.findByFilmOrderByReviewDateDesc(film.get());
             List<ReviewDTO> reviewDTOs = new ArrayList<ReviewDTO>();
             for (Review review : reviews) {
                 reviewDTOs.add(new ReviewDTO(review));
@@ -69,5 +69,27 @@ public class ReviewService {
             return  e.getMessage();
         }
 
+    }
+
+    public String updateReview(int reviewId, ReviewDTO reviewDTO) {
+        Optional<Review> review = reviewRepository.findById(reviewId);
+        if (review.isEmpty()) {
+            return "Review not found";
+        } else {
+            review.get().setReview(reviewDTO.getReviewText());
+            review.get().setRating(reviewDTO.getRating());
+            reviewRepository.save(review.get());
+            return "Review updated";
+        }
+    }
+
+    public String deleteReview(int reviewId) {
+        Optional<Review> review = reviewRepository.findById(reviewId);
+        if (review.isEmpty()) {
+            return "Review not found";
+        } else {
+            reviewRepository.delete(review.get());
+            return "Review deleted";
+        }
     }
 }

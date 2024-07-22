@@ -9,7 +9,7 @@ public class ReviewDTO {
 
     private int reviewId;
     private String reviewText;
-    private int rating;
+    private double rating;
     private LocalDateTime reviewDate;
     private String username;
 
@@ -40,11 +40,11 @@ public class ReviewDTO {
         this.reviewText = reviewText;
     }
 
-    public int getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 

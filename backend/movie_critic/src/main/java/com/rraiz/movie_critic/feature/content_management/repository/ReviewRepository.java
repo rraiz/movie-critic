@@ -11,5 +11,5 @@ import com.rraiz.movie_critic.feature.film.model.entity.Film;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
-    List<Review> findByFilm(Film film); 
+    List<Review> findByFilmOrderByReviewDateDesc(Film film);
 } 

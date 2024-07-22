@@ -27,7 +27,7 @@ public class Review {
     @Column(nullable = true, columnDefinition = "TEXT")
     private String review;
 
-    private Integer rating;
+    private Double rating;
 
     private LocalDateTime reviewDate;
 
@@ -47,7 +47,7 @@ public class Review {
     public Review() {
     }
 
-    public Review(String review, Integer rating, LocalDateTime reviewDate, Film film, ApplicationUser user) {
+    public Review(String review, Double rating, LocalDateTime reviewDate, Film film, ApplicationUser user) {
         this.review = review;
         this.rating = rating;
         this.reviewDate = reviewDate;
@@ -71,11 +71,11 @@ public class Review {
         this.review = review;
     }
 
-    public Integer getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 
