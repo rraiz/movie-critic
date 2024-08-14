@@ -20,7 +20,7 @@ Movie Critic is a full-stack web application that uses Java, JavaScript, Spring 
 - See the latest and most popular films currently.
 - Search for a specific film. 
 - Add films to a watchlist. (In Progress)
-- Submit reviews with real-time updates. (In Progress)
+- Submit reviews with real-time updates.
 
 ## Tech Stack
 
