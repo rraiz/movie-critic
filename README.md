@@ -25,12 +25,13 @@ Movie Critic is a full-stack web application that uses Java, JavaScript, Spring 
 ## Tech Stack
 
 ### Frontend
+- JavaScript
 - React
 - Tailwind CSS
 
 ### Backend
+- Java
 - Spring Boot
-- Spring Security
 
 ### Database
 - PostgreSQL
