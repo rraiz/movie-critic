@@ -10,7 +10,7 @@ Movie Critic is a full-stack web application that uses Java, JavaScript, Spring 
 
 ### User Authentication
 - Secure access using Spring Security and JWT.
-- JWT is transferred through HTTP-only cookies.
+- JWT is transferred through HTTP-only cookies, which allows for stateless authentication.
 
 ### Movie Data Fetching
 - Integration with the TMDb API to fetch movie data upon user search for the first time.
